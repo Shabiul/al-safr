@@ -148,7 +148,7 @@ export default function Home() {
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-6 sm:space-y-8">
         {/* Tab View 0: Landing page */}
-        {activeTab === 'home' && <LandingHome onNavigate={setActiveTab} />}
+        {activeTab === 'home' && <LandingHome currency={currency} onNavigate={setActiveTab} />}
 
         {activeTab !== 'home' && (
           <>
@@ -369,24 +369,56 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-slate-200 bg-slate-50/60 py-10 mt-16 text-sm text-slate-500">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div className="flex items-center gap-2.5">
-              <div className="w-7 h-7 rounded-lg bg-brand-600 text-white flex items-center justify-center">
-                <Plane className="w-3.5 h-3.5 -rotate-45" />
+      <footer className="mt-16 py-14 text-sm text-slate-300" style={{ backgroundColor: '#04182c' }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+            <div className="space-y-3">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-lg bg-brand-600 text-white flex items-center justify-center">
+                  <Plane className="w-4 h-4 -rotate-45" />
+                </div>
+                <span className="font-semibold text-white">Al-Safr (السفر)</span>
               </div>
-              <span className="font-semibold text-slate-900">Al-Safr (السفر)</span>
+              <p className="text-slate-400 leading-relaxed">
+                One stop travel platform for flights, hotels, tour packages and cabs — all backed by real, live pricing.
+              </p>
             </div>
-            <div className="flex items-center gap-4 text-slate-500">
-              <span>Live fares via Google Flights</span>
-              <span className="text-slate-300">•</span>
-              <span>Live ADS-B via OpenSky Network</span>
+
+            <div>
+              <h3 className="font-semibold text-white mb-3">Explore</h3>
+              <ul className="space-y-2 text-slate-400">
+                <li><button onClick={() => setActiveTab('home')} className="hover:text-white transition-colors">Home</button></li>
+                <li><button onClick={() => setActiveTab('book')} className="hover:text-white transition-colors">Flights</button></li>
+                <li><button onClick={() => setActiveTab('hotels')} className="hover:text-white transition-colors">Hotels</button></li>
+                <li><button onClick={() => setActiveTab('tours')} className="hover:text-white transition-colors">Tour Packages</button></li>
+                <li><button onClick={() => setActiveTab('cabs')} className="hover:text-white transition-colors">Cabs</button></li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="font-semibold text-white mb-3">Live tools</h3>
+              <ul className="space-y-2 text-slate-400">
+                <li><button onClick={() => setActiveTab('radar')} className="hover:text-white transition-colors">Live Flight Radar</button></li>
+                <li><button onClick={() => setActiveTab('price')} className="hover:text-white transition-colors">Fare Trends</button></li>
+                <li><button onClick={() => setActiveTab('bookings')} className="hover:text-white transition-colors">My Trips</button></li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="font-semibold text-white mb-3">Registered office</h3>
+              <p className="text-slate-400 leading-relaxed">
+                No-06, Classic Complex, Opp Mahindra Apts, Near Wipro, Shikaripalya, Hulimangala Post, Bengaluru — 560105
+              </p>
             </div>
           </div>
 
-          <div className="border-t border-slate-200 pt-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-slate-400">
-            <p>© 2026 Al-Safr. All rights reserved.</p>
+          <div className="border-t border-white/10 mt-10 pt-6 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-slate-500">
+            <p>© 2026 Al-Safr Tours N Travels. All rights reserved.</p>
+            <div className="flex items-center gap-4">
+              <span>Live fares via Google Flights</span>
+              <span className="text-slate-600">•</span>
+              <span>Live ADS-B via OpenSky Network</span>
+            </div>
           </div>
         </div>
       </footer>
