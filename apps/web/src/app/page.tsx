@@ -4,6 +4,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Header } from '@/components/Header';
 import { FlightSearch } from '@/components/FlightSearch';
 import { HotelSearch } from '@/components/HotelSearch';
+import { TourPackages } from '@/components/TourPackages';
 import { LiveFlightTracker } from '@/components/LiveFlightTracker';
 import { PriceTracker } from '@/components/PriceTracker';
 import { FlightCard } from '@/components/FlightCard';
@@ -26,7 +27,7 @@ import {
 
 export default function Home() {
   const [currency, setCurrency] = useState<CurrencyCode>('INR');
-  const [activeTab, setActiveTab] = useState<'book' | 'hotels' | 'radar' | 'price' | 'bookings'>('book');
+  const [activeTab, setActiveTab] = useState<'book' | 'hotels' | 'tours' | 'radar' | 'price' | 'bookings'>('book');
   const [apiStatus, setApiStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
   // Search parameters
@@ -256,6 +257,9 @@ export default function Home() {
 
         {/* Tab View 1b: Hotel Search & Results */}
         {activeTab === 'hotels' && <HotelSearch currency={currency} />}
+
+        {/* Tab View 1c: Tour Packages */}
+        {activeTab === 'tours' && <TourPackages currency={currency} />}
 
         {/* Tab View 2: Live Flight Radar */}
         {activeTab === 'radar' && (
