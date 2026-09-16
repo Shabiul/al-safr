@@ -1,0 +1,52 @@
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Customer {
+  id             String   @id @default(cuid())
+  email          String   @unique
+  hashedPassword String
+  name           String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+enum StaffRole {
+  SUPER_ADMIN
+  STAFF
+}
+
+model StaffUser {
+  id             String    @id @default(cuid())
+  email          String    @unique
+  hashedPassword String
+  name           String
+  role           StaffRole @default(STAFF)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+}
+
+// Admin-managed catalogue (create/edit/publish/unpublish is a CRM feature
+// for a later phase) — for now this is populated by the seed script so the
+// public listing has real content to show.
+model TourPackage {
+  id           String   @id @default(cuid())
+  slug         String   @unique
+  name         String
+  destination  String
+  summary      String
+  description  String
+  durationDays Int
+  priceUsd     Float
+  images       String[]
+  inclusions   String[]
+  exclusions   String[]
+  itinerary    Json
+  published    Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
