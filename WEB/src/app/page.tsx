@@ -405,10 +405,17 @@ export default function Home() {
             </div>
 
             <div>
-              <h3 className="font-semibold text-white mb-3">Registered office</h3>
-              <p className="text-slate-400 leading-relaxed">
-                No-06, Classic Complex, Opp Mahindra Apts, Near Wipro, Shikaripalya, Hulimangala Post, Bengaluru — 560105
-              </p>
+              <h3 className="font-semibold text-white mb-3">Reach us</h3>
+              <ul className="space-y-2 text-slate-400">
+                <li>A.M. Plaza, Hospital Road, Shivaji Nagar, Bengaluru 560001</li>
+                <li>
+                  <a href="tel:+919900517604" className="hover:text-white transition-colors">+91 99005 17604</a>
+                </li>
+                <li>
+                  <a href="mailto:luckysaj@gmail.com" className="hover:text-white transition-colors">luckysaj@gmail.com</a>
+                </li>
+                <li className="text-slate-500 text-xs pt-1">Registered office: No-06, Classic Complex, Opp Mahindra Apts, Near Wipro, Shikaripalya, Hulimangala Post, Bengaluru — 560105</li>
+              </ul>
             </div>
           </div>
 

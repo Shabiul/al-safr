@@ -18,6 +18,7 @@ import {
   Calendar,
   Plus,
   Minus,
+  Star,
 } from 'lucide-react';
 import { CurrencyCode, formatPrice } from '@/services/flightData';
 import { TourPackage } from '@/services/tourPackageData';
@@ -77,6 +78,45 @@ const WHY_US = [
   { icon: BadgeCheck, title: 'Transparent, always', description: 'When a service has limits — like car rental not covering India yet — we say so up front.' },
 ];
 
+const TESTIMONIALS = [
+  {
+    quote: 'Booked our Dubai family trip through Sajid bhai. Visa came through in four days and the hotel was exactly as promised. He even rearranged our return flight when my son fell ill — no extra fuss, no arguing about fees.',
+    name: 'Rahul Kulkarni',
+    location: 'Indiranagar, Bengaluru',
+    rating: 5,
+  },
+  {
+    quote: 'We did our Umrah with them last Ramadan. The hotel was a five-minute walk from the Haram, exactly as they said, and the group co-ordinator stayed with us the whole time. For first-timers that mattered more than the price.',
+    name: 'Fatima Anwar',
+    location: 'Shivaji Nagar, Bengaluru',
+    rating: 5,
+  },
+  {
+    quote: 'Our company routes all international ticketing here now. Quotes come back the same day, invoices are clean for accounts, and someone always answers after office hours. That is genuinely rare in this business.',
+    name: 'Suresh Menon',
+    location: 'Admin Head, IT services firm',
+    rating: 5,
+  },
+  {
+    quote: 'Our Kerala houseboat trip was planned perfectly for my parents — slow pace, good food, no long drives. They thought of things we did not even ask about.',
+    name: 'Priya Nair',
+    location: 'Whitefield, Bengaluru',
+    rating: 5,
+  },
+  {
+    quote: 'Schengen visa approved on the first attempt. They rewrote my covering letter and caught two mistakes in my bank statements before submission. Worth every rupee of the service fee.',
+    name: 'Mohammed Irfan',
+    location: 'Frazer Town, Bengaluru',
+    rating: 4,
+  },
+  {
+    quote: 'Honeymoon in Maldives. The water villa was exactly the one shown to us, not a downgrade on arrival like friends had warned. Everything was confirmed in writing beforehand.',
+    name: 'Anitha Reddy',
+    location: 'Jayanagar, Bengaluru',
+    rating: 5,
+  },
+];
+
 const FAQS = [
   {
     q: 'Are the prices I see actually real?',
@@ -133,10 +173,18 @@ export const LandingHome: React.FC<LandingHomeProps> = ({ currency, onNavigate }
 
         <div className="relative p-8 sm:p-16 pb-28 sm:pb-32">
           <div className="max-w-2xl space-y-5">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 backdrop-blur text-gold-400 text-xs font-semibold border border-white/20" style={{ color: 'var(--color-gold-400)' }}>
-              <Sparkles className="w-3.5 h-3.5" />
-              Real live fares, real live radar
-            </span>
+            <div className="flex flex-wrap items-center gap-3">
+              <span
+                className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold tracking-wide"
+                style={{ backgroundColor: 'var(--color-gold-500)', color: 'var(--color-navy-900)' }}
+              >
+                SINCE 2009
+              </span>
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 backdrop-blur text-xs font-semibold border border-white/20 text-white">
+                <Sparkles className="w-3.5 h-3.5" style={{ color: 'var(--color-gold-400)' }} />
+                Trusted by 10,000+ travellers from Bengaluru
+              </span>
+            </div>
 
             <h1 className="text-4xl sm:text-6xl font-bold tracking-tight text-white leading-[1.05]">
               One stop travel solutions
@@ -174,10 +222,10 @@ export const LandingHome: React.FC<LandingHomeProps> = ({ currency, onNavigate }
         <div className="absolute left-8 right-8 sm:left-16 sm:right-16 bottom-0 translate-y-1/2">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 rounded-2xl bg-white shadow-xl border border-slate-100 p-5 sm:p-7">
             {[
-              { value: '4', label: 'Travel services in one place' },
+              { value: '16+', label: 'Years of experience' },
+              { value: '10,000+', label: 'Travellers served' },
               { value: '10', label: 'Curated tour packages' },
               { value: '500+', label: 'Cars available per search' },
-              { value: 'Live', label: 'Fares, rates & radar' },
             ].map((stat) => (
               <div key={stat.label}>
                 <div className="text-2xl sm:text-3xl font-bold" style={{ color: 'var(--color-gold-600)' }}>
@@ -364,6 +412,43 @@ export const LandingHome: React.FC<LandingHomeProps> = ({ currency, onNavigate }
         </div>
       )}
 
+      {/* Testimonials */}
+      <div className="space-y-6">
+        <div className="text-center space-y-2">
+          <span className="text-xs font-semibold tracking-widest uppercase" style={{ color: 'var(--color-gold-600)' }}>
+            Client feedback
+          </span>
+          <h2 className="text-2xl sm:text-4xl font-bold tracking-tight text-slate-900">What our travellers actually say</h2>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {TESTIMONIALS.map((t) => (
+            <div key={t.name} className="bg-white rounded-2xl border border-slate-200 p-5 flex flex-col gap-3">
+              <div className="flex items-center gap-0.5">
+                {Array.from({ length: t.rating }).map((_, i) => (
+                  <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                ))}
+              </div>
+              <p className="text-sm text-slate-600 leading-relaxed" style={{ fontFamily: 'var(--font-accent)', fontStyle: 'italic' }}>
+                &ldquo;{t.quote}&rdquo;
+              </p>
+              <div className="mt-auto pt-2 border-t border-slate-100 flex items-center gap-3">
+                <div
+                  className="w-9 h-9 rounded-full flex items-center justify-center text-white text-xs font-semibold shrink-0"
+                  style={{ backgroundColor: 'var(--color-navy-900)' }}
+                >
+                  {t.name.split(' ').map((n) => n[0]).join('')}
+                </div>
+                <div>
+                  <div className="text-sm font-semibold text-slate-900">{t.name}</div>
+                  <div className="text-xs text-slate-400">{t.location}</div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* About */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
         <div className="relative rounded-3xl overflow-hidden h-72 sm:h-96">
@@ -378,9 +463,9 @@ export const LandingHome: React.FC<LandingHomeProps> = ({ currency, onNavigate }
             style={{ backgroundColor: 'var(--color-navy-900)' }}
           >
             <div className="text-2xl font-bold" style={{ color: 'var(--color-gold-400)' }}>
-              10
+              16+
             </div>
-            <div className="text-xs text-slate-300">Curated packages, live today</div>
+            <div className="text-xs text-slate-300">Years in travel</div>
           </div>
         </div>
 
@@ -389,10 +474,10 @@ export const LandingHome: React.FC<LandingHomeProps> = ({ currency, onNavigate }
             Who we are
           </span>
           <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900">
-            Al-Safr Tours N Travels, built on real data
+            A Bengaluru travel desk that actually picks up the phone
           </h2>
           <p className="text-slate-600 leading-relaxed">
-            Al-Safr (السفر) is the booking platform for Al Safar Tours N Travels, registered in Bengaluru. We built it around one rule: if we can&apos;t get a real live price from a real supplier, we don&apos;t show one.
+            Al-Safr (السفر) is the booking platform for Al Safar Tours N Travels — a Bengaluru travel consultancy serving customers since 2009. We handle everything a traveller needs under one roof: the ticket, the hotel, the tour, and now, real live pricing you can search yourself.
           </p>
           <ul className="space-y-2.5">
             {[
