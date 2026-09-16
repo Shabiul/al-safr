@@ -1,10 +1,22 @@
 import { NextResponse } from 'next/server';
 import { hasRapidApiKey, rapidApiFetch } from '@/lib/rapidapi';
 import { HotelOption } from '@/services/hotelData';
+import { CURRENCIES, CurrencyCode } from '@/services/flightData';
 
 export const dynamic = 'force-dynamic';
 
 const HOST = 'booking-com.p.rapidapi.com';
+
+// Booking.com's `filter_by_currency` param is a display hint only — it
+// actually always returns the hotel's local currency (see their own FAQ).
+// Convert to a genuine USD figure so downstream price filtering/formatting
+// (which assumes `priceUsd` really is USD) isn't comparing INR against a
+// USD threshold. Unrecognized currencies pass through unconverted rather
+// than silently dropping the price.
+function toUsd(amount: number, currencyCode: string | undefined): number {
+  const rate = currencyCode ? CURRENCIES[currencyCode as CurrencyCode]?.rate : undefined;
+  return rate ? amount / rate : amount;
+}
 
 async function resolveDestination(name: string): Promise<{ dest_id: string; dest_type: string } | null> {
   const res = await rapidApiFetch(
@@ -80,7 +92,12 @@ export async function GET(request: Request) {
       stars: h.class || 0,
       reviewScore: typeof h.review_score === 'number' ? h.review_score : null,
       reviewCount: h.review_nr ?? null,
-      priceUsd: h.min_total_price ?? h.composite_price_breakdown?.gross_amount?.value ?? null,
+      priceUsd:
+        h.min_total_price != null
+          ? toUsd(h.min_total_price, h.currency_code)
+          : h.composite_price_breakdown?.gross_amount?.value != null
+            ? toUsd(h.composite_price_breakdown.gross_amount.value, h.composite_price_breakdown.gross_amount.currency)
+            : null,
       photoUrl: h.max_photo_url || h.main_photo_url || null,
       distanceToCenterKm: typeof h.distance_to_cc === 'number' ? h.distance_to_cc : null,
       bookingUrl: h.url || `https://www.booking.com/hotel/${h.hotel_id}.html`,
