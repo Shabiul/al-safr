@@ -25,6 +25,16 @@
   --color-accent-500: #f97316;
   --color-accent-600: #ea580c;
   --color-accent-700: #c2410c;
+
+  /* Landing page only (LandingHome.tsx) — dark navy + gold, distinct from the
+     indigo brand used by the booking tools, and its own display fonts. */
+  --color-navy-900: #04182c;
+  --color-navy-800: #0a2439;
+  --color-gold-400: #f0b52e;
+  --color-gold-500: #e8a317;
+  --color-gold-600: #c9860a;
+  --font-display: "Cabinet Grotesk", var(--font-sans);
+  --font-accent: "Cormorant Garamond", serif;
 }
 
 @layer base {
