@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Plane, Globe, Menu, X, Search, Radio, TrendingUp, Ticket, Building2, Compass, Car, Home } from 'lucide-react';
+import { Plane, Globe, Menu, X, Search, Radio, TrendingUp, Ticket, Building2, Compass, Car, Home, Phone, Mail, MapPin } from 'lucide-react';
 import { CurrencyCode, CURRENCIES } from '@/services/flightData';
 
 interface HeaderProps {
@@ -33,7 +33,28 @@ export const Header: React.FC<HeaderProps> = ({
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-40 w-full bg-white/90 backdrop-blur-md border-b border-slate-200">
+    <header className="sticky top-0 z-40 w-full">
+      {/* Contact strip */}
+      <div className="w-full text-xs text-slate-300 hidden sm:block" style={{ backgroundColor: '#04182c' }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-9 flex items-center justify-between gap-4">
+          <div className="flex items-center gap-5">
+            <a href="tel:+919900517604" className="flex items-center gap-1.5 hover:text-white transition-colors">
+              <Phone className="w-3 h-3" />
+              +91 99005 17604
+            </a>
+            <a href="mailto:luckysaj@gmail.com" className="flex items-center gap-1.5 hover:text-white transition-colors">
+              <Mail className="w-3 h-3" />
+              luckysaj@gmail.com
+            </a>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <MapPin className="w-3 h-3" />
+            A.M. Plaza, Hospital Road, Shivaji Nagar, Bengaluru 560001
+          </div>
+        </div>
+      </div>
+
+      <div className="w-full bg-white/90 backdrop-blur-md border-b border-slate-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
         {/* Brand */}
         <button
@@ -157,6 +178,7 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
         </div>
       )}
+      </div>
     </header>
   );
 };
