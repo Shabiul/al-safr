@@ -1,21 +1,22 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Plane, Globe, Menu, X, Search, Radio, TrendingUp, Ticket, Building2, Compass } from 'lucide-react';
+import { Plane, Globe, Menu, X, Search, Radio, TrendingUp, Ticket, Building2, Compass, Car } from 'lucide-react';
 import { CurrencyCode, CURRENCIES } from '@/services/flightData';
 
 interface HeaderProps {
   currency: CurrencyCode;
   onCurrencyChange: (curr: CurrencyCode) => void;
   apiStatus: 'idle' | 'loading' | 'success' | 'error';
-  activeTab: 'book' | 'hotels' | 'tours' | 'radar' | 'price' | 'bookings';
-  onTabChange: (tab: 'book' | 'hotels' | 'tours' | 'radar' | 'price' | 'bookings') => void;
+  activeTab: 'book' | 'hotels' | 'tours' | 'cabs' | 'radar' | 'price' | 'bookings';
+  onTabChange: (tab: 'book' | 'hotels' | 'tours' | 'cabs' | 'radar' | 'price' | 'bookings') => void;
 }
 
-const TABS: { id: 'book' | 'hotels' | 'tours' | 'radar' | 'price' | 'bookings'; label: string; icon: React.ElementType }[] = [
+const TABS: { id: 'book' | 'hotels' | 'tours' | 'cabs' | 'radar' | 'price' | 'bookings'; label: string; icon: React.ElementType }[] = [
   { id: 'book', label: 'Search Flights', icon: Search },
   { id: 'hotels', label: 'Hotels', icon: Building2 },
   { id: 'tours', label: 'Tour Packages', icon: Compass },
+  { id: 'cabs', label: 'Cabs', icon: Car },
   { id: 'radar', label: 'Live Radar', icon: Radio },
   { id: 'price', label: 'Fare Trends', icon: TrendingUp },
   { id: 'bookings', label: 'My Trips', icon: Ticket },
