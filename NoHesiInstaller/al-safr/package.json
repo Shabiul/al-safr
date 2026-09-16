@@ -1,0 +1,11 @@
+{
+  "name": "al-safr-monorepo",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "devDependencies": {
+    "tsx": "^4.23.13"
+  }
+}
