@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { Header } from '@/components/Header';
+import { LandingHome } from '@/components/LandingHome';
 import { FlightSearch } from '@/components/FlightSearch';
 import { HotelSearch } from '@/components/HotelSearch';
 import { TourPackages } from '@/components/TourPackages';
@@ -19,7 +20,6 @@ import {
 } from '@/services/flightData';
 import {
   Plane,
-  Sparkles,
   ArrowRight,
   Printer,
   Ticket,
@@ -28,7 +28,7 @@ import {
 
 export default function Home() {
   const [currency, setCurrency] = useState<CurrencyCode>('INR');
-  const [activeTab, setActiveTab] = useState<'book' | 'hotels' | 'tours' | 'cabs' | 'radar' | 'price' | 'bookings'>('book');
+  const [activeTab, setActiveTab] = useState<'home' | 'book' | 'hotels' | 'tours' | 'cabs' | 'radar' | 'price' | 'bookings'>('home');
   const [apiStatus, setApiStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
   // Search parameters
@@ -147,50 +147,39 @@ export default function Home() {
       />
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-6 sm:space-y-8">
-        {/* Live Data Status Bar */}
-        <div className="bg-slate-50 border border-slate-200 rounded-2xl p-3.5 sm:p-4 flex flex-wrap items-center justify-between gap-3 text-sm">
-          <div className="flex flex-wrap items-center gap-3 text-slate-600">
-            <div className="flex items-center gap-1.5 font-medium text-slate-900">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" aria-hidden="true" />
-              Live data stream
+        {/* Tab View 0: Landing page */}
+        {activeTab === 'home' && <LandingHome onNavigate={setActiveTab} />}
+
+        {activeTab !== 'home' && (
+          <>
+            {/* Live Data Status Bar */}
+            <div className="bg-slate-50 border border-slate-200 rounded-2xl p-3.5 sm:p-4 flex flex-wrap items-center justify-between gap-3 text-sm">
+              <div className="flex flex-wrap items-center gap-3 text-slate-600">
+                <div className="flex items-center gap-1.5 font-medium text-slate-900">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" aria-hidden="true" />
+                  Live data stream
+                </div>
+                <span className="hidden sm:inline text-slate-300">•</span>
+                <span className="hidden sm:inline">
+                  {airborneFlights.length || 20} aircraft tracked
+                </span>
+                <span className="hidden sm:inline text-slate-300">•</span>
+                <span className="hidden sm:inline">
+                  Synced {lastLiveSync || 'just now'}
+                </span>
+              </div>
+
+              <button
+                onClick={() => fetchLiveFlightData(searchParams.origin, searchParams.destination, searchParams.departureDate, searchParams.supersonicOnly, searchParams.cabinClass)}
+                disabled={isFetchingLive}
+                className="focus-ring flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 text-sm font-medium transition-colors disabled:opacity-50"
+              >
+                <RefreshCw className={`w-3.5 h-3.5 ${isFetchingLive ? 'animate-spin text-brand-600' : ''}`} />
+                {isFetchingLive ? 'Syncing…' : 'Refresh'}
+              </button>
             </div>
-            <span className="hidden sm:inline text-slate-300">•</span>
-            <span className="hidden sm:inline">
-              {airborneFlights.length || 20} aircraft tracked
-            </span>
-            <span className="hidden sm:inline text-slate-300">•</span>
-            <span className="hidden sm:inline">
-              Synced {lastLiveSync || 'just now'}
-            </span>
-          </div>
-
-          <button
-            onClick={() => fetchLiveFlightData(searchParams.origin, searchParams.destination, searchParams.departureDate, searchParams.supersonicOnly, searchParams.cabinClass)}
-            disabled={isFetchingLive}
-            className="focus-ring flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 text-sm font-medium transition-colors disabled:opacity-50"
-          >
-            <RefreshCw className={`w-3.5 h-3.5 ${isFetchingLive ? 'animate-spin text-brand-600' : ''}`} />
-            {isFetchingLive ? 'Syncing…' : 'Refresh'}
-          </button>
-        </div>
-
-        {/* Hero */}
-        <div className="rounded-3xl p-8 sm:p-12 bg-gradient-to-br from-brand-50 via-white to-white border border-slate-200">
-          <div className="max-w-2xl space-y-4">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white text-brand-700 text-xs font-semibold border border-brand-200">
-              <Sparkles className="w-3.5 h-3.5" />
-              Real live fares, real live radar
-            </span>
-
-            <h1 className="text-3xl sm:text-5xl font-semibold tracking-tight text-slate-900 leading-[1.1]">
-              Fly further, <span className="text-brand-600">for less.</span>
-            </h1>
-
-            <p className="text-base text-slate-600 leading-relaxed max-w-lg">
-              Al-Safr (السفر) searches real live airline fares and tracks real aircraft in the sky — no guesswork, no invented prices.
-            </p>
-          </div>
-        </div>
+          </>
+        )}
 
         {/* Tab View 1: Flight Search & Results */}
         {activeTab === 'book' && (
