@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/db';
+import { prisma, TourPackage as PrismaTourPackage } from '@/lib/db';
 import { TourPackage } from '@/services/tourPackageData';
 
 export const dynamic = 'force-dynamic';
@@ -11,7 +11,7 @@ export async function GET() {
       orderBy: { createdAt: 'asc' },
     });
 
-    const packages: TourPackage[] = rows.map((p) => ({
+    const packages: TourPackage[] = rows.map((p: PrismaTourPackage) => ({
       id: p.id,
       slug: p.slug,
       name: p.name,
