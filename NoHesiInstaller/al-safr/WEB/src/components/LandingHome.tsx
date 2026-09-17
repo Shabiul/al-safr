@@ -36,6 +36,7 @@ const SERVICES: {
   title: string;
   tagline: string;
   points: string[];
+  image: string;
 }[] = [
   {
     id: 'book',
@@ -43,6 +44,7 @@ const SERVICES: {
     title: 'Flight Booking',
     tagline: 'Live domestic & international fares',
     points: ['Real-time fares via Google Flights, not cached estimates', 'Economy, Business and First cabin classes', 'Live aircraft radar for every route we search'],
+    image: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=800',
   },
   {
     id: 'hotels',
@@ -50,6 +52,7 @@ const SERVICES: {
     title: 'Hotel Booking',
     tagline: 'Real inventory, worldwide',
     points: ['Live rates and availability via Booking.com', 'Filter by star rating, guest rating and price', 'From budget stays to overwater villas'],
+    image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800',
   },
   {
     id: 'tours',
@@ -57,6 +60,7 @@ const SERVICES: {
     title: 'Tour Packages',
     tagline: 'Ready-to-book holidays',
     points: ['10 curated packages across 4 continents', 'Full day-by-day itinerary for every trip', 'Clear inclusions and exclusions, no fine print'],
+    image: 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=800',
   },
   {
     id: 'cabs',
@@ -64,12 +68,25 @@ const SERVICES: {
     title: 'Cab & Car Rental',
     tagline: 'Self-drive, real supplier pricing',
     points: ['Live pricing via Booking.com', 'Covers Europe and parts of Asia today', 'Real transmission, seats and cancellation terms'],
+    image: 'https://images.unsplash.com/photo-1502877338535-766e1452684a?w=800',
   },
 ];
 
-const TOOLS: { id: TabId; icon: React.ElementType; title: string; description: string }[] = [
-  { id: 'radar', icon: Radio, title: 'Live Flight Radar', description: 'Track real aircraft over the globe via OpenSky Network ADS-B data.' },
-  { id: 'price', icon: TrendingUp, title: 'Fare Trends', description: '7-day fare forecasts anchored on the cheapest real fare we find.' },
+const TOOLS: { id: TabId; icon: React.ElementType; title: string; description: string; image: string }[] = [
+  {
+    id: 'radar',
+    icon: Radio,
+    title: 'Live Flight Radar',
+    description: 'Track real aircraft over the globe via OpenSky Network ADS-B data.',
+    image: 'https://images.unsplash.com/photo-1436915359307-2a869c4a58ad?w=400',
+  },
+  {
+    id: 'price',
+    icon: TrendingUp,
+    title: 'Fare Trends',
+    description: '7-day fare forecasts anchored on the cheapest real fare we find.',
+    image: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=400',
+  },
 ];
 
 const WHY_US = [
@@ -283,28 +300,46 @@ export const LandingHome: React.FC<LandingHomeProps> = ({ currency, onNavigate }
               <button
                 key={service.id}
                 onClick={() => onNavigate(service.id)}
-                className="group text-left rounded-2xl p-6 flex flex-col gap-3 text-white transition-transform hover:scale-[1.01]"
-                style={{ backgroundColor: 'var(--color-navy-900)' }}
+                className="group relative overflow-hidden text-left rounded-2xl text-white transition-transform hover:scale-[1.01]"
               >
-                <div className="w-11 h-11 rounded-xl bg-white/10 flex items-center justify-center">
-                  <Icon className="w-5 h-5" style={{ color: 'var(--color-gold-400)' }} />
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={service.image}
+                  alt=""
+                  aria-hidden="true"
+                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+                <div
+                  className="absolute inset-0"
+                  style={{ background: 'linear-gradient(180deg, rgba(4,24,44,0.55) 0%, rgba(4,24,44,0.88) 65%, var(--color-navy-900) 100%)' }}
+                  aria-hidden="true"
+                />
+
+                {/* Everything below must live in this single positioned
+                    wrapper — a static-position sibling would paint behind
+                    the absolutely-positioned image/gradient above, not on
+                    top of them, regardless of DOM order. */}
+                <div className="relative p-6 flex flex-col gap-3 h-full">
+                  <div className="w-11 h-11 rounded-xl bg-white/10 backdrop-blur flex items-center justify-center">
+                    <Icon className="w-5 h-5" style={{ color: 'var(--color-gold-400)' }} />
+                  </div>
+                  <h3 className="text-lg font-semibold">{service.title}</h3>
+                  <p className="text-sm" style={{ color: 'var(--color-gold-400)' }}>
+                    {service.tagline}
+                  </p>
+                  <ul className="space-y-1.5 text-sm text-slate-300">
+                    {service.points.map((p) => (
+                      <li key={p} className="flex items-start gap-2">
+                        <span className="mt-1.5 w-1 h-1 rounded-full bg-white/50 shrink-0" />
+                        {p}
+                      </li>
+                    ))}
+                  </ul>
+                  <span className="mt-auto pt-2 flex items-center gap-1.5 text-sm font-semibold" style={{ color: 'var(--color-gold-400)' }}>
+                    Explore
+                    <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+                  </span>
                 </div>
-                <h3 className="text-lg font-semibold">{service.title}</h3>
-                <p className="text-sm" style={{ color: 'var(--color-gold-400)' }}>
-                  {service.tagline}
-                </p>
-                <ul className="space-y-1.5 text-sm text-slate-300">
-                  {service.points.map((p) => (
-                    <li key={p} className="flex items-start gap-2">
-                      <span className="mt-1.5 w-1 h-1 rounded-full bg-white/50 shrink-0" />
-                      {p}
-                    </li>
-                  ))}
-                </ul>
-                <span className="mt-auto pt-2 flex items-center gap-1.5 text-sm font-semibold" style={{ color: 'var(--color-gold-400)' }}>
-                  Explore
-                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
-                </span>
               </button>
             );
           })}
@@ -317,10 +352,14 @@ export const LandingHome: React.FC<LandingHomeProps> = ({ currency, onNavigate }
               <button
                 key={tool.id}
                 onClick={() => onNavigate(tool.id)}
-                className="group text-left bg-slate-50 hover:bg-white rounded-2xl border border-slate-200 hover:border-slate-300 transition-all p-5 flex items-center gap-4"
+                className="group text-left bg-slate-50 hover:bg-white rounded-2xl border border-slate-200 hover:border-slate-300 transition-all p-4 flex items-center gap-4"
               >
-                <div className="w-11 h-11 rounded-xl bg-white text-slate-700 border border-slate-200 flex items-center justify-center shrink-0">
-                  <Icon className="w-5 h-5" />
+                <div className="relative w-16 h-16 rounded-xl overflow-hidden shrink-0">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={tool.image} alt="" aria-hidden="true" className="absolute inset-0 w-full h-full object-cover" />
+                  <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
+                    <Icon className="w-6 h-6 text-white" />
+                  </div>
                 </div>
                 <div>
                   <h3 className="font-semibold text-slate-900">{tool.title}</h3>
