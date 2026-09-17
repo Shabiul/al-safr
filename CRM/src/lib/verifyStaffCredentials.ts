@@ -7,7 +7,7 @@ export async function verifyStaffCredentials(
   password: string
 ): Promise<StaffUser | null> {
   const staff = await prisma.staffUser.findUnique({ where: { email } });
-  if (!staff) return null;
+  if (!staff || !staff.active) return null;
 
   const isValid = await bcrypt.compare(password, staff.hashedPassword);
   if (!isValid) return null;

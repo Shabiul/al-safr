@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { AIRPORTS, Airport, FlightOption } from '@/services/flightData';
 import { hasRapidApiKey, rapidApiFetch } from '@/lib/rapidapi';
+import { getMarkupMultiplier } from '@/lib/markup';
 
 export const dynamic = 'force-dynamic';
 
@@ -75,7 +76,8 @@ function parseGoogleFlightsResponse(
   json: any,
   origin: Airport,
   dest: Airport,
-  cabinClass: string
+  cabinClass: string,
+  markupMultiplier: number
 ): { options: FlightOption[]; layoverMap: Map<string, LayoverInfo[]> } | null {
   const top: GfItinerary[] = Array.isArray(json?.data?.topFlights) ? json.data.topFlights : [];
   const other: GfItinerary[] = Array.isArray(json?.data?.otherFlights) ? json.data.otherFlights : [];
@@ -102,7 +104,7 @@ function parseGoogleFlightsResponse(
     const stops = it.stops ?? it.segments.length - 1;
     const durHours = Math.floor(it.duration / 60);
     const durMins = it.duration % 60;
-    const economyEquivalent = it.price / ratio;
+    const economyEquivalent = (it.price / ratio) * markupMultiplier;
 
     const firstSeg = it.segments[0];
     const lastSeg = it.segments[it.segments.length - 1];
@@ -218,7 +220,8 @@ async function fetchGoogleFlights(
       return { flights: null, notice: errMsg };
     }
 
-    const parsed = parseGoogleFlightsResponse(json, origin, dest, cabinClass);
+    const markupMultiplier = await getMarkupMultiplier('flights');
+    const parsed = parseGoogleFlightsResponse(json, origin, dest, cabinClass, markupMultiplier);
     if (!parsed) return { flights: null, notice: 'No flights returned for this route' };
 
     const { options, layoverMap } = parsed;

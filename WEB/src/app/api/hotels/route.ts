@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { hasRapidApiKey, rapidApiFetch } from '@/lib/rapidapi';
 import { HotelOption } from '@/services/hotelData';
 import { CURRENCIES, CurrencyCode } from '@/services/flightData';
+import { getMarkupMultiplier } from '@/lib/markup';
 
 export const dynamic = 'force-dynamic';
 
@@ -84,24 +85,28 @@ export async function GET(request: Request) {
     // The result array also carries non-hotel banner/ranking-disclosure
     // entries with no hotel_id — filter those out.
     const results: any[] = (json?.result || []).filter((h: any) => h.hotel_id);
-    const hotels: HotelOption[] = results.map((h) => ({
-      id: String(h.hotel_id),
-      name: h.hotel_name || h.hotel_name_trans || 'Unnamed Hotel',
-      address: h.address || '',
-      city: h.city || destination || '',
-      stars: h.class || 0,
-      reviewScore: typeof h.review_score === 'number' ? h.review_score : null,
-      reviewCount: h.review_nr ?? null,
-      priceUsd:
+    const markupMultiplier = await getMarkupMultiplier('hotels');
+    const hotels: HotelOption[] = results.map((h) => {
+      const rawUsd =
         h.min_total_price != null
           ? toUsd(h.min_total_price, h.currency_code)
           : h.composite_price_breakdown?.gross_amount?.value != null
             ? toUsd(h.composite_price_breakdown.gross_amount.value, h.composite_price_breakdown.gross_amount.currency)
-            : null,
-      photoUrl: h.max_photo_url || h.main_photo_url || null,
-      distanceToCenterKm: typeof h.distance_to_cc === 'number' ? h.distance_to_cc : null,
-      bookingUrl: h.url || `https://www.booking.com/hotel/${h.hotel_id}.html`,
-    }));
+            : null;
+      return {
+        id: String(h.hotel_id),
+        name: h.hotel_name || h.hotel_name_trans || 'Unnamed Hotel',
+        address: h.address || '',
+        city: h.city || destination || '',
+        stars: h.class || 0,
+        reviewScore: typeof h.review_score === 'number' ? h.review_score : null,
+        reviewCount: h.review_nr ?? null,
+        priceUsd: rawUsd != null ? rawUsd * markupMultiplier : null,
+        photoUrl: h.max_photo_url || h.main_photo_url || null,
+        distanceToCenterKm: typeof h.distance_to_cc === 'number' ? h.distance_to_cc : null,
+        bookingUrl: h.url || `https://www.booking.com/hotel/${h.hotel_id}.html`,
+      };
+    });
 
     return NextResponse.json({ hotels, destination: dest });
   } catch (err: any) {

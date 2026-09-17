@@ -26,13 +26,12 @@ model StaffUser {
   hashedPassword String
   name           String
   role           StaffRole @default(STAFF)
+  active         Boolean   @default(true)
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
 }
 
-// Admin-managed catalogue (create/edit/publish/unpublish is a CRM feature
-// for a later phase) — for now this is populated by the seed script so the
-// public listing has real content to show.
+// Admin-managed catalogue — create/edit/publish/unpublish via the CRM.
 model TourPackage {
   id           String   @id @default(cuid())
   slug         String   @unique
@@ -56,9 +55,7 @@ enum LeadType {
   CONTACT
 }
 
-// Submissions from the "Get a Quote" and "Contact" forms. No admin UI to
-// view these yet (that's the Admin Panel phase) — they're just persisted
-// for now so nothing submitted is lost.
+// Submissions from the "Get a Quote" and "Contact" forms on the WEB app.
 model Lead {
   id          String   @id @default(cuid())
   type        LeadType
@@ -69,4 +66,34 @@ model Lead {
   destination String?
   message     String?
   createdAt   DateTime @default(now())
+}
+
+// One row per priced service (flight/hotel/cab) — a percentage markup the
+// WEB app adds on top of the live supplier price before showing it to
+// customers. Edited from the CRM; read by WEB at search time.
+model MarkupSetting {
+  service    String   @id // "flights" | "hotels" | "cabs"
+  percentage Float    @default(0)
+  updatedAt  DateTime @updatedAt
+}
+
+enum PromoDiscountType {
+  PERCENTAGE
+  FIXED
+}
+
+// Management only for now — there's no checkout yet (payment gateway is
+// deferred) for a code to actually be redeemed against.
+model PromoCode {
+  id            String            @id @default(cuid())
+  code          String            @unique
+  discountType  PromoDiscountType
+  discountValue Float
+  validFrom     DateTime?
+  validUntil    DateTime?
+  usageLimit    Int?
+  timesUsed     Int               @default(0)
+  active        Boolean           @default(true)
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
 }

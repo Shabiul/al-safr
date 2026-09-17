@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { hasRapidApiKey, rapidApiFetch } from '@/lib/rapidapi';
 import { CAR_RENTAL_COUNTRIES, CabOption } from '@/services/cabData';
+import { getMarkupMultiplier } from '@/lib/markup';
 
 export const dynamic = 'force-dynamic';
 
@@ -53,12 +54,14 @@ export async function GET(request: Request) {
     }
 
     const items: any[] = json?.content?.items || [];
+    const markupMultiplier = await getMarkupMultiplier('cabs');
     const cabs: CabOption[] = items
       .filter((item) => item.type === 'CAR_CARD')
       .map((item) => {
         const c = item.content;
         const transmissionSpec = (c.vehicleSpecs || []).find((s: any) => String(s.icon).startsWith('TRANSMISSION_'));
         const priceMatch = String(c.pricing?.finalPriceDisplay || '').match(/[\d,.]+/);
+        const rawPrice = priceMatch ? Number(priceMatch[0].replace(/,/g, '')) : null;
         return {
           id: String(c.metadata?.vehicleId ?? crypto.randomUUID()),
           name: c.title || 'Rental car',
@@ -70,7 +73,7 @@ export async function GET(request: Request) {
           supplierRating: c.supplier?.rating?.score ? Number(c.supplier.rating.score) : null,
           pickupLocationLabel: c.location?.pickup?.location || '',
           freeCancellation: (c.badges || []).some((b: any) => b.id?.includes('free-cancellation')),
-          priceUsd: priceMatch ? Number(priceMatch[0].replace(/,/g, '')) : null,
+          priceUsd: rawPrice != null ? rawPrice * markupMultiplier : null,
         };
       });
 
