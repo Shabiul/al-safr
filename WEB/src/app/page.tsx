@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
+import Link from 'next/link';
 import { Header } from '@/components/Header';
 import { LandingHome } from '@/components/LandingHome';
 import { FlightSearch } from '@/components/FlightSearch';
@@ -421,7 +422,7 @@ export default function Home() {
       {/* Footer */}
       <footer className="mt-16 py-14 text-sm text-slate-300" style={{ backgroundColor: '#04182c' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-10">
             <div className="space-y-3">
               <div className="flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-lg bg-brand-600 text-white flex items-center justify-center">
@@ -442,6 +443,15 @@ export default function Home() {
                 <li><button onClick={() => handleNavigate('hotels')} className="hover:text-white transition-colors">Hotels</button></li>
                 <li><button onClick={() => handleNavigate('tours')} className="hover:text-white transition-colors">Tour Packages</button></li>
                 <li><button onClick={() => handleNavigate('cabs')} className="hover:text-white transition-colors">Cabs</button></li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="font-semibold text-white mb-3">Company</h3>
+              <ul className="space-y-2 text-slate-400">
+                <li><Link href="/about" className="hover:text-white transition-colors">About Us</Link></li>
+                <li><Link href="/contact" className="hover:text-white transition-colors">Contact</Link></li>
+                <li><Link href="/get-a-quote" className="hover:text-white transition-colors">Get a Quote</Link></li>
               </ul>
             </div>
 
@@ -469,8 +479,12 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="border-t border-white/10 mt-10 pt-6 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-slate-500">
-            <p>© 2026 Al-Safr Tours N Travels. All rights reserved.</p>
+          <div className="border-t border-white/10 mt-10 pt-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-slate-500">
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+              <p>© 2026 Al-Safr Tours N Travels. All rights reserved.</p>
+              <Link href="/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</Link>
+              <Link href="/terms" className="hover:text-white transition-colors">Terms &amp; Conditions</Link>
+            </div>
             <div className="flex items-center gap-4">
               <span>Live fares via Google Flights</span>
               <span className="text-slate-600">•</span>
