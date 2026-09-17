@@ -50,3 +50,23 @@ model TourPackage {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 }
+
+enum LeadType {
+  QUOTE
+  CONTACT
+}
+
+// Submissions from the "Get a Quote" and "Contact" forms. No admin UI to
+// view these yet (that's the Admin Panel phase) — they're just persisted
+// for now so nothing submitted is lost.
+model Lead {
+  id          String   @id @default(cuid())
+  type        LeadType
+  name        String
+  email       String?
+  phone       String?
+  service     String?
+  destination String?
+  message     String?
+  createdAt   DateTime @default(now())
+}

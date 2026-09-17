@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Plane, Globe, Menu, X, Radio, TrendingUp, Ticket, Home, LayoutGrid, Phone, Mail, MapPin } from 'lucide-react';
+import Link from 'next/link';
+import { Plane, Globe, Menu, X, Radio, TrendingUp, Ticket, Home, LayoutGrid, Phone, Mail, MapPin, ArrowRight } from 'lucide-react';
 import { CurrencyCode, CURRENCIES } from '@/services/flightData';
 
 type MainTab = 'home' | 'services' | 'radar' | 'price' | 'bookings';
@@ -121,6 +122,14 @@ export const Header: React.FC<HeaderProps> = ({
             </select>
           </div>
 
+          <Link
+            href="/get-a-quote"
+            className="focus-ring hidden sm:flex items-center gap-1.5 px-4 py-2 rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold transition-colors"
+          >
+            Get a Quote
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
+
           <button
             type="button"
             onClick={() => setIsMenuOpen((v) => !v)}
@@ -175,6 +184,14 @@ export const Header: React.FC<HeaderProps> = ({
               ))}
             </select>
           </div>
+          <Link
+            href="/get-a-quote"
+            onClick={() => setIsMenuOpen(false)}
+            className="focus-ring flex items-center justify-center gap-1.5 mx-3.5 mt-2 px-4 py-2.5 rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold transition-colors"
+          >
+            Get a Quote
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
         </div>
       )}
       </div>
