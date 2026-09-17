@@ -12,15 +12,15 @@ interface HeaderProps {
   onTabChange: (tab: 'home' | 'book' | 'hotels' | 'tours' | 'cabs' | 'radar' | 'price' | 'bookings') => void;
 }
 
-const TABS: { id: 'home' | 'book' | 'hotels' | 'tours' | 'cabs' | 'radar' | 'price' | 'bookings'; label: string; icon: React.ElementType }[] = [
-  { id: 'home', label: 'Home', icon: Home },
-  { id: 'book', label: 'Search Flights', icon: Search },
-  { id: 'hotels', label: 'Hotels', icon: Building2 },
-  { id: 'tours', label: 'Tour Packages', icon: Compass },
-  { id: 'cabs', label: 'Cabs', icon: Car },
-  { id: 'radar', label: 'Live Radar', icon: Radio },
-  { id: 'price', label: 'Fare Trends', icon: TrendingUp },
-  { id: 'bookings', label: 'My Trips', icon: Ticket },
+const TABS: { id: 'home' | 'book' | 'hotels' | 'tours' | 'cabs' | 'radar' | 'price' | 'bookings'; label: string; navLabel: string; icon: React.ElementType }[] = [
+  { id: 'home', label: 'Home', navLabel: 'Home', icon: Home },
+  { id: 'book', label: 'Search Flights', navLabel: 'Flights', icon: Search },
+  { id: 'hotels', label: 'Hotels', navLabel: 'Hotels', icon: Building2 },
+  { id: 'tours', label: 'Tour Packages', navLabel: 'Tours', icon: Compass },
+  { id: 'cabs', label: 'Cabs', navLabel: 'Cabs', icon: Car },
+  { id: 'radar', label: 'Live Radar', navLabel: 'Radar', icon: Radio },
+  { id: 'price', label: 'Fare Trends', navLabel: 'Fares', icon: TrendingUp },
+  { id: 'bookings', label: 'My Trips', navLabel: 'My Trips', icon: Ticket },
 ];
 
 export const Header: React.FC<HeaderProps> = ({
@@ -79,8 +79,8 @@ export const Header: React.FC<HeaderProps> = ({
           )}
         </button>
 
-        {/* Desktop nav */}
-        <nav className="hidden md:flex items-center gap-1" aria-label="Primary">
+        {/* Desktop nav — lg+ only; 8 tabs don't fit at md widths (768-1024px) */}
+        <nav className="hidden lg:flex items-center gap-0.5 xl:gap-1" aria-label="Primary">
           {TABS.map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
@@ -90,12 +90,13 @@ export const Header: React.FC<HeaderProps> = ({
                 type="button"
                 onClick={() => onTabChange(tab.id)}
                 aria-current={isActive ? 'page' : undefined}
-                className={`focus-ring px-3.5 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-1.5 ${
+                title={tab.label}
+                className={`focus-ring px-2.5 xl:px-3.5 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-1.5 whitespace-nowrap ${
                   isActive ? 'bg-brand-50 text-brand-700' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
                 }`}
               >
-                <Icon className="w-4 h-4" />
-                {tab.label}
+                <Icon className="w-4 h-4 shrink-0" />
+                {tab.navLabel}
               </button>
             );
           })}
@@ -127,7 +128,7 @@ export const Header: React.FC<HeaderProps> = ({
             onClick={() => setIsMenuOpen((v) => !v)}
             aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={isMenuOpen}
-            className="focus-ring md:hidden p-2 rounded-lg text-slate-600 hover:bg-slate-50"
+            className="focus-ring lg:hidden p-2 rounded-lg text-slate-600 hover:bg-slate-50"
           >
             {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
@@ -136,7 +137,7 @@ export const Header: React.FC<HeaderProps> = ({
 
       {/* Mobile menu */}
       {isMenuOpen && (
-        <div className="md:hidden border-t border-slate-200 bg-white px-4 py-3 space-y-1">
+        <div className="lg:hidden border-t border-slate-200 bg-white px-4 py-3 space-y-1">
           {TABS.map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;

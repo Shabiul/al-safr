@@ -162,16 +162,23 @@ export const LandingHome: React.FC<LandingHomeProps> = ({ currency, onNavigate }
 
   return (
     <div className="space-y-20" style={{ fontFamily: 'var(--font-display)' }}>
-      {/* Hero */}
-      <div className="relative rounded-3xl overflow-hidden">
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: "url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600')" }}
-          aria-hidden="true"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-[color:var(--color-navy-900)]/90 via-[color:var(--color-navy-900)]/70 to-[color:var(--color-navy-900)]/40" aria-hidden="true" />
+      {/* Hero + stats bar wrapped together so the parent's space-y-20 treats
+          them as one unit — the negative margin overlap between them is
+          otherwise fragile against a sibling-spacing utility fighting it. */}
+      <div>
+      {/* Hero — the background image/gradient live in their own clipped
+          layer so the stats card below can overlap the bottom edge without
+          being cut off by this container's own rounded-corner clipping. */}
+      <div className="relative">
+        <div className="absolute inset-0 rounded-3xl overflow-hidden" aria-hidden="true">
+          <div
+            className="absolute inset-0 bg-cover bg-center"
+            style={{ backgroundImage: "url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600')" }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-[color:var(--color-navy-900)]/90 via-[color:var(--color-navy-900)]/70 to-[color:var(--color-navy-900)]/40" />
+        </div>
 
-        <div className="relative p-8 sm:p-16 pb-28 sm:pb-32">
+        <div className="relative p-8 sm:p-16 pb-14 sm:pb-16">
           <div className="max-w-2xl space-y-5">
             <div className="flex flex-wrap items-center gap-3">
               <span
@@ -218,27 +225,30 @@ export const LandingHome: React.FC<LandingHomeProps> = ({ currency, onNavigate }
           </div>
         </div>
 
-        {/* Stats bar, overlapping the hero's bottom edge */}
-        <div className="absolute left-8 right-8 sm:left-16 sm:right-16 bottom-0 translate-y-1/2">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 rounded-2xl bg-white shadow-xl border border-slate-100 p-5 sm:p-7">
-            {[
-              { value: '16+', label: 'Years of experience' },
-              { value: '10,000+', label: 'Travellers served' },
-              { value: '10', label: 'Curated tour packages' },
-              { value: '500+', label: 'Cars available per search' },
-            ].map((stat) => (
-              <div key={stat.label}>
-                <div className="text-2xl sm:text-3xl font-bold" style={{ color: 'var(--color-gold-600)' }}>
-                  {stat.value}
-                </div>
-                <div className="text-xs sm:text-sm text-slate-500 mt-0.5">{stat.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
       </div>
 
-      <div className="h-8 sm:h-2" aria-hidden="true" />
+      {/* Stats bar — a normal-flow sibling pulled up over the hero's bottom
+          edge with a negative margin, so its real height (2 rows on mobile,
+          1 row from sm up) is never clipped and always reserves its own
+          space in the layout, no manual spacer needed. */}
+      <div className="relative z-10 px-4 sm:px-10 -mt-14 sm:-mt-10">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 rounded-2xl bg-white shadow-xl border border-slate-100 p-5 sm:p-7">
+          {[
+            { value: '16+', label: 'Years of experience' },
+            { value: '10,000+', label: 'Travellers served' },
+            { value: '10', label: 'Curated tour packages' },
+            { value: '500+', label: 'Cars available per search' },
+          ].map((stat) => (
+            <div key={stat.label}>
+              <div className="text-2xl sm:text-3xl font-bold" style={{ color: 'var(--color-gold-600)' }}>
+                {stat.value}
+              </div>
+              <div className="text-xs sm:text-sm text-slate-500 mt-0.5">{stat.label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+      </div>
 
       {/* Why us */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
