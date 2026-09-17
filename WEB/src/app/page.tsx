@@ -24,11 +24,26 @@ import {
   Printer,
   Ticket,
   RefreshCw,
+  Search,
+  Building2,
+  Compass,
+  Car,
 } from 'lucide-react';
+
+type MainTab = 'home' | 'services' | 'radar' | 'price' | 'bookings';
+type ServiceId = 'book' | 'hotels' | 'tours' | 'cabs';
+
+const SERVICE_TABS: { id: ServiceId; label: string; icon: React.ElementType }[] = [
+  { id: 'book', label: 'Flights', icon: Search },
+  { id: 'hotels', label: 'Hotels', icon: Building2 },
+  { id: 'tours', label: 'Tour Packages', icon: Compass },
+  { id: 'cabs', label: 'Cabs', icon: Car },
+];
 
 export default function Home() {
   const [currency, setCurrency] = useState<CurrencyCode>('INR');
-  const [activeTab, setActiveTab] = useState<'home' | 'book' | 'hotels' | 'tours' | 'cabs' | 'radar' | 'price' | 'bookings'>('home');
+  const [activeTab, setActiveTab] = useState<MainTab>('home');
+  const [activeService, setActiveService] = useState<ServiceId>('book');
   const [apiStatus, setApiStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
   // Search parameters
@@ -105,7 +120,20 @@ export default function Home() {
     setSearchParams(params);
     setSelectedCabin(params.cabinClass);
     fetchLiveFlightData(params.origin, params.destination, params.departureDate, params.supersonicOnly, params.cabinClass);
-    setActiveTab('book');
+    setActiveService('book');
+    setActiveTab('services');
+  };
+
+  // LandingHome's cards link to a specific service (book/hotels/tours/cabs)
+  // or a top-level tab (radar/price/bookings) — the services all live under
+  // one consolidated "Services" tab with its own sub-navigation.
+  const handleNavigate = (target: ServiceId | 'radar' | 'price' | 'bookings') => {
+    if (target === 'book' || target === 'hotels' || target === 'tours' || target === 'cabs') {
+      setActiveService(target);
+      setActiveTab('services');
+    } else {
+      setActiveTab(target);
+    }
   };
 
   // Open Seat Selector
@@ -148,7 +176,7 @@ export default function Home() {
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-6 sm:space-y-8">
         {/* Tab View 0: Landing page */}
-        {activeTab === 'home' && <LandingHome currency={currency} onNavigate={setActiveTab} />}
+        {activeTab === 'home' && <LandingHome currency={currency} onNavigate={handleNavigate} />}
 
         {activeTab !== 'home' && (
           <>
@@ -181,78 +209,100 @@ export default function Home() {
           </>
         )}
 
-        {/* Tab View 1: Flight Search & Results */}
-        {activeTab === 'book' && (
+        {/* Tab View 1: Services hub — Flights, Hotels, Tour Packages, Cabs
+            share one tab with its own sub-navigation, instead of four
+            separate top-level tabs. */}
+        {activeTab === 'services' && (
           <div className="space-y-6">
-            <FlightSearch
-              currency={currency}
-              origin={searchParams.origin}
-              destination={searchParams.destination}
-              departureDate={searchParams.departureDate}
-              returnDate={searchParams.returnDate}
-              cabinClass={selectedCabin}
-              passengers={searchParams.passengers}
-              supersonicOnly={searchParams.supersonicOnly}
-              onSearch={handleSearch}
-            />
+            <div className="flex flex-wrap items-center gap-1.5 bg-slate-100 p-1.5 rounded-2xl w-fit">
+              {SERVICE_TABS.map((service) => {
+                const Icon = service.icon;
+                const isActive = activeService === service.id;
+                return (
+                  <button
+                    key={service.id}
+                    type="button"
+                    onClick={() => setActiveService(service.id)}
+                    aria-current={isActive ? 'page' : undefined}
+                    className={`focus-ring flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-sm font-medium transition-colors ${
+                      isActive ? 'bg-white text-brand-700 shadow-sm' : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                  >
+                    <Icon className="w-4 h-4" />
+                    {service.label}
+                  </button>
+                );
+              })}
+            </div>
 
-            <div className="space-y-4">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                <div>
-                  <h2 className="text-lg font-semibold text-slate-900">
-                    {flights.length} {flights.length === 1 ? 'flight' : 'flights'} found
-                    <span className="ml-2 text-sm font-normal text-slate-500">
-                      {searchParams.origin} → {searchParams.destination}
-                    </span>
-                  </h2>
-                  {dataSourceNotice && (
-                    <p className="text-xs text-slate-400 mt-0.5">{dataSourceNotice}</p>
+            {activeService === 'book' && (
+              <div className="space-y-6">
+                <FlightSearch
+                  currency={currency}
+                  origin={searchParams.origin}
+                  destination={searchParams.destination}
+                  departureDate={searchParams.departureDate}
+                  returnDate={searchParams.returnDate}
+                  cabinClass={selectedCabin}
+                  passengers={searchParams.passengers}
+                  supersonicOnly={searchParams.supersonicOnly}
+                  onSearch={handleSearch}
+                />
+
+                <div className="space-y-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div>
+                      <h2 className="text-lg font-semibold text-slate-900">
+                        {flights.length} {flights.length === 1 ? 'flight' : 'flights'} found
+                        <span className="ml-2 text-sm font-normal text-slate-500">
+                          {searchParams.origin} → {searchParams.destination}
+                        </span>
+                      </h2>
+                      {dataSourceNotice && (
+                        <p className="text-xs text-slate-400 mt-0.5">{dataSourceNotice}</p>
+                      )}
+                    </div>
+                  </div>
+
+                  {isFetchingLive ? (
+                    <div className="p-12 text-center bg-slate-50 rounded-2xl border border-slate-200 space-y-3">
+                      <RefreshCw className="w-7 h-7 text-brand-600 animate-spin mx-auto" />
+                      <div className="font-medium text-sm text-slate-700">Searching live fares…</div>
+                      <p className="text-sm text-slate-500">
+                        {searchParams.origin} → {searchParams.destination}
+                      </p>
+                    </div>
+                  ) : flights.length === 0 ? (
+                    <div className="p-12 text-center bg-slate-50 rounded-2xl border border-dashed border-slate-300 space-y-2">
+                      <div className="font-medium text-sm text-slate-700">
+                        No live flights found for {searchParams.origin} → {searchParams.destination}
+                      </div>
+                      <p className="text-sm text-slate-500 max-w-md mx-auto">
+                        {dataSourceNotice || 'Try a different date, cabin class, or route.'}
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="space-y-3">
+                      {flights.map((flight) => (
+                        <FlightCard
+                          key={flight.id}
+                          flight={flight}
+                          currency={currency}
+                          selectedCabin={selectedCabin}
+                          onSelectFlight={handleOpenSeatSelector}
+                        />
+                      ))}
+                    </div>
                   )}
                 </div>
               </div>
+            )}
 
-              {isFetchingLive ? (
-                <div className="p-12 text-center bg-slate-50 rounded-2xl border border-slate-200 space-y-3">
-                  <RefreshCw className="w-7 h-7 text-brand-600 animate-spin mx-auto" />
-                  <div className="font-medium text-sm text-slate-700">Searching live fares…</div>
-                  <p className="text-sm text-slate-500">
-                    {searchParams.origin} → {searchParams.destination}
-                  </p>
-                </div>
-              ) : flights.length === 0 ? (
-                <div className="p-12 text-center bg-slate-50 rounded-2xl border border-dashed border-slate-300 space-y-2">
-                  <div className="font-medium text-sm text-slate-700">
-                    No live flights found for {searchParams.origin} → {searchParams.destination}
-                  </div>
-                  <p className="text-sm text-slate-500 max-w-md mx-auto">
-                    {dataSourceNotice || 'Try a different date, cabin class, or route.'}
-                  </p>
-                </div>
-              ) : (
-                <div className="space-y-3">
-                  {flights.map((flight) => (
-                    <FlightCard
-                      key={flight.id}
-                      flight={flight}
-                      currency={currency}
-                      selectedCabin={selectedCabin}
-                      onSelectFlight={handleOpenSeatSelector}
-                    />
-                  ))}
-                </div>
-              )}
-            </div>
+            {activeService === 'hotels' && <HotelSearch currency={currency} />}
+            {activeService === 'tours' && <TourPackages currency={currency} />}
+            {activeService === 'cabs' && <CabSearch currency={currency} />}
           </div>
         )}
-
-        {/* Tab View 1b: Hotel Search & Results */}
-        {activeTab === 'hotels' && <HotelSearch currency={currency} />}
-
-        {/* Tab View 1c: Tour Packages */}
-        {activeTab === 'tours' && <TourPackages currency={currency} />}
-
-        {/* Tab View 1d: Cab / Car Rental Search */}
-        {activeTab === 'cabs' && <CabSearch currency={currency} />}
 
         {/* Tab View 2: Live Flight Radar */}
         {activeTab === 'radar' && (
@@ -304,7 +354,7 @@ export default function Home() {
                   </p>
                 </div>
                 <button
-                  onClick={() => setActiveTab('book')}
+                  onClick={() => handleNavigate('book')}
                   className="focus-ring py-2.5 px-6 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold transition-colors"
                 >
                   Search flights
@@ -388,10 +438,10 @@ export default function Home() {
               <h3 className="font-semibold text-white mb-3">Explore</h3>
               <ul className="space-y-2 text-slate-400">
                 <li><button onClick={() => setActiveTab('home')} className="hover:text-white transition-colors">Home</button></li>
-                <li><button onClick={() => setActiveTab('book')} className="hover:text-white transition-colors">Flights</button></li>
-                <li><button onClick={() => setActiveTab('hotels')} className="hover:text-white transition-colors">Hotels</button></li>
-                <li><button onClick={() => setActiveTab('tours')} className="hover:text-white transition-colors">Tour Packages</button></li>
-                <li><button onClick={() => setActiveTab('cabs')} className="hover:text-white transition-colors">Cabs</button></li>
+                <li><button onClick={() => handleNavigate('book')} className="hover:text-white transition-colors">Flights</button></li>
+                <li><button onClick={() => handleNavigate('hotels')} className="hover:text-white transition-colors">Hotels</button></li>
+                <li><button onClick={() => handleNavigate('tours')} className="hover:text-white transition-colors">Tour Packages</button></li>
+                <li><button onClick={() => handleNavigate('cabs')} className="hover:text-white transition-colors">Cabs</button></li>
               </ul>
             </div>
 

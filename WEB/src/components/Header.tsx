@@ -1,26 +1,25 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Plane, Globe, Menu, X, Search, Radio, TrendingUp, Ticket, Building2, Compass, Car, Home, Phone, Mail, MapPin } from 'lucide-react';
+import { Plane, Globe, Menu, X, Radio, TrendingUp, Ticket, Home, LayoutGrid, Phone, Mail, MapPin } from 'lucide-react';
 import { CurrencyCode, CURRENCIES } from '@/services/flightData';
+
+type MainTab = 'home' | 'services' | 'radar' | 'price' | 'bookings';
 
 interface HeaderProps {
   currency: CurrencyCode;
   onCurrencyChange: (curr: CurrencyCode) => void;
   apiStatus: 'idle' | 'loading' | 'success' | 'error';
-  activeTab: 'home' | 'book' | 'hotels' | 'tours' | 'cabs' | 'radar' | 'price' | 'bookings';
-  onTabChange: (tab: 'home' | 'book' | 'hotels' | 'tours' | 'cabs' | 'radar' | 'price' | 'bookings') => void;
+  activeTab: MainTab;
+  onTabChange: (tab: MainTab) => void;
 }
 
-const TABS: { id: 'home' | 'book' | 'hotels' | 'tours' | 'cabs' | 'radar' | 'price' | 'bookings'; label: string; navLabel: string; icon: React.ElementType }[] = [
-  { id: 'home', label: 'Home', navLabel: 'Home', icon: Home },
-  { id: 'book', label: 'Search Flights', navLabel: 'Flights', icon: Search },
-  { id: 'hotels', label: 'Hotels', navLabel: 'Hotels', icon: Building2 },
-  { id: 'tours', label: 'Tour Packages', navLabel: 'Tours', icon: Compass },
-  { id: 'cabs', label: 'Cabs', navLabel: 'Cabs', icon: Car },
-  { id: 'radar', label: 'Live Radar', navLabel: 'Radar', icon: Radio },
-  { id: 'price', label: 'Fare Trends', navLabel: 'Fares', icon: TrendingUp },
-  { id: 'bookings', label: 'My Trips', navLabel: 'My Trips', icon: Ticket },
+const TABS: { id: MainTab; label: string; icon: React.ElementType }[] = [
+  { id: 'home', label: 'Home', icon: Home },
+  { id: 'services', label: 'Services', icon: LayoutGrid },
+  { id: 'radar', label: 'Live Radar', icon: Radio },
+  { id: 'price', label: 'Fare Trends', icon: TrendingUp },
+  { id: 'bookings', label: 'My Trips', icon: Ticket },
 ];
 
 export const Header: React.FC<HeaderProps> = ({
@@ -79,8 +78,8 @@ export const Header: React.FC<HeaderProps> = ({
           )}
         </button>
 
-        {/* Desktop nav — lg+ only; 8 tabs don't fit at md widths (768-1024px) */}
-        <nav className="hidden lg:flex items-center gap-0.5 xl:gap-1" aria-label="Primary">
+        {/* Desktop nav */}
+        <nav className="hidden lg:flex items-center gap-1" aria-label="Primary">
           {TABS.map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
@@ -90,13 +89,12 @@ export const Header: React.FC<HeaderProps> = ({
                 type="button"
                 onClick={() => onTabChange(tab.id)}
                 aria-current={isActive ? 'page' : undefined}
-                title={tab.label}
-                className={`focus-ring px-2.5 xl:px-3.5 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-1.5 whitespace-nowrap ${
+                className={`focus-ring px-3.5 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-1.5 whitespace-nowrap ${
                   isActive ? 'bg-brand-50 text-brand-700' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
                 }`}
               >
                 <Icon className="w-4 h-4 shrink-0" />
-                {tab.navLabel}
+                {tab.label}
               </button>
             );
           })}
