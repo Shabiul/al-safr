@@ -2,7 +2,8 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { Plane, Globe, Menu, X, Ticket, Home, LayoutGrid, Phone, Mail, MapPin, ArrowRight } from 'lucide-react';
+import { usePathname } from 'next/navigation';
+import { Plane, Globe, Menu, X, Ticket, Home, LayoutGrid, Phone, Mail, MapPin, ArrowRight, Info, MessageCircle } from 'lucide-react';
 import { CurrencyCode, CURRENCIES } from '@/services/flightData';
 
 type MainTab = 'home' | 'services' | 'bookings';
@@ -21,6 +22,12 @@ const TABS: { id: MainTab; label: string; icon: React.ElementType }[] = [
   { id: 'bookings', label: 'My Trips', icon: Ticket },
 ];
 
+// Real routes (not SPA tab state) shown alongside the tabs above.
+const PAGE_LINKS: { href: string; label: string; icon: React.ElementType }[] = [
+  { href: '/about', label: 'About Us', icon: Info },
+  { href: '/contact', label: 'Contact', icon: MessageCircle },
+];
+
 export const Header: React.FC<HeaderProps> = ({
   currency,
   onCurrencyChange,
@@ -29,6 +36,7 @@ export const Header: React.FC<HeaderProps> = ({
   onTabChange,
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const pathname = usePathname();
 
   return (
     <header className="sticky top-0 z-40 w-full">
@@ -97,6 +105,23 @@ export const Header: React.FC<HeaderProps> = ({
               </button>
             );
           })}
+          {PAGE_LINKS.map((link) => {
+            const Icon = link.icon;
+            const isActive = pathname === link.href;
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                aria-current={isActive ? 'page' : undefined}
+                className={`focus-ring px-3.5 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-1.5 whitespace-nowrap ${
+                  isActive ? 'bg-brand-50 text-brand-700' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                }`}
+              >
+                <Icon className="w-4 h-4 shrink-0" />
+                {link.label}
+              </Link>
+            );
+          })}
         </nav>
 
         {/* Right side */}
@@ -162,6 +187,24 @@ export const Header: React.FC<HeaderProps> = ({
                 <Icon className="w-4 h-4" />
                 {tab.label}
               </button>
+            );
+          })}
+          {PAGE_LINKS.map((link) => {
+            const Icon = link.icon;
+            const isActive = pathname === link.href;
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={() => setIsMenuOpen(false)}
+                aria-current={isActive ? 'page' : undefined}
+                className={`focus-ring w-full px-3.5 py-2.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-2.5 ${
+                  isActive ? 'bg-brand-50 text-brand-700' : 'text-slate-600 hover:bg-slate-50'
+                }`}
+              >
+                <Icon className="w-4 h-4" />
+                {link.label}
+              </Link>
             );
           })}
           <div className="flex items-center gap-1.5 px-3.5 py-2.5">
