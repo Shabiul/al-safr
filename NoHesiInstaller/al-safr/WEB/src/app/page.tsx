@@ -155,7 +155,10 @@ export default function Home() {
         onTabChange={setActiveTab}
       />
 
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-6 sm:space-y-8">
+      {/* Header is a fixed overlay (transparent over the hero on the home
+          tab), so it no longer reserves space in normal flow — every other
+          tab needs top padding matching its solid height instead. */}
+      <main className={`flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pb-6 sm:pb-8 space-y-6 sm:space-y-8 ${activeTab === 'home' ? '' : 'pt-20 sm:pt-28'}`}>
         {/* Tab View 0: Landing page */}
         {activeTab === 'home' && <LandingHome currency={currency} onNavigate={handleNavigate} />}
 

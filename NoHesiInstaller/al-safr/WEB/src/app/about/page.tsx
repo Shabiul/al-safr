@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { StaticPageShell } from '@/components/StaticPageShell';
 import { ShieldCheck, Globe2, BadgeCheck, MapPin, ArrowRight, Flag, Plane, Rocket } from 'lucide-react';
+import { CountUpStat } from '@/components/CountUpStat';
 
 export const metadata = {
   title: 'About Us | Al-Safr',
@@ -59,7 +60,7 @@ export default function AboutPage() {
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 rounded-2xl bg-slate-50 border border-slate-200 p-5 sm:p-7">
         {STATS.map((stat) => (
           <div key={stat.label}>
-            <div className="text-2xl sm:text-3xl font-bold text-brand-700">{stat.value}</div>
+            <CountUpStat value={stat.value} className="block text-2xl sm:text-3xl font-bold text-brand-700" />
             <div className="text-xs sm:text-sm text-slate-500 mt-0.5">{stat.label}</div>
           </div>
         ))}
