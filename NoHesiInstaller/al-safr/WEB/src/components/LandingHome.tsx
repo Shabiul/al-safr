@@ -8,7 +8,6 @@ import {
   Building2,
   Compass,
   Car,
-  Radio,
   ArrowRight,
   ShieldCheck,
   Globe2,
@@ -22,7 +21,7 @@ import {
 import { CurrencyCode, formatPrice } from '@/services/flightData';
 import { TourPackage } from '@/services/tourPackageData';
 
-type TabId = 'book' | 'hotels' | 'tours' | 'cabs' | 'radar' | 'bookings';
+type TabId = 'book' | 'hotels' | 'tours' | 'cabs' | 'bookings';
 
 interface LandingHomeProps {
   currency: CurrencyCode;
@@ -42,7 +41,7 @@ const SERVICES: {
     icon: Plane,
     title: 'Flight Booking',
     tagline: 'Live domestic & international fares',
-    points: ['Real-time fares via Google Flights, not cached estimates', 'Economy, Business and First cabin classes', 'Live aircraft radar for every route we search'],
+    points: ['Real-time fares via Google Flights, not cached estimates', 'Economy, Business and First cabin classes', 'Book directly into a real seat map'],
     image: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=800',
   },
   {
@@ -68,16 +67,6 @@ const SERVICES: {
     tagline: 'Self-drive, real supplier pricing',
     points: ['Live pricing via Booking.com', 'Covers Europe and parts of Asia today', 'Real transmission, seats and cancellation terms'],
     image: 'https://images.unsplash.com/photo-1502877338535-766e1452684a?w=800',
-  },
-];
-
-const TOOLS: { id: TabId; icon: React.ElementType; title: string; description: string; image: string }[] = [
-  {
-    id: 'radar',
-    icon: Radio,
-    title: 'Live Flight Radar',
-    description: 'Track real aircraft over the globe via OpenSky Network ADS-B data.',
-    image: 'https://images.unsplash.com/photo-1436915359307-2a869c4a58ad?w=400',
   },
 ];
 
@@ -139,10 +128,6 @@ const FAQS = [
     q: 'How are the tour packages priced?',
     a: 'Each of our 10 packages lists inclusions, exclusions and a full day-by-day itinerary with one clear per-person price — no hidden tiers.',
   },
-  {
-    q: 'Can I track my flight after booking?',
-    a: 'Yes — the Live Flight Radar tab tracks real aircraft in the sky using ADS-B data from OpenSky Network, independent of which airline you flew.',
-  },
 ];
 
 export const LandingHome: React.FC<LandingHomeProps> = ({ currency, onNavigate }) => {
@@ -178,16 +163,19 @@ export const LandingHome: React.FC<LandingHomeProps> = ({ currency, onNavigate }
       {/* Hero — the background image/gradient live in their own clipped
           layer so the stats card below can overlap the bottom edge without
           being cut off by this container's own rounded-corner clipping. */}
-      <div className="relative">
+      <div className="relative min-h-[calc(100svh-4rem)] sm:min-h-[calc(100svh-6rem)] flex items-center">
         <div className="absolute inset-0 rounded-3xl overflow-hidden" aria-hidden="true">
-          <div
-            className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: "url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600')" }}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80"
+            alt=""
+            aria-hidden="true"
+            className="absolute inset-0 w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-[color:var(--color-navy-900)]/90 via-[color:var(--color-navy-900)]/70 to-[color:var(--color-navy-900)]/40" />
         </div>
 
-        <div className="relative p-8 sm:p-16 pb-14 sm:pb-16">
+        <div className="relative p-8 sm:p-16 pb-14 sm:pb-16 w-full">
           <div className="max-w-2xl space-y-5">
             <div className="flex flex-wrap items-center gap-3">
               <span
@@ -332,32 +320,6 @@ export const LandingHome: React.FC<LandingHomeProps> = ({ currency, onNavigate }
                     <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
                   </span>
                 </div>
-              </button>
-            );
-          })}
-        </div>
-
-        <div className="grid grid-cols-1 max-w-md gap-4">
-          {TOOLS.map((tool) => {
-            const Icon = tool.icon;
-            return (
-              <button
-                key={tool.id}
-                onClick={() => onNavigate(tool.id)}
-                className="group text-left bg-slate-50 hover:bg-white rounded-2xl border border-slate-200 hover:border-slate-300 transition-all p-4 flex items-center gap-4"
-              >
-                <div className="relative w-16 h-16 rounded-xl overflow-hidden shrink-0">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={tool.image} alt="" aria-hidden="true" className="absolute inset-0 w-full h-full object-cover" />
-                  <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
-                    <Icon className="w-6 h-6 text-white" />
-                  </div>
-                </div>
-                <div>
-                  <h3 className="font-semibold text-slate-900">{tool.title}</h3>
-                  <p className="text-sm text-slate-500">{tool.description}</p>
-                </div>
-                <ArrowRight className="w-4 h-4 text-slate-300 group-hover:translate-x-0.5 transition-all ml-auto shrink-0" />
               </button>
             );
           })}
