@@ -1,23 +1,25 @@
 import { auth } from '@/auth';
 import { prisma } from '@/lib/db';
-import { Inbox, Users, Compass, UserCog, MessageSquare, FileText } from 'lucide-react';
+import { Inbox, Users, Compass, UserCog, MessageSquare, FileText, CalendarCheck } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 
 export default async function DashboardPage() {
   const session = await auth();
 
-  const [customerCount, staffCount, packageCount, quoteCount, contactCount, recentLeads] = await Promise.all([
+  const [customerCount, staffCount, packageCount, quoteCount, contactCount, bookingCount, recentLeads] = await Promise.all([
     prisma.customer.count(),
     prisma.staffUser.count({ where: { active: true } }),
     prisma.tourPackage.count(),
     prisma.lead.count({ where: { type: 'QUOTE' } }),
     prisma.lead.count({ where: { type: 'CONTACT' } }),
+    prisma.booking.count(),
     prisma.lead.findMany({ orderBy: { createdAt: 'desc' }, take: 5 }),
   ]);
 
   const stats = [
     { label: 'Customers', value: customerCount, icon: Users, color: 'text-indigo-600 bg-indigo-50' },
+    { label: 'Bookings', value: bookingCount, icon: CalendarCheck, color: 'text-blue-600 bg-blue-50' },
     { label: 'Active staff', value: staffCount, icon: UserCog, color: 'text-violet-600 bg-violet-50' },
     { label: 'Tour packages', value: packageCount, icon: Compass, color: 'text-teal-600 bg-teal-50' },
     { label: 'Quote requests', value: quoteCount, icon: FileText, color: 'text-amber-600 bg-amber-50' },
@@ -31,7 +33,7 @@ export default async function DashboardPage() {
         <p className="text-brand-100 text-sm mt-1">Here&apos;s what&apos;s happening across Al-Safr right now.</p>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
         {stats.map((stat) => {
           const Icon = stat.icon;
           return (

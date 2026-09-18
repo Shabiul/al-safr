@@ -7,12 +7,15 @@ generator client {
 }
 
 model Customer {
-  id             String   @id @default(cuid())
-  email          String   @unique
+  id             String         @id @default(cuid())
+  email          String         @unique
   hashedPassword String
   name           String
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  bookings       Booking[]
+  notes          CustomerNote[]
+  documents      Document[]
 }
 
 enum StaffRole {
@@ -33,8 +36,8 @@ model StaffUser {
 
 // Admin-managed catalogue — create/edit/publish/unpublish via the CRM.
 model TourPackage {
-  id           String   @id @default(cuid())
-  slug         String   @unique
+  id           String    @id @default(cuid())
+  slug         String    @unique
   name         String
   destination  String
   summary      String
@@ -45,9 +48,10 @@ model TourPackage {
   inclusions   String[]
   exclusions   String[]
   itinerary    Json
-  published    Boolean  @default(true)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  published    Boolean   @default(true)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  bookings     Booking[]
 }
 
 enum LeadType {
@@ -55,17 +59,174 @@ enum LeadType {
   CONTACT
 }
 
+enum LeadStatus {
+  NEW
+  CONTACTED
+  QUOTED
+  WON
+  LOST
+}
+
 // Submissions from the "Get a Quote" and "Contact" forms on the WEB app.
 model Lead {
-  id          String   @id @default(cuid())
-  type        LeadType
-  name        String
-  email       String?
-  phone       String?
-  service     String?
-  destination String?
-  message     String?
-  createdAt   DateTime @default(now())
+  id             String     @id @default(cuid())
+  type           LeadType
+  name           String
+  email          String?
+  phone          String?
+  service        String?
+  destination    String?
+  message        String?
+  status         LeadStatus @default(NEW)
+  followUpAt     DateTime?
+  assignedToName String?
+  createdAt      DateTime   @default(now())
+  notes          LeadNote[]
+}
+
+// Staff-authored notes on a lead's pipeline progress.
+model LeadNote {
+  id        String   @id @default(cuid())
+  leadId    String
+  lead      Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  staffName String
+  note      String
+  createdAt DateTime @default(now())
+}
+
+// Staff-authored notes on a customer, shown in their activity timeline.
+model CustomerNote {
+  id         String   @id @default(cuid())
+  customerId String
+  customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  staffName  String
+  note       String
+  createdAt  DateTime @default(now())
+}
+
+enum BookingServiceType {
+  FLIGHT
+  HOTEL
+  CAB
+  PACKAGE
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+}
+
+// A booking recorded by staff (phone/walk-in/manual) or created from a
+// converted lead. There's no online checkout yet, so every booking is
+// entered by a staff member in the CRM.
+model Booking {
+  id             String             @id @default(cuid())
+  customerId     String?
+  customer       Customer?          @relation(fields: [customerId], references: [id])
+  customerName   String
+  customerEmail  String?
+  customerPhone  String?
+  serviceType    BookingServiceType
+  tourPackageId  String?
+  tourPackage    TourPackage?       @relation(fields: [tourPackageId], references: [id])
+  details        String?
+  travelDate     DateTime?
+  amount         Float
+  currency       String             @default("USD")
+  status         BookingStatus      @default(PENDING)
+  promoCodeId    String?
+  promoCode      PromoCode?         @relation(fields: [promoCodeId], references: [id])
+  assignedToName String?
+  notes          String?
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+  payments       PaymentRecord[]
+  documents      Document[]
+}
+
+enum PaymentRecordType {
+  PAYMENT
+  REFUND
+}
+
+enum PaymentMethod {
+  CASH
+  BANK_TRANSFER
+  UPI
+  CARD
+  OTHER
+}
+
+// A manually-recorded payment or refund against a booking (cash/bank
+// transfer/UPI/card) — there's no payment gateway integration yet.
+model PaymentRecord {
+  id         String            @id @default(cuid())
+  bookingId  String
+  booking    Booking           @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  type       PaymentRecordType
+  method     PaymentMethod
+  amount     Float
+  reference  String?
+  note       String?
+  recordedBy String?
+  createdAt  DateTime          @default(now())
+}
+
+enum SupplierType {
+  HOTEL
+  CAB_OPERATOR
+  TOUR_OPERATOR
+  AIRLINE
+  OTHER
+}
+
+// Vendors the business works with directly, outside the live RapidAPI
+// inventory (local hotels/cab operators/tour guides with negotiated rates).
+model Supplier {
+  id                String       @id @default(cuid())
+  name              String
+  type              SupplierType
+  contactName       String?
+  phone             String?
+  email             String?
+  commissionPercent Float?
+  notes             String?
+  active            Boolean      @default(true)
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+}
+
+enum DocumentType {
+  PASSPORT
+  VISA
+  TICKET
+  OTHER
+}
+
+// Files (passport/visa/ticket scans) uploaded against a customer or
+// booking, stored in Supabase Storage's private "documents" bucket.
+model Document {
+  id          String       @id @default(cuid())
+  customerId  String?
+  customer    Customer?    @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  bookingId   String?
+  booking     Booking?     @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  type        DocumentType
+  fileName    String
+  storagePath String
+  uploadedBy  String?
+  createdAt   DateTime     @default(now())
+}
+
+// One row per RapidAPI key rotation event, so staff can see when a key hit
+// its quota (429/403) and the app fell back to the next one in the pool.
+model ApiKeyEvent {
+  id        String   @id @default(cuid())
+  service   String
+  keyLabel  String
+  createdAt DateTime @default(now())
 }
 
 // One row per priced service (flight/hotel/cab) — a percentage markup the
@@ -96,4 +257,5 @@ model PromoCode {
   active        Boolean           @default(true)
   createdAt     DateTime          @default(now())
   updatedAt     DateTime          @updatedAt
+  bookings      Booking[]
 }

@@ -12,6 +12,10 @@ import {
   UserCog,
   LogOut,
   Plane,
+  CalendarCheck,
+  Truck,
+  BarChart3,
+  Activity,
 } from 'lucide-react';
 
 interface AdminSidebarProps {
@@ -24,9 +28,13 @@ const NAV_ITEMS = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, superAdminOnly: false },
   { href: '/leads', label: 'Leads', icon: Inbox, superAdminOnly: false },
   { href: '/customers', label: 'Customers', icon: Users, superAdminOnly: false },
+  { href: '/bookings', label: 'Bookings', icon: CalendarCheck, superAdminOnly: false },
   { href: '/tour-packages', label: 'Tour Packages', icon: Compass, superAdminOnly: false },
+  { href: '/suppliers', label: 'Suppliers', icon: Truck, superAdminOnly: false },
   { href: '/markup', label: 'Markup', icon: Percent, superAdminOnly: true },
   { href: '/promo-codes', label: 'Promo Codes', icon: Tag, superAdminOnly: true },
+  { href: '/reports', label: 'Reports', icon: BarChart3, superAdminOnly: true },
+  { href: '/api-health', label: 'API Health', icon: Activity, superAdminOnly: true },
   { href: '/staff', label: 'Staff', icon: UserCog, superAdminOnly: true },
 ];
 
