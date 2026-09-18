@@ -38,7 +38,7 @@ export function StaffTable({ staff, currentUserId }: { staff: StaffRow[]; curren
   };
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden">
+    <div className="card overflow-hidden">
       {error && <p className="p-3 text-sm text-rose-600 bg-rose-50 border-b border-rose-200">{error}</p>}
       <table className="w-full text-sm">
         <thead className="bg-slate-50 text-slate-500 text-xs uppercase tracking-wide">
@@ -53,7 +53,7 @@ export function StaffTable({ staff, currentUserId }: { staff: StaffRow[]; curren
           {staff.map((s) => {
             const isSelf = s.id === currentUserId;
             return (
-              <tr key={s.id}>
+              <tr key={s.id} className="hover:bg-slate-50 transition-colors">
                 <td className="px-5 py-3.5 font-medium text-slate-900">
                   {s.name} {isSelf && <span className="text-xs text-slate-400">(you)</span>}
                 </td>

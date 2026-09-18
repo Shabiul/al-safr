@@ -53,7 +53,7 @@ export function NewPromoCodeForm() {
     return (
       <button
         onClick={() => setIsOpen(true)}
-        className="focus-ring flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold transition-colors"
+        className="focus-ring flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold transition-colors shadow-sm shadow-brand-600/20"
       >
         <Plus className="w-4 h-4" />
         New promo code
@@ -62,7 +62,7 @@ export function NewPromoCodeForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white rounded-2xl border border-slate-200 p-5 space-y-4 max-w-lg">
+    <form onSubmit={handleSubmit} className="card p-5 space-y-4 max-w-lg">
       <h2 className="font-semibold text-slate-900">New promo code</h2>
       {error && <p className="text-sm text-rose-600">{error}</p>}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -111,7 +111,7 @@ export function NewPromoCodeForm() {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="focus-ring px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 disabled:opacity-50 text-white text-sm font-semibold transition-colors"
+          className="focus-ring px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 disabled:opacity-50 text-white text-sm font-semibold transition-colors shadow-sm shadow-brand-600/20"
         >
           {isSubmitting ? 'Creating…' : 'Create code'}
         </button>

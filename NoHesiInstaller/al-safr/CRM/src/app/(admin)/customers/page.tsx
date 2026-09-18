@@ -19,7 +19,7 @@ export default async function CustomersPage() {
           <p className="text-sm text-slate-500">No customers have registered yet.</p>
         </div>
       ) : (
-        <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden">
+        <div className="card overflow-hidden">
           <table className="w-full text-sm">
             <thead className="bg-slate-50 text-slate-500 text-xs uppercase tracking-wide">
               <tr>
@@ -30,7 +30,7 @@ export default async function CustomersPage() {
             </thead>
             <tbody className="divide-y divide-slate-100">
               {customers.map((c) => (
-                <tr key={c.id}>
+                <tr key={c.id} className="hover:bg-slate-50 transition-colors">
                   <td className="px-5 py-3.5 font-medium text-slate-900">{c.name}</td>
                   <td className="px-5 py-3.5 text-slate-500">{c.email}</td>
                   <td className="px-5 py-3.5 text-slate-500">

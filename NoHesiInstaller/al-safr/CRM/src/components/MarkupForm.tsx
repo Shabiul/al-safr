@@ -45,10 +45,10 @@ export function MarkupForm({ initial }: { initial: MarkupSettingRow[] }) {
   };
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 divide-y divide-slate-100 max-w-lg">
+    <div className="card divide-y divide-slate-100 max-w-lg">
       {error && <p className="p-4 text-sm text-rose-600 bg-rose-50">{error}</p>}
       {initial.map((s) => (
-        <div key={s.service} className="p-5 flex items-center justify-between gap-4">
+        <div key={s.service} className="p-5 flex items-center justify-between gap-4 hover:bg-slate-50 transition-colors">
           <div>
             <div className="font-medium text-slate-900">{LABELS[s.service] || s.service}</div>
             <div className="text-xs text-slate-500">Added on top of the live supplier price</div>
@@ -69,7 +69,7 @@ export function MarkupForm({ initial }: { initial: MarkupSettingRow[] }) {
             <button
               onClick={() => save(s.service)}
               disabled={busyService === s.service}
-              className="focus-ring w-9 h-9 rounded-lg bg-brand-600 hover:bg-brand-700 disabled:opacity-50 text-white flex items-center justify-center transition-colors"
+              className="focus-ring w-9 h-9 rounded-lg bg-brand-600 hover:bg-brand-700 disabled:opacity-50 text-white flex items-center justify-center transition-colors shadow-sm shadow-brand-600/20"
               aria-label={`Save ${s.service} markup`}
             >
               <Check className="w-4 h-4" />

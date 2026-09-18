@@ -268,7 +268,7 @@ export function TourPackageForm({ initial }: { initial?: TourPackageFormData }) 
       <button
         type="submit"
         disabled={isSubmitting}
-        className="focus-ring px-6 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 disabled:opacity-50 text-white text-sm font-semibold transition-colors"
+        className="focus-ring px-6 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 disabled:opacity-50 text-white text-sm font-semibold transition-colors shadow-sm shadow-brand-600/20"
       >
         {isSubmitting ? 'Saving…' : isEdit ? 'Save changes' : 'Create package'}
       </button>

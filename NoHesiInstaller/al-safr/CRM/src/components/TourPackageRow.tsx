@@ -38,7 +38,7 @@ export function TourPackageRow({ pkg }: TourPackageRowProps) {
   };
 
   return (
-    <div className="p-4 flex items-center justify-between gap-4">
+    <div className="p-4 flex items-center justify-between gap-4 hover:bg-slate-50 transition-colors">
       <div className="min-w-0">
         <div className="font-medium text-slate-900 truncate">{pkg.name}</div>
         <div className="text-sm text-slate-500">{pkg.destination} · ${pkg.priceUsd}</div>

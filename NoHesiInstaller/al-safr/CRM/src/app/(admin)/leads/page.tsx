@@ -20,9 +20,9 @@ export default async function LeadsPage() {
           <p className="text-sm text-slate-500">No leads yet.</p>
         </div>
       ) : (
-        <div className="bg-white rounded-2xl border border-slate-200 divide-y divide-slate-100">
+        <div className="card divide-y divide-slate-100">
           {leads.map((lead) => (
-            <div key={lead.id} className="p-5 flex flex-col sm:flex-row sm:items-start justify-between gap-3">
+            <div key={lead.id} className="p-5 flex flex-col sm:flex-row sm:items-start justify-between gap-3 hover:bg-slate-50 transition-colors">
               <div className="space-y-1.5 min-w-0">
                 <div className="flex items-center gap-2">
                   <span className="font-semibold text-slate-900">{lead.name}</span>
