@@ -4,6 +4,7 @@ import { db } from '@/lib/db';
 import { CurrencyCode, CURRENCIES, formatPrice } from '@/services/flightData';
 import { TourPackage } from '@/services/tourPackageData';
 import { ArrowLeft, MapPin, Calendar, Check, X, Compass } from 'lucide-react';
+import { TourBookingFlow } from '@/components/TourBookingFlow';
 
 export const dynamic = 'force-dynamic';
 
@@ -72,9 +73,18 @@ export default async function TourPackageDetailPage({ params, searchParams }: Pa
               {pkg.durationDays} {pkg.durationDays === 1 ? 'day' : 'days'}
             </p>
           </div>
-          <div className="text-right shrink-0">
-            <div className="text-2xl font-semibold text-slate-900">{formatPrice(pkg.priceUsd, currency)}</div>
-            <div className="text-xs text-slate-400">per person</div>
+          <div className="text-right shrink-0 space-y-3">
+            <div>
+              <div className="text-2xl font-semibold text-slate-900">{formatPrice(pkg.priceUsd, currency)}</div>
+              <div className="text-xs text-slate-400">per person</div>
+            </div>
+            <TourBookingFlow
+              tourPackageId={pkg.id}
+              packageName={pkg.name}
+              destination={pkg.destination}
+              priceUsd={pkg.priceUsd}
+              currency={currency}
+            />
           </div>
         </div>
 
