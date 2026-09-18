@@ -47,7 +47,7 @@ export function PromoCodeTable({ codes }: { codes: PromoCodeRow[] }) {
   }
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden">
+    <div className="card overflow-hidden">
       <table className="w-full text-sm">
         <thead className="bg-slate-50 text-slate-500 text-xs uppercase tracking-wide">
           <tr>
@@ -61,7 +61,7 @@ export function PromoCodeTable({ codes }: { codes: PromoCodeRow[] }) {
         </thead>
         <tbody className="divide-y divide-slate-100">
           {codes.map((c) => (
-            <tr key={c.id}>
+            <tr key={c.id} className="hover:bg-slate-50 transition-colors">
               <td className="px-5 py-3.5 font-mono font-semibold text-slate-900">{c.code}</td>
               <td className="px-5 py-3.5 text-slate-600">
                 {c.discountType === 'PERCENTAGE' ? `${c.discountValue}%` : `$${c.discountValue}`}
