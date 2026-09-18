@@ -1,12 +1,12 @@
 import bcrypt from 'bcryptjs';
-import { prisma } from '@/lib/db';
+import { db } from '@/lib/db';
 import type { Customer } from '@/types';
 
 export async function verifyCustomerCredentials(
   email: string,
   password: string
 ): Promise<Customer | null> {
-  const customer = await prisma.customer.findUnique({ where: { email } });
+  const { data: customer } = await db.from('Customer').select('*').eq('email', email).maybeSingle();
   if (!customer) return null;
 
   const isValid = await bcrypt.compare(password, customer.hashedPassword);

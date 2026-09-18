@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/db';
+import { db } from '@/lib/db';
 import { requireSuperAdminSession } from '@/lib/api-auth';
 
 export const dynamic = 'force-dynamic';
@@ -20,20 +20,18 @@ export async function PATCH(request: Request, { params }: RouteParams) {
 
   const { active, role } = await request.json();
 
-  try {
-    const staff = await prisma.staffUser.update({
-      where: { id },
-      data: {
-        ...(active !== undefined && { active }),
-        ...(role !== undefined && { role: role === 'SUPER_ADMIN' ? 'SUPER_ADMIN' : 'STAFF' }),
-      },
-      select: { id: true, email: true, name: true, role: true, active: true },
-    });
-    return NextResponse.json({ staff });
-  } catch (err: any) {
-    if (err?.code === 'P2025') {
-      return NextResponse.json({ error: 'Staff account not found' }, { status: 404 });
-    }
-    return NextResponse.json({ error: err?.message || 'Failed to update staff account' }, { status: 500 });
-  }
+  const { data: staff, error: dbError } = await db
+    .from('StaffUser')
+    .update({
+      ...(active !== undefined && { active }),
+      ...(role !== undefined && { role: role === 'SUPER_ADMIN' ? 'SUPER_ADMIN' : 'STAFF' }),
+      updatedAt: new Date().toISOString(),
+    })
+    .eq('id', id)
+    .select('id, email, name, role, active')
+    .maybeSingle();
+
+  if (dbError) return NextResponse.json({ error: dbError.message }, { status: 500 });
+  if (!staff) return NextResponse.json({ error: 'Staff account not found' }, { status: 404 });
+  return NextResponse.json({ staff });
 }

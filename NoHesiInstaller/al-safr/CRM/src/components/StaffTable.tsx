@@ -9,7 +9,7 @@ interface StaffRow {
   name: string;
   role: string;
   active: boolean;
-  createdAt: Date;
+  createdAt: string;
 }
 
 export function StaffTable({ staff, currentUserId }: { staff: StaffRow[]; currentUserId?: string }) {

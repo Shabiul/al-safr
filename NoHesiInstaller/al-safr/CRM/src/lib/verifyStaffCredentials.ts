@@ -1,12 +1,12 @@
 import bcrypt from 'bcryptjs';
-import { prisma } from '@/lib/db';
+import { db } from '@/lib/db';
 import type { StaffUser } from '@/types';
 
 export async function verifyStaffCredentials(
   email: string,
   password: string
 ): Promise<StaffUser | null> {
-  const staff = await prisma.staffUser.findUnique({ where: { email } });
+  const { data: staff } = await db.from('StaffUser').select('*').eq('email', email).maybeSingle();
   if (!staff || !staff.active) return null;
 
   const isValid = await bcrypt.compare(password, staff.hashedPassword);

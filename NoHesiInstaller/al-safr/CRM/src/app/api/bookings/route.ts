@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/db';
+import { db } from '@/lib/db';
 import { requireStaffSession } from '@/lib/api-auth';
 
 export const dynamic = 'force-dynamic';
@@ -8,10 +8,8 @@ export async function GET() {
   const { error } = await requireStaffSession();
   if (error) return error;
 
-  const bookings = await prisma.booking.findMany({
-    orderBy: { createdAt: 'desc' },
-    include: { tourPackage: { select: { name: true } }, payments: true },
-  });
+  const { data: bookings, error: dbError } = await db.from('Booking').select('*').order('createdAt', { ascending: false });
+  if (dbError) return NextResponse.json({ error: dbError.message }, { status: 500 });
   return NextResponse.json({ bookings });
 }
 
@@ -29,30 +27,37 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'customerName, serviceType and amount are required' }, { status: 400 });
   }
 
-  try {
-    const booking = await prisma.booking.create({
-      data: {
-        customerName,
-        customerEmail: customerEmail || null,
-        customerPhone: customerPhone || null,
-        serviceType,
-        tourPackageId: tourPackageId || null,
-        details: details || null,
-        travelDate: travelDate ? new Date(travelDate) : null,
-        amount: Number(amount),
-        currency: currency || 'USD',
-        promoCodeId: promoCodeId || null,
-        notes: notes || null,
-        assignedToName: session.user?.name ?? 'Staff',
-      },
-    });
+  const { data: booking, error: dbError } = await db
+    .from('Booking')
+    .insert({
+      id: crypto.randomUUID(),
+      customerName,
+      customerEmail: customerEmail || null,
+      customerPhone: customerPhone || null,
+      serviceType,
+      tourPackageId: tourPackageId || null,
+      details: details || null,
+      travelDate: travelDate ? new Date(travelDate).toISOString() : null,
+      amount: Number(amount),
+      currency: currency || 'USD',
+      promoCodeId: promoCodeId || null,
+      notes: notes || null,
+      assignedToName: session.user?.name ?? 'Staff',
+      updatedAt: new Date().toISOString(),
+    })
+    .select()
+    .single();
 
-    if (promoCodeId) {
-      await prisma.promoCode.update({ where: { id: promoCodeId }, data: { timesUsed: { increment: 1 } } });
-    }
-
-    return NextResponse.json({ booking }, { status: 201 });
-  } catch (err: any) {
-    return NextResponse.json({ error: err?.message || 'Failed to create booking' }, { status: 500 });
+  if (dbError || !booking) {
+    return NextResponse.json({ error: dbError?.message || 'Failed to create booking' }, { status: 500 });
   }
+
+  if (promoCodeId) {
+    const { data: promo } = await db.from('PromoCode').select('timesUsed').eq('id', promoCodeId).maybeSingle();
+    if (promo) {
+      await db.from('PromoCode').update({ timesUsed: promo.timesUsed + 1, updatedAt: new Date().toISOString() }).eq('id', promoCodeId);
+    }
+  }
+
+  return NextResponse.json({ booking }, { status: 201 });
 }

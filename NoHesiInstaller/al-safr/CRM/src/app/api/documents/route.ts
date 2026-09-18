@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/db';
+import { db } from '@/lib/db';
 import { requireStaffSession } from '@/lib/api-auth';
 import { uploadDocument } from '@/lib/storage';
 
@@ -26,18 +26,24 @@ export async function POST(request: Request) {
 
   try {
     await uploadDocument(storagePath, file);
-    const doc = await prisma.document.create({
-      data: {
-        type: type as any,
-        fileName: file.name,
-        storagePath,
-        customerId: typeof customerId === 'string' ? customerId : null,
-        bookingId: typeof bookingId === 'string' ? bookingId : null,
-        uploadedBy: session.user?.name ?? 'Staff',
-      },
-    });
-    return NextResponse.json({ document: doc }, { status: 201 });
   } catch (err: any) {
     return NextResponse.json({ error: err?.message || 'Failed to upload document' }, { status: 500 });
   }
+
+  const { data: doc, error: dbError } = await db
+    .from('Document')
+    .insert({
+      id: crypto.randomUUID(),
+      type,
+      fileName: file.name,
+      storagePath,
+      customerId: typeof customerId === 'string' ? customerId : null,
+      bookingId: typeof bookingId === 'string' ? bookingId : null,
+      uploadedBy: session.user?.name ?? 'Staff',
+    })
+    .select()
+    .single();
+
+  if (dbError) return NextResponse.json({ error: dbError.message || 'Failed to upload document' }, { status: 500 });
+  return NextResponse.json({ document: doc }, { status: 201 });
 }

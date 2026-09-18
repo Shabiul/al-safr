@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/db';
+import { db } from '@/lib/db';
 import { requireStaffSession } from '@/lib/api-auth';
 
 export const dynamic = 'force-dynamic';
@@ -18,12 +18,12 @@ export async function POST(request: Request, { params }: RouteParams) {
     return NextResponse.json({ error: 'Note text is required' }, { status: 400 });
   }
 
-  try {
-    const created = await prisma.leadNote.create({
-      data: { leadId: id, note: note.trim(), staffName: session.user?.name ?? 'Staff' },
-    });
-    return NextResponse.json({ note: created }, { status: 201 });
-  } catch (err: any) {
-    return NextResponse.json({ error: err?.message || 'Failed to add note' }, { status: 500 });
-  }
+  const { data: created, error: dbError } = await db
+    .from('LeadNote')
+    .insert({ id: crypto.randomUUID(), leadId: id, note: note.trim(), staffName: session.user?.name ?? 'Staff' })
+    .select()
+    .single();
+
+  if (dbError) return NextResponse.json({ error: dbError.message || 'Failed to add note' }, { status: 500 });
+  return NextResponse.json({ note: created }, { status: 201 });
 }

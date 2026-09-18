@@ -1,9 +1,9 @@
-import { prisma } from '@/lib/db';
+import { db } from '@/lib/db';
 import { registerCustomer, EmailAlreadyRegisteredError } from './registerCustomer';
 
 async function run() {
   const email = 'register-test@al-safr.test';
-  await prisma.customer.deleteMany({ where: { email } });
+  await db.from('Customer').delete().eq('email', email);
 
   const created = await registerCustomer(email, 'a-strong-password', 'Register Test');
   if (created.email !== email) {
@@ -20,13 +20,11 @@ async function run() {
     throw new Error('FAIL: registering a duplicate email did not throw EmailAlreadyRegisteredError');
   }
 
-  await prisma.customer.deleteMany({ where: { email } });
+  await db.from('Customer').delete().eq('email', email);
   console.log('registerCustomer.test passed.');
 }
 
-run()
-  .catch((err) => {
-    console.error(err);
-    process.exit(1);
-  })
-  .finally(() => prisma.$disconnect());
+run().catch((err) => {
+  console.error(err);
+  process.exit(1);
+});

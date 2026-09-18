@@ -1,5 +1,5 @@
 import { auth } from '@/auth';
-import { prisma } from '@/lib/db';
+import { db } from '@/lib/db';
 import { Inbox, Users, Compass, UserCog, MessageSquare, FileText, CalendarCheck } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
@@ -7,23 +7,32 @@ export const dynamic = 'force-dynamic';
 export default async function DashboardPage() {
   const session = await auth();
 
-  const [customerCount, staffCount, packageCount, quoteCount, contactCount, bookingCount, recentLeads] = await Promise.all([
-    prisma.customer.count(),
-    prisma.staffUser.count({ where: { active: true } }),
-    prisma.tourPackage.count(),
-    prisma.lead.count({ where: { type: 'QUOTE' } }),
-    prisma.lead.count({ where: { type: 'CONTACT' } }),
-    prisma.booking.count(),
-    prisma.lead.findMany({ orderBy: { createdAt: 'desc' }, take: 5 }),
+  const [
+    { count: customerCount },
+    { count: staffCount },
+    { count: packageCount },
+    { count: quoteCount },
+    { count: contactCount },
+    { count: bookingCount },
+    { data: recentLeadsData },
+  ] = await Promise.all([
+    db.from('Customer').select('*', { count: 'exact', head: true }),
+    db.from('StaffUser').select('*', { count: 'exact', head: true }).eq('active', true),
+    db.from('TourPackage').select('*', { count: 'exact', head: true }),
+    db.from('Lead').select('*', { count: 'exact', head: true }).eq('type', 'QUOTE'),
+    db.from('Lead').select('*', { count: 'exact', head: true }).eq('type', 'CONTACT'),
+    db.from('Booking').select('*', { count: 'exact', head: true }),
+    db.from('Lead').select('*').order('createdAt', { ascending: false }).limit(5),
   ]);
+  const recentLeads = recentLeadsData ?? [];
 
   const stats = [
-    { label: 'Customers', value: customerCount, icon: Users, color: 'text-indigo-600 bg-indigo-50' },
-    { label: 'Bookings', value: bookingCount, icon: CalendarCheck, color: 'text-blue-600 bg-blue-50' },
-    { label: 'Active staff', value: staffCount, icon: UserCog, color: 'text-violet-600 bg-violet-50' },
-    { label: 'Tour packages', value: packageCount, icon: Compass, color: 'text-teal-600 bg-teal-50' },
-    { label: 'Quote requests', value: quoteCount, icon: FileText, color: 'text-amber-600 bg-amber-50' },
-    { label: 'Contact messages', value: contactCount, icon: MessageSquare, color: 'text-rose-600 bg-rose-50' },
+    { label: 'Customers', value: customerCount ?? 0, icon: Users, color: 'text-indigo-600 bg-indigo-50' },
+    { label: 'Bookings', value: bookingCount ?? 0, icon: CalendarCheck, color: 'text-blue-600 bg-blue-50' },
+    { label: 'Active staff', value: staffCount ?? 0, icon: UserCog, color: 'text-violet-600 bg-violet-50' },
+    { label: 'Tour packages', value: packageCount ?? 0, icon: Compass, color: 'text-teal-600 bg-teal-50' },
+    { label: 'Quote requests', value: quoteCount ?? 0, icon: FileText, color: 'text-amber-600 bg-amber-50' },
+    { label: 'Contact messages', value: contactCount ?? 0, icon: MessageSquare, color: 'text-rose-600 bg-rose-50' },
   ];
 
   return (

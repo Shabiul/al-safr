@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/db';
+import { db } from '@/lib/db';
 import { requireStaffSession } from '@/lib/api-auth';
 
 export const dynamic = 'force-dynamic';
@@ -8,7 +8,8 @@ export async function GET() {
   const { error } = await requireStaffSession();
   if (error) return error;
 
-  const packages = await prisma.tourPackage.findMany({ orderBy: { createdAt: 'desc' } });
+  const { data: packages, error: dbError } = await db.from('TourPackage').select('*').order('createdAt', { ascending: false });
+  if (dbError) return NextResponse.json({ error: dbError.message }, { status: 500 });
   return NextResponse.json({ packages });
 }
 
@@ -23,28 +24,32 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'slug, name and destination are required' }, { status: 400 });
   }
 
-  try {
-    const pkg = await prisma.tourPackage.create({
-      data: {
-        slug,
-        name,
-        destination,
-        summary: summary || '',
-        description: description || '',
-        durationDays: Number(durationDays) || 1,
-        priceUsd: Number(priceUsd) || 0,
-        images: images || [],
-        inclusions: inclusions || [],
-        exclusions: exclusions || [],
-        itinerary: itinerary || [],
-        published: published ?? true,
-      },
-    });
-    return NextResponse.json({ package: pkg });
-  } catch (err: any) {
-    if (err?.code === 'P2002') {
+  const { data: pkg, error: dbError } = await db
+    .from('TourPackage')
+    .insert({
+      id: crypto.randomUUID(),
+      slug,
+      name,
+      destination,
+      summary: summary || '',
+      description: description || '',
+      durationDays: Number(durationDays) || 1,
+      priceUsd: Number(priceUsd) || 0,
+      images: images || [],
+      inclusions: inclusions || [],
+      exclusions: exclusions || [],
+      itinerary: itinerary || [],
+      published: published ?? true,
+      updatedAt: new Date().toISOString(),
+    })
+    .select()
+    .single();
+
+  if (dbError) {
+    if (dbError.code === '23505') {
       return NextResponse.json({ error: `A package with slug "${slug}" already exists` }, { status: 409 });
     }
-    return NextResponse.json({ error: err?.message || 'Failed to create package' }, { status: 500 });
+    return NextResponse.json({ error: dbError.message || 'Failed to create package' }, { status: 500 });
   }
+  return NextResponse.json({ package: pkg });
 }

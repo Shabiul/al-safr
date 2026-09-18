@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
-import { prisma } from '@/lib/db';
+import { db } from '@/lib/db';
 import { requireSuperAdminSession } from '@/lib/api-auth';
 
 export const dynamic = 'force-dynamic';
@@ -9,10 +9,11 @@ export async function GET() {
   const { error } = await requireSuperAdminSession();
   if (error) return error;
 
-  const staff = await prisma.staffUser.findMany({
-    orderBy: { createdAt: 'desc' },
-    select: { id: true, email: true, name: true, role: true, active: true, createdAt: true },
-  });
+  const { data: staff, error: dbError } = await db
+    .from('StaffUser')
+    .select('id, email, name, role, active, createdAt')
+    .order('createdAt', { ascending: false });
+  if (dbError) return NextResponse.json({ error: dbError.message }, { status: 500 });
   return NextResponse.json({ staff });
 }
 
@@ -28,17 +29,25 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Password must be at least 8 characters' }, { status: 400 });
   }
 
-  try {
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const staff = await prisma.staffUser.create({
-      data: { email, hashedPassword, name, role: role === 'SUPER_ADMIN' ? 'SUPER_ADMIN' : 'STAFF' },
-      select: { id: true, email: true, name: true, role: true, active: true },
-    });
-    return NextResponse.json({ staff });
-  } catch (err: any) {
-    if (err?.code === 'P2002') {
-      return NextResponse.json({ error: `An account with ${email} already exists` }, { status: 409 });
-    }
-    return NextResponse.json({ error: err?.message || 'Failed to create staff account' }, { status: 500 });
+  const { data: existing } = await db.from('StaffUser').select('id').eq('email', email).maybeSingle();
+  if (existing) {
+    return NextResponse.json({ error: `An account with ${email} already exists` }, { status: 409 });
   }
+
+  const hashedPassword = await bcrypt.hash(password, 10);
+  const { data: staff, error: dbError } = await db
+    .from('StaffUser')
+    .insert({
+      id: crypto.randomUUID(),
+      email,
+      hashedPassword,
+      name,
+      role: role === 'SUPER_ADMIN' ? 'SUPER_ADMIN' : 'STAFF',
+      updatedAt: new Date().toISOString(),
+    })
+    .select('id, email, name, role, active')
+    .single();
+
+  if (dbError) return NextResponse.json({ error: dbError.message }, { status: 500 });
+  return NextResponse.json({ staff });
 }

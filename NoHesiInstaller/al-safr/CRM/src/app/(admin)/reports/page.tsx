@@ -1,5 +1,5 @@
 import { auth } from '@/auth';
-import { prisma } from '@/lib/db';
+import { db } from '@/lib/db';
 import { ForbiddenNotice } from '@/components/ForbiddenNotice';
 
 export const dynamic = 'force-dynamic';
@@ -11,12 +11,16 @@ export default async function ReportsPage() {
   const role = (session?.user as { role?: string } | undefined)?.role;
   if (role !== 'SUPER_ADMIN') return <ForbiddenNotice />;
 
-  const [bookings, payments, leads, promoCodes] = await Promise.all([
-    prisma.booking.findMany({ select: { serviceType: true, amount: true, status: true } }),
-    prisma.paymentRecord.findMany({ select: { type: true, amount: true } }),
-    prisma.lead.findMany({ select: { status: true } }),
-    prisma.promoCode.findMany({ where: { timesUsed: { gt: 0 } }, orderBy: { timesUsed: 'desc' }, select: { code: true, timesUsed: true } }),
+  const [{ data: bookingsData }, { data: paymentsData }, { data: leadsData }, { data: promoCodesData }] = await Promise.all([
+    db.from('Booking').select('serviceType, amount, status'),
+    db.from('PaymentRecord').select('type, amount'),
+    db.from('Lead').select('status'),
+    db.from('PromoCode').select('code, timesUsed').gt('timesUsed', 0).order('timesUsed', { ascending: false }),
   ]);
+  const bookings = bookingsData ?? [];
+  const payments = paymentsData ?? [];
+  const leads = leadsData ?? [];
+  const promoCodes = promoCodesData ?? [];
 
   const netReceived = payments.reduce((sum, p) => sum + (p.type === 'PAYMENT' ? p.amount : -p.amount), 0);
   const confirmedBookings = bookings.filter((b) => b.status === 'CONFIRMED' || b.status === 'COMPLETED');

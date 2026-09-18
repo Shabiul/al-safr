@@ -1,11 +1,11 @@
-import { prisma } from '@/lib/db';
+import { db } from '@/lib/db';
 import { NewSupplierForm } from '@/components/NewSupplierForm';
 import { SupplierTable } from '@/components/SupplierTable';
 
 export const dynamic = 'force-dynamic';
 
 export default async function SuppliersPage() {
-  const suppliers = await prisma.supplier.findMany({ orderBy: { createdAt: 'desc' } });
+  const { data: suppliers } = await db.from('Supplier').select('*').order('createdAt', { ascending: false });
 
   return (
     <div className="space-y-6">
@@ -14,7 +14,7 @@ export default async function SuppliersPage() {
         <p className="text-slate-500 text-sm mt-1">Hotels, cab operators, and tour vendors you work with directly.</p>
       </div>
       <NewSupplierForm />
-      <SupplierTable suppliers={suppliers} />
+      <SupplierTable suppliers={suppliers ?? []} />
     </div>
   );
 }

@@ -1,5 +1,5 @@
 import bcrypt from 'bcryptjs';
-import { prisma } from '@/lib/db';
+import { db } from '@/lib/db';
 import { verifyCustomerCredentials } from './verifyCustomerCredentials';
 
 async function run() {
@@ -7,8 +7,11 @@ async function run() {
   const password = 'correct-horse-battery-staple';
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  await prisma.customer.deleteMany({ where: { email } });
-  await prisma.customer.create({ data: { email, hashedPassword, name: 'Verify Test' } });
+  await db.from('Customer').delete().eq('email', email);
+  const { error: insertError } = await db
+    .from('Customer')
+    .insert({ id: crypto.randomUUID(), email, hashedPassword, name: 'Verify Test', updatedAt: new Date().toISOString() });
+  if (insertError) throw new Error(`FAIL: seed insert failed: ${insertError.message}`);
 
   const matched = await verifyCustomerCredentials(email, password);
   if (!matched || matched.email !== email) {
@@ -25,13 +28,11 @@ async function run() {
     throw new Error('FAIL: unknown email verified');
   }
 
-  await prisma.customer.deleteMany({ where: { email } });
+  await db.from('Customer').delete().eq('email', email);
   console.log('verifyCustomerCredentials.test passed.');
 }
 
-run()
-  .catch((err) => {
-    console.error(err);
-    process.exit(1);
-  })
-  .finally(() => prisma.$disconnect());
+run().catch((err) => {
+  console.error(err);
+  process.exit(1);
+});

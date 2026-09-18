@@ -1,19 +1,19 @@
 import Link from 'next/link';
-import { prisma } from '@/lib/db';
+import { db } from '@/lib/db';
 import { Plus } from 'lucide-react';
 import { TourPackageRow } from '@/components/TourPackageRow';
 
 export const dynamic = 'force-dynamic';
 
 export default async function TourPackagesPage() {
-  const packages = await prisma.tourPackage.findMany({ orderBy: { createdAt: 'desc' } });
+  const { data: packages } = await db.from('TourPackage').select('*').order('createdAt', { ascending: false });
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-semibold text-slate-900">Tour Packages</h1>
-          <p className="text-slate-500 text-sm mt-1">{packages.length} packages in the catalogue.</p>
+          <p className="text-slate-500 text-sm mt-1">{packages?.length ?? 0} packages in the catalogue.</p>
         </div>
         <Link
           href="/tour-packages/new"
@@ -25,7 +25,7 @@ export default async function TourPackagesPage() {
       </div>
 
       <div className="card divide-y divide-slate-100">
-        {packages.map((pkg) => (
+        {(packages ?? []).map((pkg) => (
           <TourPackageRow key={pkg.id} pkg={{ id: pkg.id, name: pkg.name, destination: pkg.destination, priceUsd: pkg.priceUsd, published: pkg.published }} />
         ))}
       </div>
