@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { prisma } from '@/lib/db';
 
 export const dynamic = 'force-dynamic';
@@ -31,7 +32,9 @@ export default async function CustomersPage() {
             <tbody className="divide-y divide-slate-100">
               {customers.map((c) => (
                 <tr key={c.id} className="hover:bg-slate-50 transition-colors">
-                  <td className="px-5 py-3.5 font-medium text-slate-900">{c.name}</td>
+                  <td className="px-5 py-3.5 font-medium text-slate-900">
+                    <Link href={`/customers/${c.id}`} className="hover:text-brand-700">{c.name}</Link>
+                  </td>
                   <td className="px-5 py-3.5 text-slate-500">{c.email}</td>
                   <td className="px-5 py-3.5 text-slate-500">
                     {c.createdAt.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
