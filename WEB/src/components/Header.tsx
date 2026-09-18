@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Plane, Globe, Menu, X, Ticket, Home, LayoutGrid, Phone, Mail, MapPin, ArrowRight, Info, MessageCircle } from 'lucide-react';
@@ -36,12 +36,28 @@ export const Header: React.FC<HeaderProps> = ({
   onTabChange,
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
 
+  // On the home tab the header floats transparent over the hero image until
+  // the user scrolls past it, then it solidifies — everywhere else (no dark
+  // hero backdrop to sit over) it stays solid.
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  const transparent = activeTab === 'home' && !scrolled && !isMenuOpen;
+
   return (
-    <header className="sticky top-0 z-40 w-full">
+    <header className="fixed top-0 inset-x-0 z-40 w-full">
       {/* Contact strip */}
-      <div className="w-full text-xs text-slate-300 hidden sm:block" style={{ backgroundColor: '#04182c' }}>
+      <div
+        className={`w-full text-xs text-slate-300 hidden sm:block transition-opacity duration-300 ${transparent ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+        style={{ backgroundColor: '#04182c' }}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-9 flex items-center justify-between gap-4">
           <div className="flex items-center gap-5">
             <a href="tel:+919900517604" className="flex items-center gap-1.5 hover:text-white transition-colors">
@@ -60,7 +76,7 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
       </div>
 
-      <div className="w-full bg-white/90 backdrop-blur-md border-b border-slate-200">
+      <div className={`w-full transition-colors duration-300 ${transparent ? 'bg-transparent' : 'bg-white/90 backdrop-blur-md border-b border-slate-200'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
         {/* Brand */}
         <button
@@ -74,7 +90,7 @@ export const Header: React.FC<HeaderProps> = ({
           <div className="w-9 h-9 rounded-xl bg-brand-600 text-white flex items-center justify-center shadow-sm">
             <Plane className="w-4.5 h-4.5 -rotate-45" />
           </div>
-          <span className="text-lg font-semibold tracking-tight text-slate-900">Al-Safr</span>
+          <span className={`text-lg font-semibold tracking-tight transition-colors duration-300 ${transparent ? 'text-white' : 'text-slate-900'}`}>Al-Safr</span>
           {apiStatus !== 'idle' && (
             <span
               aria-hidden="true"
@@ -97,7 +113,9 @@ export const Header: React.FC<HeaderProps> = ({
                 onClick={() => onTabChange(tab.id)}
                 aria-current={isActive ? 'page' : undefined}
                 className={`focus-ring px-3.5 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-1.5 whitespace-nowrap ${
-                  isActive ? 'bg-brand-50 text-brand-700' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                  transparent
+                    ? isActive ? 'bg-white/15 text-white' : 'text-white/90 hover:text-white hover:bg-white/10'
+                    : isActive ? 'bg-brand-50 text-brand-700' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
                 }`}
               >
                 <Icon className="w-4 h-4 shrink-0" />
@@ -114,7 +132,9 @@ export const Header: React.FC<HeaderProps> = ({
                 href={link.href}
                 aria-current={isActive ? 'page' : undefined}
                 className={`focus-ring px-3.5 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-1.5 whitespace-nowrap ${
-                  isActive ? 'bg-brand-50 text-brand-700' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                  transparent
+                    ? isActive ? 'bg-white/15 text-white' : 'text-white/90 hover:text-white hover:bg-white/10'
+                    : isActive ? 'bg-brand-50 text-brand-700' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
                 }`}
               >
                 <Icon className="w-4 h-4 shrink-0" />
@@ -126,8 +146,8 @@ export const Header: React.FC<HeaderProps> = ({
 
         {/* Right side */}
         <div className="flex items-center gap-2">
-          <div className="hidden sm:flex items-center gap-1.5 bg-slate-50 rounded-lg border border-slate-200 px-2.5 py-1.5">
-            <Globe className="w-3.5 h-3.5 text-slate-400" aria-hidden="true" />
+          <div className={`hidden sm:flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 transition-colors duration-300 ${transparent ? 'bg-white/10 border-white/25' : 'bg-slate-50 border-slate-200'}`}>
+            <Globe className={`w-3.5 h-3.5 ${transparent ? 'text-white/80' : 'text-slate-400'}`} aria-hidden="true" />
             <label htmlFor="currency-select" className="sr-only">
               Currency
             </label>
@@ -135,7 +155,7 @@ export const Header: React.FC<HeaderProps> = ({
               id="currency-select"
               value={currency}
               onChange={(e) => onCurrencyChange(e.target.value as CurrencyCode)}
-              className="focus-ring bg-transparent text-sm font-medium text-slate-700 cursor-pointer"
+              className={`focus-ring bg-transparent text-sm font-medium cursor-pointer ${transparent ? 'text-white [&>option]:text-slate-900' : 'text-slate-700'}`}
             >
               {Object.keys(CURRENCIES).map((c) => (
                 <option key={c} value={c}>
@@ -158,7 +178,7 @@ export const Header: React.FC<HeaderProps> = ({
             onClick={() => setIsMenuOpen((v) => !v)}
             aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={isMenuOpen}
-            className="focus-ring lg:hidden p-2 rounded-lg text-slate-600 hover:bg-slate-50"
+            className={`focus-ring lg:hidden p-2 rounded-lg transition-colors ${transparent ? 'text-white hover:bg-white/10' : 'text-slate-600 hover:bg-slate-50'}`}
           >
             {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>

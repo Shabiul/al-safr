@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import { CurrencyCode, formatPrice } from '@/services/flightData';
 import { TourPackage } from '@/services/tourPackageData';
+import { CountUpStat } from '@/components/CountUpStat';
 
 type TabId = 'book' | 'hotels' | 'tours' | 'cabs' | 'bookings';
 
@@ -166,7 +167,7 @@ export const LandingHome: React.FC<LandingHomeProps> = ({ currency, onNavigate }
           the parent applies. The background image/gradient live in their
           own layer so the stats card below can overlap the bottom edge
           without being cut off by clipping. */}
-      <div className="relative left-1/2 right-1/2 -mx-[50vw] w-screen min-h-[calc(100svh-4rem)] sm:min-h-[calc(100svh-6rem)] flex items-center overflow-hidden">
+      <div className="relative left-1/2 right-1/2 -mx-[50vw] w-screen h-svh flex items-center overflow-hidden">
         <div className="absolute inset-0" aria-hidden="true">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
@@ -240,9 +241,11 @@ export const LandingHome: React.FC<LandingHomeProps> = ({ currency, onNavigate }
             { value: '500+', label: 'Cars available per search' },
           ].map((stat) => (
             <div key={stat.label}>
-              <div className="text-2xl sm:text-3xl font-bold" style={{ color: 'var(--color-gold-600)' }}>
-                {stat.value}
-              </div>
+              <CountUpStat
+                value={stat.value}
+                className="block text-2xl sm:text-3xl font-bold"
+                style={{ color: 'var(--color-gold-600)' } as React.CSSProperties}
+              />
               <div className="text-xs sm:text-sm text-slate-500 mt-0.5">{stat.label}</div>
             </div>
           ))}
