@@ -9,7 +9,6 @@ import {
   Compass,
   Car,
   Radio,
-  TrendingUp,
   ArrowRight,
   ShieldCheck,
   Globe2,
@@ -23,7 +22,7 @@ import {
 import { CurrencyCode, formatPrice } from '@/services/flightData';
 import { TourPackage } from '@/services/tourPackageData';
 
-type TabId = 'book' | 'hotels' | 'tours' | 'cabs' | 'radar' | 'price' | 'bookings';
+type TabId = 'book' | 'hotels' | 'tours' | 'cabs' | 'radar' | 'bookings';
 
 interface LandingHomeProps {
   currency: CurrencyCode;
@@ -79,13 +78,6 @@ const TOOLS: { id: TabId; icon: React.ElementType; title: string; description: s
     title: 'Live Flight Radar',
     description: 'Track real aircraft over the globe via OpenSky Network ADS-B data.',
     image: 'https://images.unsplash.com/photo-1436915359307-2a869c4a58ad?w=400',
-  },
-  {
-    id: 'price',
-    icon: TrendingUp,
-    title: 'Fare Trends',
-    description: '7-day fare forecasts anchored on the cheapest real fare we find.',
-    image: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=400',
   },
 ];
 
@@ -345,7 +337,7 @@ export const LandingHome: React.FC<LandingHomeProps> = ({ currency, onNavigate }
           })}
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 max-w-md gap-4">
           {TOOLS.map((tool) => {
             const Icon = tool.icon;
             return (

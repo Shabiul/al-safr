@@ -9,7 +9,6 @@ import { HotelSearch } from '@/components/HotelSearch';
 import { TourPackages } from '@/components/TourPackages';
 import { CabSearch } from '@/components/CabSearch';
 import { LiveFlightTracker } from '@/components/LiveFlightTracker';
-import { PriceTracker } from '@/components/PriceTracker';
 import { FlightCard } from '@/components/FlightCard';
 import { SeatSelectorModal, BookingConfirmation } from '@/components/SeatSelectorModal';
 import { BoardingPassModal } from '@/components/BoardingPassModal';
@@ -31,7 +30,7 @@ import {
   Car,
 } from 'lucide-react';
 
-type MainTab = 'home' | 'services' | 'radar' | 'price' | 'bookings';
+type MainTab = 'home' | 'services' | 'radar' | 'bookings';
 type ServiceId = 'book' | 'hotels' | 'tours' | 'cabs';
 
 const SERVICE_TABS: { id: ServiceId; label: string; icon: React.ElementType }[] = [
@@ -68,7 +67,6 @@ export default function Home() {
   const [airborneFlights, setAirborneFlights] = useState<any[]>([]);
   const [liveStreamConnected, setLiveStreamConnected] = useState<boolean>(false);
   const [dataSourceNotice, setDataSourceNotice] = useState<string>('');
-  const [livePriceForecast, setLivePriceForecast] = useState<any[]>([]);
 
   // Booking & Seat Modals
   const [selectedFlightForSeat, setSelectedFlightForSeat] = useState<FlightOption | null>(null);
@@ -98,7 +96,6 @@ export default function Home() {
 
         setFlights(liveOptions);
         setAirborneFlights(data.liveTelemetry?.airborneFlights || []);
-        setLivePriceForecast(data.priceForecast || []);
         setLastLiveSync(new Date(data.timestamp).toLocaleTimeString());
         setLiveStreamConnected(true);
         setDataSourceNotice(data.dataSourceNotice || '');
@@ -126,9 +123,9 @@ export default function Home() {
   };
 
   // LandingHome's cards link to a specific service (book/hotels/tours/cabs)
-  // or a top-level tab (radar/price/bookings) — the services all live under
+  // or a top-level tab (radar/bookings) — the services all live under
   // one consolidated "Services" tab with its own sub-navigation.
-  const handleNavigate = (target: ServiceId | 'radar' | 'price' | 'bookings') => {
+  const handleNavigate = (target: ServiceId | 'radar' | 'bookings') => {
     if (target === 'book' || target === 'hotels' || target === 'tours' || target === 'cabs') {
       setActiveService(target);
       setActiveTab('services');
@@ -316,17 +313,7 @@ export default function Home() {
           />
         )}
 
-        {/* Tab View 3: Dynamic Price Forecast */}
-        {activeTab === 'price' && (
-          <PriceTracker
-            currency={currency}
-            livePriceForecast={livePriceForecast}
-            currentOrigin={searchParams.origin}
-            currentDest={searchParams.destination}
-          />
-        )}
-
-        {/* Tab View 4: Boarding Passes */}
+        {/* Tab View 3: Boarding Passes */}
         {activeTab === 'bookings' && (
           <div className="space-y-6">
             <div className="flex items-center justify-between bg-white p-5 rounded-2xl border border-slate-200">
@@ -459,7 +446,6 @@ export default function Home() {
               <h3 className="font-semibold text-white mb-3">Live tools</h3>
               <ul className="space-y-2 text-slate-400">
                 <li><button onClick={() => setActiveTab('radar')} className="hover:text-white transition-colors">Live Flight Radar</button></li>
-                <li><button onClick={() => setActiveTab('price')} className="hover:text-white transition-colors">Fare Trends</button></li>
                 <li><button onClick={() => setActiveTab('bookings')} className="hover:text-white transition-colors">My Trips</button></li>
               </ul>
             </div>
