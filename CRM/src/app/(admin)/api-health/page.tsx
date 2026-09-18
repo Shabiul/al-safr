@@ -1,5 +1,5 @@
 import { auth } from '@/auth';
-import { prisma } from '@/lib/db';
+import { db } from '@/lib/db';
 import { ForbiddenNotice } from '@/components/ForbiddenNotice';
 import { AlertTriangle } from 'lucide-react';
 
@@ -10,7 +10,8 @@ export default async function ApiHealthPage() {
   const role = (session?.user as { role?: string } | undefined)?.role;
   if (role !== 'SUPER_ADMIN') return <ForbiddenNotice />;
 
-  const events = await prisma.apiKeyEvent.findMany({ orderBy: { createdAt: 'desc' }, take: 100 });
+  const { data } = await db.from('ApiKeyEvent').select('*').order('createdAt', { ascending: false }).limit(100);
+  const events = data ?? [];
   const byKey = new Map<string, number>();
   for (const e of events) byKey.set(e.keyLabel, (byKey.get(e.keyLabel) ?? 0) + 1);
 
@@ -50,7 +51,7 @@ export default async function ApiHealthPage() {
                   <span className="text-sm text-slate-900">{e.keyLabel}</span>
                   <span className="text-xs text-slate-400">{e.service}</span>
                 </div>
-                <span className="text-xs text-slate-400">{e.createdAt.toLocaleString('en-IN')}</span>
+                <span className="text-xs text-slate-400">{new Date(e.createdAt).toLocaleString('en-IN')}</span>
               </div>
             ))}
           </div>

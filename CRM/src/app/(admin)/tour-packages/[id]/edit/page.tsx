@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { prisma } from '@/lib/db';
+import { db } from '@/lib/db';
 import { TourPackageForm, TourPackageFormData } from '@/components/TourPackageForm';
 
 interface PageProps {
@@ -8,7 +8,7 @@ interface PageProps {
 
 export default async function EditTourPackagePage({ params }: PageProps) {
   const { id } = await params;
-  const pkg = await prisma.tourPackage.findUnique({ where: { id } });
+  const { data: pkg } = await db.from('TourPackage').select('*').eq('id', id).maybeSingle();
   if (!pkg) notFound();
 
   const initial: TourPackageFormData = {

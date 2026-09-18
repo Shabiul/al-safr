@@ -1,22 +1,15 @@
 import { config } from 'dotenv';
 import { resolve } from 'path';
-import { PrismaClient } from '@prisma/client';
-import { PrismaPg } from '@prisma/adapter-pg';
+import { createClient } from '@supabase/supabase-js';
 
 // Next.js loads .env.local itself before any app code runs, so this is a
 // no-op there (dotenv never overwrites an already-set var). Scripts run
-// directly via `tsx` (prisma/seed.ts, the *.test.ts files) have no such
-// loader, so this is what actually supplies DATABASE_URL for them.
+// directly via `tsx` (the *.test.ts files) have no such loader, so this is
+// what actually supplies SUPABASE_URL/SUPABASE_SECRET_KEY for them.
 config({ path: resolve(__dirname, '../../.env.local') });
 
-const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
-
-const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
-
-export const prisma = globalForPrisma.prisma ?? new PrismaClient({ adapter });
-
-if (process.env.NODE_ENV !== 'production') {
-  globalForPrisma.prisma = prisma;
-}
-
-export * from '@prisma/client';
+// Server-only: the secret key bypasses row-level security, which is fine
+// since every caller is already gated by our own session checks.
+export const db = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_SECRET_KEY!, {
+  auth: { persistSession: false },
+});

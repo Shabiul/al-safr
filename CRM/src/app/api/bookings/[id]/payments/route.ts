@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/db';
+import { db } from '@/lib/db';
 import { requireStaffSession } from '@/lib/api-auth';
 
 export const dynamic = 'force-dynamic';
@@ -19,20 +19,21 @@ export async function POST(request: Request, { params }: RouteParams) {
     return NextResponse.json({ error: 'type, method and amount are required' }, { status: 400 });
   }
 
-  try {
-    const record = await prisma.paymentRecord.create({
-      data: {
-        bookingId: id,
-        type,
-        method,
-        amount: Number(amount),
-        reference: reference || null,
-        note: note || null,
-        recordedBy: session.user?.name ?? 'Staff',
-      },
-    });
-    return NextResponse.json({ payment: record }, { status: 201 });
-  } catch (err: any) {
-    return NextResponse.json({ error: err?.message || 'Failed to record payment' }, { status: 500 });
-  }
+  const { data: record, error: dbError } = await db
+    .from('PaymentRecord')
+    .insert({
+      id: crypto.randomUUID(),
+      bookingId: id,
+      type,
+      method,
+      amount: Number(amount),
+      reference: reference || null,
+      note: note || null,
+      recordedBy: session.user?.name ?? 'Staff',
+    })
+    .select()
+    .single();
+
+  if (dbError) return NextResponse.json({ error: dbError.message || 'Failed to record payment' }, { status: 500 });
+  return NextResponse.json({ payment: record }, { status: 201 });
 }

@@ -1,5 +1,5 @@
 import bcrypt from 'bcryptjs';
-import { prisma } from '@/lib/db';
+import { db } from '@/lib/db';
 import { verifyStaffCredentials } from './verifyStaffCredentials';
 
 async function run() {
@@ -7,10 +7,16 @@ async function run() {
   const password = 'correct-horse-battery-staple';
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  await prisma.staffUser.deleteMany({ where: { email } });
-  await prisma.staffUser.create({
-    data: { email, hashedPassword, name: 'Verify Staff Test', role: 'STAFF' },
+  await db.from('StaffUser').delete().eq('email', email);
+  const { error: insertError } = await db.from('StaffUser').insert({
+    id: crypto.randomUUID(),
+    email,
+    hashedPassword,
+    name: 'Verify Staff Test',
+    role: 'STAFF',
+    updatedAt: new Date().toISOString(),
   });
+  if (insertError) throw new Error(`FAIL: seed insert failed: ${insertError.message}`);
 
   const matched = await verifyStaffCredentials(email, password);
   if (!matched || matched.email !== email || matched.role !== 'STAFF') {
@@ -22,13 +28,11 @@ async function run() {
     throw new Error('FAIL: wrong password verified');
   }
 
-  await prisma.staffUser.deleteMany({ where: { email } });
+  await db.from('StaffUser').delete().eq('email', email);
   console.log('verifyStaffCredentials.test passed.');
 }
 
-run()
-  .catch((err) => {
-    console.error(err);
-    process.exit(1);
-  })
-  .finally(() => prisma.$disconnect());
+run().catch((err) => {
+  console.error(err);
+  process.exit(1);
+});

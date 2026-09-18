@@ -1,5 +1,5 @@
 import { auth } from '@/auth';
-import { prisma } from '@/lib/db';
+import { db } from '@/lib/db';
 import { ForbiddenNotice } from '@/components/ForbiddenNotice';
 import { StaffTable } from '@/components/StaffTable';
 import { NewStaffForm } from '@/components/NewStaffForm';
@@ -12,21 +12,21 @@ export default async function StaffPage() {
   if (role !== 'SUPER_ADMIN') return <ForbiddenNotice />;
 
   const currentUserId = (session?.user as { id?: string } | undefined)?.id;
-  const staff = await prisma.staffUser.findMany({
-    orderBy: { createdAt: 'desc' },
-    select: { id: true, email: true, name: true, role: true, active: true, createdAt: true },
-  });
+  const { data: staff } = await db
+    .from('StaffUser')
+    .select('id, email, name, role, active, createdAt')
+    .order('createdAt', { ascending: false });
 
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-semibold text-slate-900">Staff</h1>
-        <p className="text-slate-500 text-sm mt-1">{staff.length} staff accounts.</p>
+        <p className="text-slate-500 text-sm mt-1">{staff?.length ?? 0} staff accounts.</p>
       </div>
 
       <NewStaffForm />
 
-      <StaffTable staff={staff} currentUserId={currentUserId} />
+      <StaffTable staff={staff ?? []} currentUserId={currentUserId} />
     </div>
   );
 }

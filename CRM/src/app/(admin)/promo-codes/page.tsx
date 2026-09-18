@@ -1,5 +1,5 @@
 import { auth } from '@/auth';
-import { prisma } from '@/lib/db';
+import { db } from '@/lib/db';
 import { ForbiddenNotice } from '@/components/ForbiddenNotice';
 import { NewPromoCodeForm } from '@/components/NewPromoCodeForm';
 import { PromoCodeTable } from '@/components/PromoCodeTable';
@@ -11,7 +11,7 @@ export default async function PromoCodesPage() {
   const role = (session?.user as { role?: string } | undefined)?.role;
   if (role !== 'SUPER_ADMIN') return <ForbiddenNotice />;
 
-  const codes = await prisma.promoCode.findMany({ orderBy: { createdAt: 'desc' } });
+  const { data: codes } = await db.from('PromoCode').select('*').order('createdAt', { ascending: false });
 
   return (
     <div className="space-y-6">
@@ -23,7 +23,7 @@ export default async function PromoCodesPage() {
       </div>
 
       <NewPromoCodeForm />
-      <PromoCodeTable codes={codes} />
+      <PromoCodeTable codes={codes ?? []} />
     </div>
   );
 }

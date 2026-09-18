@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/db';
+import { db } from '@/lib/db';
 import { requireStaffSession } from '@/lib/api-auth';
 
 export const dynamic = 'force-dynamic';
@@ -13,17 +13,15 @@ export async function GET(request: Request, { params }: RouteParams) {
   if (error) return error;
 
   const { id } = await params;
-  const booking = await prisma.booking.findUnique({
-    where: { id },
-    include: {
-      tourPackage: { select: { name: true } },
-      promoCode: { select: { code: true } },
-      payments: { orderBy: { createdAt: 'desc' } },
-      documents: { orderBy: { createdAt: 'desc' } },
-    },
-  });
+  const { data: booking } = await db.from('Booking').select('*').eq('id', id).maybeSingle();
   if (!booking) return NextResponse.json({ error: 'Booking not found' }, { status: 404 });
-  return NextResponse.json({ booking });
+
+  const [{ data: payments }, { data: documents }] = await Promise.all([
+    db.from('PaymentRecord').select('*').eq('bookingId', id).order('createdAt', { ascending: false }),
+    db.from('Document').select('*').eq('bookingId', id).order('createdAt', { ascending: false }),
+  ]);
+
+  return NextResponse.json({ booking: { ...booking, payments: payments ?? [], documents: documents ?? [] } });
 }
 
 export async function PATCH(request: Request, { params }: RouteParams) {
@@ -33,17 +31,18 @@ export async function PATCH(request: Request, { params }: RouteParams) {
   const { id } = await params;
   const { status, notes } = await request.json();
 
-  try {
-    const booking = await prisma.booking.update({
-      where: { id },
-      data: {
-        ...(status !== undefined && { status }),
-        ...(notes !== undefined && { notes }),
-      },
-    });
-    return NextResponse.json({ booking });
-  } catch (err: any) {
-    if (err?.code === 'P2025') return NextResponse.json({ error: 'Booking not found' }, { status: 404 });
-    return NextResponse.json({ error: err?.message || 'Failed to update booking' }, { status: 500 });
-  }
+  const { data: booking, error: dbError } = await db
+    .from('Booking')
+    .update({
+      ...(status !== undefined && { status }),
+      ...(notes !== undefined && { notes }),
+      updatedAt: new Date().toISOString(),
+    })
+    .eq('id', id)
+    .select()
+    .maybeSingle();
+
+  if (dbError) return NextResponse.json({ error: dbError.message }, { status: 500 });
+  if (!booking) return NextResponse.json({ error: 'Booking not found' }, { status: 404 });
+  return NextResponse.json({ booking });
 }

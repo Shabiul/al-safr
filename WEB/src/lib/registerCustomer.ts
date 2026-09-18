@@ -1,5 +1,5 @@
 import bcrypt from 'bcryptjs';
-import { prisma } from '@/lib/db';
+import { db } from '@/lib/db';
 import type { Customer } from '@/types';
 
 export class EmailAlreadyRegisteredError extends Error {}
@@ -9,13 +9,18 @@ export async function registerCustomer(
   password: string,
   name: string
 ): Promise<Customer> {
-  const existing = await prisma.customer.findUnique({ where: { email } });
+  const { data: existing } = await db.from('Customer').select('id').eq('email', email).maybeSingle();
   if (existing) {
     throw new EmailAlreadyRegisteredError(`An account with ${email} already exists`);
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
-  const customer = await prisma.customer.create({ data: { email, hashedPassword, name } });
+  const { data: customer, error } = await db
+    .from('Customer')
+    .insert({ id: crypto.randomUUID(), email, hashedPassword, name, updatedAt: new Date().toISOString() })
+    .select()
+    .single();
+  if (error || !customer) throw new Error(error?.message || 'Failed to create customer');
 
   return { id: customer.id, email: customer.email, name: customer.name };
 }

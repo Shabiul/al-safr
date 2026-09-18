@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/db';
+import { db } from '@/lib/db';
 import { requireStaffSession } from '@/lib/api-auth';
 import { deleteDocument, getDocumentDownloadUrl } from '@/lib/storage';
 
@@ -14,7 +14,7 @@ export async function GET(request: Request, { params }: RouteParams) {
   if (error) return error;
 
   const { id } = await params;
-  const doc = await prisma.document.findUnique({ where: { id } });
+  const { data: doc } = await db.from('Document').select('*').eq('id', id).maybeSingle();
   if (!doc) return NextResponse.json({ error: 'Document not found' }, { status: 404 });
 
   try {
@@ -30,10 +30,10 @@ export async function DELETE(request: Request, { params }: RouteParams) {
   if (error) return error;
 
   const { id } = await params;
-  const doc = await prisma.document.findUnique({ where: { id } });
+  const { data: doc } = await db.from('Document').select('*').eq('id', id).maybeSingle();
   if (!doc) return NextResponse.json({ error: 'Document not found' }, { status: 404 });
 
   await deleteDocument(doc.storagePath);
-  await prisma.document.delete({ where: { id } });
+  await db.from('Document').delete().eq('id', id);
   return NextResponse.json({ success: true });
 }

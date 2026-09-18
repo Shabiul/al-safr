@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/db';
+import { db } from '@/lib/db';
 import { requireStaffSession } from '@/lib/api-auth';
 
 export const dynamic = 'force-dynamic';
@@ -16,20 +16,18 @@ export async function PATCH(request: Request, { params }: RouteParams) {
   const body = await request.json();
   const { status, followUpAt, assignedToName } = body;
 
-  try {
-    const lead = await prisma.lead.update({
-      where: { id },
-      data: {
-        ...(status !== undefined && { status }),
-        ...(followUpAt !== undefined && { followUpAt: followUpAt ? new Date(followUpAt) : null }),
-        ...(assignedToName !== undefined && { assignedToName }),
-      },
-    });
-    return NextResponse.json({ lead });
-  } catch (err: any) {
-    if (err?.code === 'P2025') {
-      return NextResponse.json({ error: 'Lead not found' }, { status: 404 });
-    }
-    return NextResponse.json({ error: err?.message || 'Failed to update lead' }, { status: 500 });
-  }
+  const { data: lead, error: dbError } = await db
+    .from('Lead')
+    .update({
+      ...(status !== undefined && { status }),
+      ...(followUpAt !== undefined && { followUpAt: followUpAt ? new Date(followUpAt).toISOString() : null }),
+      ...(assignedToName !== undefined && { assignedToName }),
+    })
+    .eq('id', id)
+    .select()
+    .maybeSingle();
+
+  if (dbError) return NextResponse.json({ error: dbError.message }, { status: 500 });
+  if (!lead) return NextResponse.json({ error: 'Lead not found' }, { status: 404 });
+  return NextResponse.json({ lead });
 }

@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/db';
+import { db } from '@/lib/db';
 import { requireSuperAdminSession } from '@/lib/api-auth';
 
 export const dynamic = 'force-dynamic';
@@ -10,8 +10,8 @@ export async function GET() {
   const { error } = await requireSuperAdminSession();
   if (error) return error;
 
-  const rows = await prisma.markupSetting.findMany();
-  const bySvc = new Map(rows.map((r) => [r.service, r.percentage]));
+  const { data: rows } = await db.from('MarkupSetting').select('*');
+  const bySvc = new Map((rows ?? []).map((r) => [r.service, r.percentage]));
   const settings = SERVICES.map((service) => ({ service, percentage: bySvc.get(service) ?? 0 }));
 
   return NextResponse.json({ settings });
@@ -29,11 +29,12 @@ export async function PATCH(request: Request) {
     return NextResponse.json({ error: 'percentage must be a number between 0 and 500' }, { status: 400 });
   }
 
-  const setting = await prisma.markupSetting.upsert({
-    where: { service },
-    update: { percentage },
-    create: { service, percentage },
-  });
+  const { data: setting, error: dbError } = await db
+    .from('MarkupSetting')
+    .upsert({ service, percentage, updatedAt: new Date().toISOString() }, { onConflict: 'service' })
+    .select()
+    .single();
 
+  if (dbError) return NextResponse.json({ error: dbError.message }, { status: 500 });
   return NextResponse.json({ setting });
 }

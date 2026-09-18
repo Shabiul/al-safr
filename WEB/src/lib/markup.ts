@@ -1,4 +1,4 @@
-import { prisma } from '@/lib/db';
+import { db } from '@/lib/db';
 
 export type MarkupService = 'flights' | 'hotels' | 'cabs';
 
@@ -7,8 +7,8 @@ export type MarkupService = 'flights' | 'hotels' | 'cabs';
 // if the CRM hasn't set one for this service yet.
 export async function getMarkupMultiplier(service: MarkupService): Promise<number> {
   try {
-    const setting = await prisma.markupSetting.findUnique({ where: { service } });
-    return 1 + (setting?.percentage ?? 0) / 100;
+    const { data } = await db.from('MarkupSetting').select('percentage').eq('service', service).maybeSingle();
+    return 1 + (data?.percentage ?? 0) / 100;
   } catch {
     return 1;
   }

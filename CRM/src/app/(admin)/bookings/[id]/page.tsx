@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { prisma } from '@/lib/db';
+import { db } from '@/lib/db';
 import { ArrowLeft } from 'lucide-react';
 import { BookingStatusControl } from '@/components/BookingStatusControl';
 import { PaymentPanel } from '@/components/PaymentPanel';
@@ -12,16 +12,19 @@ const SERVICE_LABELS: Record<string, string> = { FLIGHT: 'Flight', HOTEL: 'Hotel
 
 export default async function BookingDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const booking = await prisma.booking.findUnique({
-    where: { id },
-    include: {
-      tourPackage: { select: { name: true } },
-      promoCode: { select: { code: true } },
-      payments: { orderBy: { createdAt: 'desc' } },
-      documents: { orderBy: { createdAt: 'desc' } },
-    },
-  });
+  const { data: booking } = await db.from('Booking').select('*').eq('id', id).maybeSingle();
   if (!booking) notFound();
+
+  const [{ data: tourPackage }, { data: promoCode }, { data: payments }, { data: documents }] = await Promise.all([
+    booking.tourPackageId
+      ? db.from('TourPackage').select('name').eq('id', booking.tourPackageId).maybeSingle()
+      : Promise.resolve({ data: null }),
+    booking.promoCodeId
+      ? db.from('PromoCode').select('code').eq('id', booking.promoCodeId).maybeSingle()
+      : Promise.resolve({ data: null }),
+    db.from('PaymentRecord').select('*').eq('bookingId', id).order('createdAt', { ascending: false }),
+    db.from('Document').select('*').eq('bookingId', id).order('createdAt', { ascending: false }),
+  ]);
 
   return (
     <div className="space-y-6">
@@ -34,8 +37,8 @@ export default async function BookingDetailPage({ params }: { params: Promise<{ 
         <div>
           <h1 className="text-2xl font-semibold text-slate-900">{booking.customerName}</h1>
           <p className="text-slate-500 text-sm mt-1">
-            {SERVICE_LABELS[booking.serviceType]}{booking.tourPackage ? ` · ${booking.tourPackage.name}` : ''}
-            {booking.promoCode ? ` · Promo: ${booking.promoCode.code}` : ''}
+            {SERVICE_LABELS[booking.serviceType]}{tourPackage ? ` · ${tourPackage.name}` : ''}
+            {promoCode ? ` · Promo: ${promoCode.code}` : ''}
           </p>
           <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-slate-500 mt-2">
             {booking.customerEmail && <span>{booking.customerEmail}</span>}
@@ -52,15 +55,9 @@ export default async function BookingDetailPage({ params }: { params: Promise<{ 
         </div>
       </div>
 
-      <PaymentPanel
-        bookingId={booking.id}
-        payments={booking.payments.map((p) => ({ ...p, createdAt: p.createdAt.toISOString() }))}
-      />
+      <PaymentPanel bookingId={booking.id} payments={payments ?? []} />
 
-      <DocumentsPanel
-        bookingId={booking.id}
-        documents={booking.documents.map((d) => ({ ...d, createdAt: d.createdAt.toISOString() }))}
-      />
+      <DocumentsPanel bookingId={booking.id} documents={documents ?? []} />
     </div>
   );
 }

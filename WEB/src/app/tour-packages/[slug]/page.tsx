@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { prisma } from '@/lib/db';
+import { db } from '@/lib/db';
 import { CurrencyCode, CURRENCIES, formatPrice } from '@/services/flightData';
 import { TourPackage } from '@/services/tourPackageData';
 import { ArrowLeft, MapPin, Calendar, Check, X, Compass } from 'lucide-react';
@@ -17,7 +17,7 @@ export default async function TourPackageDetailPage({ params, searchParams }: Pa
   const { currency: currencyParam } = await searchParams;
   const currency: CurrencyCode = currencyParam && currencyParam in CURRENCIES ? (currencyParam as CurrencyCode) : 'INR';
 
-  const row = await prisma.tourPackage.findUnique({ where: { slug } });
+  const { data: row } = await db.from('TourPackage').select('*').eq('slug', slug).maybeSingle();
   if (!row || !row.published) notFound();
 
   const pkg: TourPackage = {

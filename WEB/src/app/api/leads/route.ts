@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/db';
+import { db } from '@/lib/db';
 
 export const dynamic = 'force-dynamic';
 
@@ -14,12 +14,14 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'name is required' }, { status: 400 });
   }
 
-  try {
-    const lead = await prisma.lead.create({
-      data: { type, name, email, phone, service, destination, message },
-    });
-    return NextResponse.json({ id: lead.id });
-  } catch (err: any) {
-    return NextResponse.json({ error: err?.message || 'Failed to submit' }, { status: 500 });
+  const { data: lead, error } = await db
+    .from('Lead')
+    .insert({ id: crypto.randomUUID(), type, name, email, phone, service, destination, message })
+    .select('id')
+    .single();
+
+  if (error || !lead) {
+    return NextResponse.json({ error: error?.message || 'Failed to submit' }, { status: 500 });
   }
+  return NextResponse.json({ id: lead.id });
 }

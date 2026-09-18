@@ -1,5 +1,5 @@
 import { auth } from '@/auth';
-import { prisma } from '@/lib/db';
+import { db } from '@/lib/db';
 import { ForbiddenNotice } from '@/components/ForbiddenNotice';
 import { MarkupForm } from '@/components/MarkupForm';
 
@@ -12,8 +12,8 @@ export default async function MarkupPage() {
   const role = (session?.user as { role?: string } | undefined)?.role;
   if (role !== 'SUPER_ADMIN') return <ForbiddenNotice />;
 
-  const rows = await prisma.markupSetting.findMany();
-  const bySvc = new Map(rows.map((r) => [r.service, r.percentage]));
+  const { data: rows } = await db.from('MarkupSetting').select('*');
+  const bySvc = new Map((rows ?? []).map((r) => [r.service, r.percentage]));
   const settings = SERVICES.map((service) => ({ service, percentage: bySvc.get(service) ?? 0 }));
 
   return (

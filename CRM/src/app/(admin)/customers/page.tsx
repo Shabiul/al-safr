@@ -1,21 +1,22 @@
 import Link from 'next/link';
-import { prisma } from '@/lib/db';
+import { db } from '@/lib/db';
 
 export const dynamic = 'force-dynamic';
 
 export default async function CustomersPage() {
-  const customers = await prisma.customer.findMany({ orderBy: { createdAt: 'desc' } });
+  const { data: customers } = await db.from('Customer').select('*').order('createdAt', { ascending: false });
+  const rows = customers ?? [];
 
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-semibold text-slate-900">Customers</h1>
         <p className="text-slate-500 text-sm mt-1">
-          {customers.length} registered {customers.length === 1 ? 'customer' : 'customers'} on the WEB app.
+          {rows.length} registered {rows.length === 1 ? 'customer' : 'customers'} on the WEB app.
         </p>
       </div>
 
-      {customers.length === 0 ? (
+      {rows.length === 0 ? (
         <div className="bg-white rounded-2xl border border-dashed border-slate-300 p-12 text-center">
           <p className="text-sm text-slate-500">No customers have registered yet.</p>
         </div>
@@ -30,14 +31,14 @@ export default async function CustomersPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
-              {customers.map((c) => (
+              {rows.map((c) => (
                 <tr key={c.id} className="hover:bg-slate-50 transition-colors">
                   <td className="px-5 py-3.5 font-medium text-slate-900">
                     <Link href={`/customers/${c.id}`} className="hover:text-brand-700">{c.name}</Link>
                   </td>
                   <td className="px-5 py-3.5 text-slate-500">{c.email}</td>
                   <td className="px-5 py-3.5 text-slate-500">
-                    {c.createdAt.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                    {new Date(c.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
                   </td>
                 </tr>
               ))}

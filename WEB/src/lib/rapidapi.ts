@@ -1,4 +1,4 @@
-import { prisma } from '@/lib/db';
+import { db } from '@/lib/db';
 
 // Comma-separated RAPIDAPI_KEY env var. On 429/403 (quota exhausted) we
 // retry the same request with the next key before giving up.
@@ -20,7 +20,7 @@ export async function rapidApiFetch(url: string, host: string, init: RequestInit
       headers: { ...init.headers, 'x-rapidapi-key': KEYS[i], 'x-rapidapi-host': host },
     });
     if (res.status !== 429 && res.status !== 403) return res;
-    prisma.apiKeyEvent.create({ data: { service: host, keyLabel: keyLabel(KEYS[i], i) } }).catch(() => {});
+    db.from('ApiKeyEvent').insert({ id: crypto.randomUUID(), service: host, keyLabel: keyLabel(KEYS[i], i) }).then(() => {});
     lastRes = res;
   }
   if (!lastRes) throw new Error('RAPIDAPI_KEY not configured');
