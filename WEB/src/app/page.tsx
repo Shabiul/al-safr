@@ -8,14 +8,12 @@ import { FlightSearch } from '@/components/FlightSearch';
 import { HotelSearch } from '@/components/HotelSearch';
 import { TourPackages } from '@/components/TourPackages';
 import { CabSearch } from '@/components/CabSearch';
-import { LiveFlightTracker } from '@/components/LiveFlightTracker';
 import { FlightCard } from '@/components/FlightCard';
 import { SeatSelectorModal, BookingConfirmation } from '@/components/SeatSelectorModal';
 import { BoardingPassModal } from '@/components/BoardingPassModal';
 import {
   CurrencyCode,
   FlightOption,
-  LIVE_FLIGHTS,
   formatPrice,
 } from '@/services/flightData';
 import {
@@ -30,7 +28,7 @@ import {
   Car,
 } from 'lucide-react';
 
-type MainTab = 'home' | 'services' | 'radar' | 'bookings';
+type MainTab = 'home' | 'services' | 'bookings';
 type ServiceId = 'book' | 'hotels' | 'tours' | 'cabs';
 
 const SERVICE_TABS: { id: ServiceId; label: string; icon: React.ElementType }[] = [
@@ -64,7 +62,6 @@ export default function Home() {
   // Live Telemetry Stream State
   const [isFetchingLive, setIsFetchingLive] = useState(false);
   const [lastLiveSync, setLastLiveSync] = useState<string>('');
-  const [airborneFlights, setAirborneFlights] = useState<any[]>([]);
   const [liveStreamConnected, setLiveStreamConnected] = useState<boolean>(false);
   const [dataSourceNotice, setDataSourceNotice] = useState<string>('');
 
@@ -95,7 +92,6 @@ export default function Home() {
         }
 
         setFlights(liveOptions);
-        setAirborneFlights(data.liveTelemetry?.airborneFlights || []);
         setLastLiveSync(new Date(data.timestamp).toLocaleTimeString());
         setLiveStreamConnected(true);
         setDataSourceNotice(data.dataSourceNotice || '');
@@ -123,9 +119,9 @@ export default function Home() {
   };
 
   // LandingHome's cards link to a specific service (book/hotels/tours/cabs)
-  // or a top-level tab (radar/bookings) — the services all live under
-  // one consolidated "Services" tab with its own sub-navigation.
-  const handleNavigate = (target: ServiceId | 'radar' | 'bookings') => {
+  // or a top-level tab (bookings) — the services all live under one
+  // consolidated "Services" tab with its own sub-navigation.
+  const handleNavigate = (target: ServiceId | 'bookings') => {
     if (target === 'book' || target === 'hotels' || target === 'tours' || target === 'cabs') {
       setActiveService(target);
       setActiveTab('services');
@@ -147,19 +143,6 @@ export default function Home() {
     setActiveBooking(confirmation);
     setAllBookings((prev) => [confirmation, ...prev]);
     setIsBoardingPassOpen(true);
-  };
-
-  // Quick route selector from radar (only ever called for the demo fleet,
-  // which has a route — live ADS-B targets don't expose the "book" action)
-  const handleBookFromRadar = (flightNumber: string) => {
-    const live = LIVE_FLIGHTS.find((f) => f.flightNumber === flightNumber);
-    if (live?.origin && live?.destination) {
-      handleSearch({
-        ...searchParams,
-        origin: live.origin.code,
-        destination: live.destination.code,
-      });
-    }
   };
 
   return (
@@ -185,10 +168,6 @@ export default function Home() {
                   <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" aria-hidden="true" />
                   Live data stream
                 </div>
-                <span className="hidden sm:inline text-slate-300">•</span>
-                <span className="hidden sm:inline">
-                  {airborneFlights.length || 20} aircraft tracked
-                </span>
                 <span className="hidden sm:inline text-slate-300">•</span>
                 <span className="hidden sm:inline">
                   Synced {lastLiveSync || 'just now'}
@@ -302,18 +281,7 @@ export default function Home() {
           </div>
         )}
 
-        {/* Tab View 2: Live Flight Radar */}
-        {activeTab === 'radar' && (
-          <LiveFlightTracker
-            currency={currency}
-            onSelectFlightToBook={handleBookFromRadar}
-            liveAirborneFlights={airborneFlights}
-            onRefreshLive={() => fetchLiveFlightData(searchParams.origin, searchParams.destination, searchParams.departureDate, searchParams.supersonicOnly, searchParams.cabinClass)}
-            isRefreshing={isFetchingLive}
-          />
-        )}
-
-        {/* Tab View 3: Boarding Passes */}
+        {/* Tab View 2: Boarding Passes */}
         {activeTab === 'bookings' && (
           <div className="space-y-6">
             <div className="flex items-center justify-between bg-white p-5 rounded-2xl border border-slate-200">
@@ -409,7 +377,7 @@ export default function Home() {
       {/* Footer */}
       <footer className="mt-16 py-14 text-sm text-slate-300" style={{ backgroundColor: '#04182c' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
             <div className="space-y-3">
               <div className="flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-lg bg-brand-600 text-white flex items-center justify-center">
@@ -430,6 +398,7 @@ export default function Home() {
                 <li><button onClick={() => handleNavigate('hotels')} className="hover:text-white transition-colors">Hotels</button></li>
                 <li><button onClick={() => handleNavigate('tours')} className="hover:text-white transition-colors">Tour Packages</button></li>
                 <li><button onClick={() => handleNavigate('cabs')} className="hover:text-white transition-colors">Cabs</button></li>
+                <li><button onClick={() => setActiveTab('bookings')} className="hover:text-white transition-colors">My Trips</button></li>
               </ul>
             </div>
 
@@ -439,14 +408,6 @@ export default function Home() {
                 <li><Link href="/about" className="hover:text-white transition-colors">About Us</Link></li>
                 <li><Link href="/contact" className="hover:text-white transition-colors">Contact</Link></li>
                 <li><Link href="/get-a-quote" className="hover:text-white transition-colors">Get a Quote</Link></li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="font-semibold text-white mb-3">Live tools</h3>
-              <ul className="space-y-2 text-slate-400">
-                <li><button onClick={() => setActiveTab('radar')} className="hover:text-white transition-colors">Live Flight Radar</button></li>
-                <li><button onClick={() => setActiveTab('bookings')} className="hover:text-white transition-colors">My Trips</button></li>
               </ul>
             </div>
 
@@ -471,11 +432,20 @@ export default function Home() {
               <Link href="/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</Link>
               <Link href="/terms" className="hover:text-white transition-colors">Terms &amp; Conditions</Link>
             </div>
-            <div className="flex items-center gap-4">
-              <span>Live fares via Google Flights</span>
-              <span className="text-slate-600">•</span>
-              <span>Live ADS-B via OpenSky Network</span>
-            </div>
+            <span>Live fares via Google Flights</span>
+          </div>
+
+          <div className="border-t border-white/10 mt-6 pt-6 text-center text-xs text-slate-500">
+            Designed and developed with{' '}
+            <span aria-hidden="true">❤</span> by{' '}
+            <a
+              href="https://naazailabs.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-medium text-slate-300 hover:text-white transition-colors"
+            >
+              Naaz AI Labs
+            </a>
           </div>
         </div>
       </footer>

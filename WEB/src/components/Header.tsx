@@ -2,10 +2,10 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { Plane, Globe, Menu, X, Radio, Ticket, Home, LayoutGrid, Phone, Mail, MapPin, ArrowRight } from 'lucide-react';
+import { Plane, Globe, Menu, X, Ticket, Home, LayoutGrid, Phone, Mail, MapPin, ArrowRight } from 'lucide-react';
 import { CurrencyCode, CURRENCIES } from '@/services/flightData';
 
-type MainTab = 'home' | 'services' | 'radar' | 'bookings';
+type MainTab = 'home' | 'services' | 'bookings';
 
 interface HeaderProps {
   currency: CurrencyCode;
@@ -18,7 +18,6 @@ interface HeaderProps {
 const TABS: { id: MainTab; label: string; icon: React.ElementType }[] = [
   { id: 'home', label: 'Home', icon: Home },
   { id: 'services', label: 'Services', icon: LayoutGrid },
-  { id: 'radar', label: 'Live Radar', icon: Radio },
   { id: 'bookings', label: 'My Trips', icon: Ticket },
 ];
 
