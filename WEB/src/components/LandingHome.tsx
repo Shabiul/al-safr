@@ -160,11 +160,14 @@ export const LandingHome: React.FC<LandingHomeProps> = ({ currency, onNavigate }
           them as one unit — the negative margin overlap between them is
           otherwise fragile against a sibling-spacing utility fighting it. */}
       <div>
-      {/* Hero — the background image/gradient live in their own clipped
-          layer so the stats card below can overlap the bottom edge without
-          being cut off by this container's own rounded-corner clipping. */}
-      <div className="relative min-h-[calc(100svh-4rem)] sm:min-h-[calc(100svh-6rem)] flex items-center">
-        <div className="absolute inset-0 rounded-3xl overflow-hidden" aria-hidden="true">
+      {/* Hero — full-bleed: breaks out of the page's centered max-w-7xl
+          container to span the entire viewport width (left-1/2 +
+          -translate-x-1/2 + w-screen), regardless of how much side padding
+          the parent applies. The background image/gradient live in their
+          own layer so the stats card below can overlap the bottom edge
+          without being cut off by clipping. */}
+      <div className="relative left-1/2 right-1/2 -mx-[50vw] w-screen min-h-[calc(100svh-4rem)] sm:min-h-[calc(100svh-6rem)] flex items-center overflow-hidden">
+        <div className="absolute inset-0" aria-hidden="true">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80"
@@ -175,7 +178,7 @@ export const LandingHome: React.FC<LandingHomeProps> = ({ currency, onNavigate }
           <div className="absolute inset-0 bg-gradient-to-b from-[color:var(--color-navy-900)]/90 via-[color:var(--color-navy-900)]/70 to-[color:var(--color-navy-900)]/40" />
         </div>
 
-        <div className="relative p-8 sm:p-16 pb-14 sm:pb-16 w-full">
+        <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
           <div className="max-w-2xl space-y-5">
             <div className="flex flex-wrap items-center gap-3">
               <span
@@ -259,6 +262,59 @@ export const LandingHome: React.FC<LandingHomeProps> = ({ currency, onNavigate }
             </div>
           );
         })}
+      </div>
+
+      {/* About */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+        <div className="relative rounded-3xl overflow-hidden h-72 sm:h-96">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=1200"
+            alt="Travel planning"
+            className="w-full h-full object-cover"
+          />
+          <div
+            className="absolute bottom-4 left-4 rounded-2xl px-5 py-4 text-white"
+            style={{ backgroundColor: 'var(--color-navy-900)' }}
+          >
+            <div className="text-2xl font-bold" style={{ color: 'var(--color-gold-400)' }}>
+              16+
+            </div>
+            <div className="text-xs text-slate-300">Years in travel</div>
+          </div>
+        </div>
+
+        <div className="space-y-4">
+          <span className="text-xs font-semibold tracking-widest uppercase" style={{ color: 'var(--color-gold-600)' }}>
+            Who we are
+          </span>
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900">
+            A Bengaluru travel desk that actually picks up the phone
+          </h2>
+          <p className="text-slate-600 leading-relaxed">
+            Al-Safr (السفر) is the booking platform for Al Safar Tours N Travels — a Bengaluru travel consultancy serving customers since 2009. We handle everything a traveller needs under one roof: the ticket, the hotel, the tour, and now, real live pricing you can search yourself.
+          </p>
+          <ul className="space-y-2.5">
+            {[
+              'Flights and hotels priced live at the moment you search',
+              'Tour packages with a full itinerary, not a brochure summary',
+              'Honest about coverage — we say when a service has limits',
+            ].map((item) => (
+              <li key={item} className="flex items-start gap-2.5 text-sm text-slate-600">
+                <BadgeCheck className="w-4 h-4 shrink-0 mt-0.5" style={{ color: 'var(--color-gold-600)' }} />
+                {item}
+              </li>
+            ))}
+          </ul>
+          <button
+            onClick={() => onNavigate('book')}
+            className="focus-ring inline-flex items-center gap-2 px-6 py-3 rounded-full text-white font-semibold text-sm mt-2"
+            style={{ backgroundColor: 'var(--color-navy-900)' }}
+          >
+            Explore our services
+            <ArrowRight className="w-4 h-4" />
+          </button>
+        </div>
       </div>
 
       {/* Services */}
@@ -449,59 +505,6 @@ export const LandingHome: React.FC<LandingHomeProps> = ({ currency, onNavigate }
               </div>
             </div>
           ))}
-        </div>
-      </div>
-
-      {/* About */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-        <div className="relative rounded-3xl overflow-hidden h-72 sm:h-96">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=1200"
-            alt="Travel planning"
-            className="w-full h-full object-cover"
-          />
-          <div
-            className="absolute bottom-4 left-4 rounded-2xl px-5 py-4 text-white"
-            style={{ backgroundColor: 'var(--color-navy-900)' }}
-          >
-            <div className="text-2xl font-bold" style={{ color: 'var(--color-gold-400)' }}>
-              16+
-            </div>
-            <div className="text-xs text-slate-300">Years in travel</div>
-          </div>
-        </div>
-
-        <div className="space-y-4">
-          <span className="text-xs font-semibold tracking-widest uppercase" style={{ color: 'var(--color-gold-600)' }}>
-            Who we are
-          </span>
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900">
-            A Bengaluru travel desk that actually picks up the phone
-          </h2>
-          <p className="text-slate-600 leading-relaxed">
-            Al-Safr (السفر) is the booking platform for Al Safar Tours N Travels — a Bengaluru travel consultancy serving customers since 2009. We handle everything a traveller needs under one roof: the ticket, the hotel, the tour, and now, real live pricing you can search yourself.
-          </p>
-          <ul className="space-y-2.5">
-            {[
-              'Flights and hotels priced live at the moment you search',
-              'Tour packages with a full itinerary, not a brochure summary',
-              'Honest about coverage — we say when a service has limits',
-            ].map((item) => (
-              <li key={item} className="flex items-start gap-2.5 text-sm text-slate-600">
-                <BadgeCheck className="w-4 h-4 shrink-0 mt-0.5" style={{ color: 'var(--color-gold-600)' }} />
-                {item}
-              </li>
-            ))}
-          </ul>
-          <button
-            onClick={() => onNavigate('book')}
-            className="focus-ring inline-flex items-center gap-2 px-6 py-3 rounded-full text-white font-semibold text-sm mt-2"
-            style={{ backgroundColor: 'var(--color-navy-900)' }}
-          >
-            Explore our services
-            <ArrowRight className="w-4 h-4" />
-          </button>
         </div>
       </div>
 
