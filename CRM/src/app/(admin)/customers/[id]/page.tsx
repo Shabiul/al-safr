@@ -13,7 +13,11 @@ export default async function CustomerDetailPage({ params }: { params: Promise<{
   if (!customer) notFound();
 
   const [{ data: bookings }, { data: notes }, { data: documents }, { data: leads }] = await Promise.all([
-    db.from('Booking').select('*').eq('customerId', id).order('createdAt', { ascending: false }),
+    // Bookings created from the CRM store the customer's contact details as
+    // free text and rarely have customerId set (there's no customer picker
+    // in the booking form yet), so match by email too or this always shows
+    // zero bookings for customers who have real ones.
+    db.from('Booking').select('*').or(`customerId.eq.${id},customerEmail.eq.${customer.email}`).order('createdAt', { ascending: false }),
     db.from('CustomerNote').select('*').eq('customerId', id).order('createdAt', { ascending: false }),
     db.from('Document').select('*').eq('customerId', id).order('createdAt', { ascending: false }),
     db.from('Lead').select('*').eq('email', customer.email).order('createdAt', { ascending: false }),
