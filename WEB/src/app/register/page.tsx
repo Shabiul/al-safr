@@ -80,7 +80,7 @@ export default function RegisterPage() {
           {error && (
             <p
               className="text-sm font-bold px-3 py-2 rounded-xl max-border"
-              style={{ backgroundColor: 'var(--color-max-pink)', color: 'white' }}
+              style={{ backgroundColor: 'var(--color-max-orange)', color: 'white' }}
             >
               {error}
             </p>
@@ -89,7 +89,7 @@ export default function RegisterPage() {
             type="submit"
             disabled={isSubmitting}
             className="focus-ring max-press w-full disabled:opacity-50 rounded-xl py-3 font-black text-sm text-white max-border max-shadow"
-            style={{ backgroundColor: 'var(--color-max-green)' }}
+            style={{ backgroundColor: 'var(--color-max-blue)' }}
           >
             {isSubmitting ? 'Creating account…' : 'Create account'}
           </button>

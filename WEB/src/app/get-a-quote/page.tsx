@@ -32,7 +32,7 @@ export default function GetAQuotePage() {
   if (status === 'done') {
     return (
       <StaticPageShell title="Quote request received">
-        <div className="p-8 rounded-2xl max-border max-shadow flex items-start gap-3" style={{ backgroundColor: 'var(--color-max-green)' }}>
+        <div className="p-8 rounded-2xl max-border max-shadow flex items-start gap-3" style={{ backgroundColor: 'var(--color-max-blue)' }}>
           <CheckCircle2 className="w-6 h-6 shrink-0" style={{ color: 'var(--color-ink)' }} />
           <div>
             <h2 className="font-black text-slate-900">Thanks, {name.split(' ')[0]}.</h2>

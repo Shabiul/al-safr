@@ -26,25 +26,22 @@
   --color-accent-600: #ea580c;
   --color-accent-700: #c2410c;
 
-  /* Landing page only (LandingHome.tsx) — dark navy + gold, distinct from the
-     indigo brand used by the booking tools, and its own display fonts. */
+  /* Landing/neo-maximalism dark neutral, used as a section background and
+     for dark UI chrome — not counted as one of the 3 accent colors below. */
   --color-navy-900: #04182c;
   --color-navy-800: #0a2439;
-  --color-gold-400: #f0b52e;
-  --color-gold-500: #e8a317;
-  --color-gold-600: #c9860a;
   --font-display: "Cabinet Grotesk", var(--font-sans);
   --font-accent: "Cormorant Garamond", serif;
 
-  /* Landing page maximalism palette — loud, clashing-on-purpose colors used
-     only by LandingHome.tsx's color-blocked sections and sticker/badge UI.
-     Never used by the booking tools' indigo brand chrome. */
-  --color-max-pink: #ff3ea5;
-  --color-max-yellow: #ffd400;
+  /* Neo-maximalism accent palette — exactly 3 colors (blue/yellow/orange),
+     reused deliberately everywhere across the whole WEB app instead of a
+     different hue per section. Paired with thick black outlines + hard
+     offset shadows (.max-border/.max-shadow below) rather than a wide
+     rainbow of colors — that restraint is what makes it "neo" rather than
+     just loud. --color-ink is the shared border/text neutral. */
   --color-max-blue: #2f6fff;
-  --color-max-green: #00d084;
-  --color-max-orange: #ff5c1a;
-  --color-max-purple: #7a2bff;
+  --color-max-yellow: #ffd400;
+  --color-max-orange: #ff5c3d;
   --color-ink: #0a0a0a;
 }
 

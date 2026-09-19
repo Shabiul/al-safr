@@ -97,12 +97,12 @@ export default async function TourPackageDetailPage({ params, searchParams }: Pa
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-3">
-            <span className="inline-block text-xs font-black tracking-widest uppercase px-3 py-1 rounded-full max-border" style={{ backgroundColor: 'var(--color-max-pink)', color: 'white' }}>
+            <span className="inline-block text-xs font-black tracking-widest uppercase px-3 py-1 rounded-full max-border" style={{ backgroundColor: 'var(--color-max-orange)', color: 'white' }}>
               Itinerary
             </span>
             <ol className="space-y-4 pt-2">
               {pkg.itinerary.map((day, i) => {
-                const itineraryColors = ['var(--color-max-pink)', 'var(--color-max-yellow)', 'var(--color-max-blue)', 'var(--color-max-green)', 'var(--color-max-orange)', 'var(--color-max-purple)'];
+                const itineraryColors = ['var(--color-max-orange)', 'var(--color-max-yellow)', 'var(--color-max-blue)', 'var(--color-max-blue)', 'var(--color-max-orange)', 'var(--color-max-blue)'];
                 const color = itineraryColors[i % itineraryColors.length];
                 return (
                   <li key={day.day} className="flex gap-4 rounded-2xl p-4 max-border max-shadow-sm bg-white">
@@ -124,13 +124,13 @@ export default async function TourPackageDetailPage({ params, searchParams }: Pa
 
           <div className="space-y-6">
             <div className="rounded-2xl p-4 max-border max-shadow-sm bg-white">
-              <h2 className="inline-block text-xs font-black uppercase tracking-widest px-3 py-1 rounded-full max-border mb-3" style={{ backgroundColor: 'var(--color-max-green)', color: 'var(--color-ink)' }}>
+              <h2 className="inline-block text-xs font-black uppercase tracking-widest px-3 py-1 rounded-full max-border mb-3" style={{ backgroundColor: 'var(--color-max-blue)', color: 'var(--color-ink)' }}>
                 Inclusions
               </h2>
               <ul className="space-y-2">
                 {pkg.inclusions.map((item, i) => (
                   <li key={i} className="text-sm text-slate-700 flex items-start gap-2 font-medium">
-                    <span className="w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5 max-border" style={{ backgroundColor: 'var(--color-max-green)' }}>
+                    <span className="w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5 max-border" style={{ backgroundColor: 'var(--color-max-blue)' }}>
                       <Check className="w-3 h-3" style={{ color: 'var(--color-ink)' }} />
                     </span>
                     {item}

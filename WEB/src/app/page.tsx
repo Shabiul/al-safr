@@ -32,10 +32,10 @@ type MainTab = 'home' | 'services' | 'bookings';
 type ServiceId = 'book' | 'hotels' | 'tours' | 'cabs';
 
 const SERVICE_TABS: { id: ServiceId; label: string; icon: React.ElementType; color: string }[] = [
-  { id: 'book', label: 'Flights', icon: Search, color: 'var(--color-max-pink)' },
+  { id: 'book', label: 'Flights', icon: Search, color: 'var(--color-max-orange)' },
   { id: 'hotels', label: 'Hotels', icon: Building2, color: 'var(--color-max-blue)' },
   { id: 'tours', label: 'Tour Packages', icon: Compass, color: 'var(--color-max-orange)' },
-  { id: 'cabs', label: 'Cabs', icon: Car, color: 'var(--color-max-green)' },
+  { id: 'cabs', label: 'Cabs', icon: Car, color: 'var(--color-max-blue)' },
 ];
 
 export default function Home() {
@@ -169,7 +169,7 @@ export default function Home() {
               <div className="flex flex-wrap items-center gap-3 text-slate-600">
                 <div
                   className="flex items-center gap-1.5 font-black text-xs uppercase tracking-wide px-3 py-1.5 rounded-full max-border"
-                  style={{ backgroundColor: 'var(--color-max-green)', color: 'var(--color-ink)' }}
+                  style={{ backgroundColor: 'var(--color-max-blue)', color: 'var(--color-ink)' }}
                 >
                   <span className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: 'var(--color-ink)' }} aria-hidden="true" />
                   Live data stream
@@ -293,7 +293,7 @@ export default function Home() {
           <div className="space-y-6">
             <div className="flex items-center justify-between bg-white p-5 rounded-2xl max-border max-shadow-sm">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl max-border flex items-center justify-center" style={{ backgroundColor: 'var(--color-max-pink)' }}>
+                <div className="w-10 h-10 rounded-xl max-border flex items-center justify-center" style={{ backgroundColor: 'var(--color-max-orange)' }}>
                   <Ticket className="w-5 h-5" style={{ color: 'var(--color-ink)' }} />
                 </div>
                 <div>
@@ -343,7 +343,7 @@ export default function Home() {
                         </span>
                         <div className="font-black text-sm text-slate-900">{b.passengerName}</div>
                       </div>
-                      <span className="text-xs font-black px-2.5 py-1 rounded-full max-border" style={{ backgroundColor: 'var(--color-max-green)', color: 'var(--color-ink)' }}>
+                      <span className="text-xs font-black px-2.5 py-1 rounded-full max-border" style={{ backgroundColor: 'var(--color-max-blue)', color: 'var(--color-ink)' }}>
                         Seat {b.seatNumber}
                       </span>
                     </div>
@@ -355,7 +355,7 @@ export default function Home() {
                       </div>
                       <div className="text-xs text-slate-400 font-bold flex flex-col items-center">
                         <span className="font-mono">{b.flight.flightNumber}</span>
-                        <ArrowRight className="w-4 h-4 my-0.5" style={{ color: 'var(--color-max-pink)' }} />
+                        <ArrowRight className="w-4 h-4 my-0.5" style={{ color: 'var(--color-max-orange)' }} />
                         <span>{b.flight.duration}</span>
                       </div>
                       <div className="text-right">

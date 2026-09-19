@@ -63,7 +63,7 @@ export const BoardingPassModal: React.FC<BoardingPassModalProps> = ({
     >
       <div className="bg-white w-full max-w-2xl rounded-2xl overflow-hidden flex flex-col my-8 max-border max-shadow">
         {/* Top Confirmation Banner */}
-        <div className="text-white px-6 py-4 flex items-center justify-between gap-3 border-b-[3px]" style={{ backgroundColor: 'var(--color-max-green)', borderColor: 'var(--color-ink)' }}>
+        <div className="text-white px-6 py-4 flex items-center justify-between gap-3 border-b-[3px]" style={{ backgroundColor: 'var(--color-max-blue)', borderColor: 'var(--color-ink)' }}>
           <div className="flex items-center gap-2.5 min-w-0">
             <span className="p-1.5 rounded-full bg-white/20 shrink-0 max-border">
               <CheckCircle2 className="w-5 h-5" />
@@ -108,7 +108,7 @@ export const BoardingPassModal: React.FC<BoardingPassModalProps> = ({
 
               <div className="text-right shrink-0">
                 <span className="text-[11px] text-slate-400 block font-medium">Cabin</span>
-                <span className="text-xs font-black text-white px-2 py-0.5 rounded-full max-border" style={{ backgroundColor: 'var(--color-max-purple)' }}>
+                <span className="text-xs font-black text-white px-2 py-0.5 rounded-full max-border" style={{ backgroundColor: 'var(--color-max-blue)' }}>
                   {CABIN_LABEL[booking.cabin]}
                 </span>
               </div>
@@ -165,7 +165,7 @@ export const BoardingPassModal: React.FC<BoardingPassModalProps> = ({
 
               <div>
                 <span className="text-[11px] text-slate-400 block font-medium">Boarding group</span>
-                <span className="font-black block mt-0.5" style={{ color: 'var(--color-max-green)' }}>{booking.boardingGroup}</span>
+                <span className="font-black block mt-0.5" style={{ color: 'var(--color-max-blue)' }}>{booking.boardingGroup}</span>
               </div>
             </div>
 
@@ -180,7 +180,7 @@ export const BoardingPassModal: React.FC<BoardingPassModalProps> = ({
                   <span className="text-xs font-black text-slate-800 tracking-wide block font-mono">
                     AS-{booking.bookingRef}-{booking.seatNumber}
                   </span>
-                  <span className="text-[11px] font-bold flex items-center gap-1 mt-0.5" style={{ color: 'var(--color-max-green)' }}>
+                  <span className="text-[11px] font-bold flex items-center gap-1 mt-0.5" style={{ color: 'var(--color-max-blue)' }}>
                     <ShieldCheck className="w-3 h-3" aria-hidden="true" />
                     Security cleared
                   </span>

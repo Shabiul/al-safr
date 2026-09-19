@@ -6,9 +6,9 @@ import { Phone, Mail, MapPin, Clock, CheckCircle2, MessageCircle } from 'lucide-
 
 const CONTACT_CARDS = [
   { icon: Phone, label: 'Phone', value: '+91 99005 17604', href: 'tel:+919900517604', color: 'var(--color-max-yellow)' },
-  { icon: Mail, label: 'Email', value: 'luckysaj@gmail.com', href: 'mailto:luckysaj@gmail.com', color: 'var(--color-max-pink)' },
+  { icon: Mail, label: 'Email', value: 'luckysaj@gmail.com', href: 'mailto:luckysaj@gmail.com', color: 'var(--color-max-orange)' },
   { icon: MapPin, label: 'Office', value: 'A.M. Plaza, Hospital Road, Shivaji Nagar, Bengaluru 560001', color: 'var(--color-max-blue)' },
-  { icon: Clock, label: 'Hours', value: 'Mon – Sat: 10:00 AM – 8:00 PM · Sunday: by appointment', color: 'var(--color-max-green)' },
+  { icon: Clock, label: 'Hours', value: 'Mon – Sat: 10:00 AM – 8:00 PM · Sunday: by appointment', color: 'var(--color-max-blue)' },
 ];
 
 export default function ContactPage() {
@@ -37,7 +37,7 @@ export default function ContactPage() {
     return (
       <StaticPageShell title="Message sent">
         <div className="p-8 rounded-2xl bg-white max-border max-shadow flex items-start gap-3">
-          <div className="w-11 h-11 rounded-xl max-border flex items-center justify-center shrink-0" style={{ backgroundColor: 'var(--color-max-green)' }}>
+          <div className="w-11 h-11 rounded-xl max-border flex items-center justify-center shrink-0" style={{ backgroundColor: 'var(--color-max-blue)' }}>
             <CheckCircle2 className="w-6 h-6" style={{ color: 'var(--color-ink)' }} />
           </div>
           <div>
@@ -130,7 +130,7 @@ export default function ContactPage() {
             />
           </label>
           {status === 'error' && (
-            <p className="text-sm font-bold px-3 py-2 rounded-lg max-border" style={{ backgroundColor: 'var(--color-max-pink)', color: 'white' }}>
+            <p className="text-sm font-bold px-3 py-2 rounded-lg max-border" style={{ backgroundColor: 'var(--color-max-orange)', color: 'white' }}>
               Something went wrong — please try again.
             </p>
           )}

@@ -57,7 +57,7 @@ export default function LoginPage() {
           {error && (
             <p
               className="text-sm font-bold px-3 py-2 rounded-xl max-border"
-              style={{ backgroundColor: 'var(--color-max-pink)', color: 'white' }}
+              style={{ backgroundColor: 'var(--color-max-orange)', color: 'white' }}
             >
               {error}
             </p>

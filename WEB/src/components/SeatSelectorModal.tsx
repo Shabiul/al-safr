@@ -221,7 +221,7 @@ export const SeatSelectorModal: React.FC<SeatSelectorModalProps> = ({
 
               {/* Business (Rows 4-6) */}
               <div className="space-y-2 border-b-2 border-slate-100 pb-4">
-                <div className="flex items-center justify-between text-xs font-black text-white px-3 py-1 rounded-lg max-border" style={{ backgroundColor: 'var(--color-max-purple)' }}>
+                <div className="flex items-center justify-between text-xs font-black text-white px-3 py-1 rounded-lg max-border" style={{ backgroundColor: 'var(--color-max-blue)' }}>
                   <span>Business (Rows 4–6)</span>
                   <span className="font-bold">2-2 lie-flat</span>
                 </div>
