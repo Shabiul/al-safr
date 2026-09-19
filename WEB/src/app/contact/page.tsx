@@ -5,9 +5,10 @@ import { StaticPageShell } from '@/components/StaticPageShell';
 import { Phone, Mail, MapPin, Clock, CheckCircle2, MessageCircle } from 'lucide-react';
 
 const CONTACT_CARDS = [
-  { icon: Phone, label: 'Phone', value: '+91 99005 17604', href: 'tel:+919900517604', color: 'var(--color-ticket-orange)' },
+  { icon: Phone, label: 'Phone', value: '+91 89045 63397', href: 'tel:+918904563397', color: 'var(--color-ticket-orange)' },
+  { icon: MessageCircle, label: 'WhatsApp', value: '+91 89045 63396', href: 'https://wa.me/918904563396', color: '#10b981' },
   { icon: Mail, label: 'Email', value: 'luckysaj@gmail.com', href: 'mailto:luckysaj@gmail.com', color: 'var(--color-ticket-orange)' },
-  { icon: MapPin, label: 'Office', value: 'A.M. Plaza, Hospital Road, Shivaji Nagar, Bengaluru 560001', color: 'var(--color-ticket-orange)' },
+  { icon: MapPin, label: 'Office', value: '53/3, Abbaiah Reddy St, near Celebrity Arch, Doddathoguru, Electronic City Phase I, Electronic City, Bengaluru, Karnataka 560100', color: 'var(--color-ticket-orange)' },
   { icon: Clock, label: 'Hours', value: 'Mon – Sat: 10:00 AM – 8:00 PM · Sunday: by appointment', color: 'var(--color-ticket-orange)' },
 ];
 
@@ -44,7 +45,7 @@ export default function ContactPage() {
             <h2 className="font-black text-slate-900">Thanks, {name.split(' ')[0]}.</h2>
             <p className="text-sm text-slate-600 mt-1">
               We&apos;ve got your message. For anything urgent, call us directly at{' '}
-              <a href="tel:+919900517604" className="font-black" style={{ color: 'var(--color-ticket-orange)' }}>+91 99005 17604</a>.
+              <a href="tel:+918904563397" className="font-black" style={{ color: 'var(--color-ticket-orange)' }}>+91 89045 63397</a>.
             </p>
           </div>
         </div>
@@ -159,7 +160,7 @@ export default function ContactPage() {
             >
               Visit us
             </span>
-            <p className="text-sm font-bold">A.M. Plaza, Hospital Road, Shivaji Nagar, Bengaluru 560001</p>
+            <p className="text-sm font-bold">53/3, Abbaiah Reddy St, near Celebrity Arch, Doddathoguru, Electronic City Phase I, Electronic City, Bengaluru, Karnataka 560100</p>
             <p className="text-xs text-slate-200 mt-1 font-medium">Mon – Sat, 10:00 AM – 8:00 PM</p>
           </div>
         </div>

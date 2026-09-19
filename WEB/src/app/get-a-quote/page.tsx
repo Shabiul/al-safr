@@ -38,7 +38,7 @@ export default function GetAQuotePage() {
             <h2 className="font-black text-slate-900">Thanks, {name.split(' ')[0]}.</h2>
             <p className="text-sm text-slate-800 mt-1 font-medium">
               We&apos;ll get back to you shortly at {phone}. For anything urgent, call{' '}
-              <a href="tel:+919900517604" className="font-black underline">+91 99005 17604</a> directly.
+              <a href="tel:+918904563397" className="font-black underline">+91 89045 63397</a> directly.
             </p>
           </div>
         </div>
