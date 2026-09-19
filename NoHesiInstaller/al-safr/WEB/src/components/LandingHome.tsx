@@ -17,6 +17,7 @@ import {
   Plus,
   Minus,
   Star,
+  Zap,
 } from 'lucide-react';
 import { CurrencyCode, formatPrice } from '@/services/flightData';
 import { TourPackage } from '@/services/tourPackageData';
@@ -36,6 +37,7 @@ const SERVICES: {
   tagline: string;
   points: string[];
   image: string;
+  color: string;
 }[] = [
   {
     id: 'book',
@@ -44,6 +46,7 @@ const SERVICES: {
     tagline: 'Live domestic & international fares',
     points: ['Real-time fares via Google Flights, not cached estimates', 'Economy, Business and First cabin classes', 'Book directly into a real seat map'],
     image: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=800',
+    color: 'var(--color-max-pink)',
   },
   {
     id: 'hotels',
@@ -52,6 +55,7 @@ const SERVICES: {
     tagline: 'Real inventory, worldwide',
     points: ['Live rates and availability via Booking.com', 'Filter by star rating, guest rating and price', 'From budget stays to overwater villas'],
     image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800',
+    color: 'var(--color-max-blue)',
   },
   {
     id: 'tours',
@@ -60,6 +64,7 @@ const SERVICES: {
     tagline: 'Ready-to-book holidays',
     points: ['10 curated packages across 4 continents', 'Full day-by-day itinerary for every trip', 'Clear inclusions and exclusions, no fine print'],
     image: 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=800',
+    color: 'var(--color-max-orange)',
   },
   {
     id: 'cabs',
@@ -68,13 +73,14 @@ const SERVICES: {
     tagline: 'Self-drive, real supplier pricing',
     points: ['Live pricing via Booking.com', 'Covers Europe and parts of Asia today', 'Real transmission, seats and cancellation terms'],
     image: 'https://images.unsplash.com/photo-1502877338535-766e1452684a?w=800',
+    color: 'var(--color-max-green)',
   },
 ];
 
 const WHY_US = [
-  { icon: ShieldCheck, title: 'No invented prices', description: 'Every fare, room rate and car price shown comes straight from a live supplier — never a placeholder.' },
-  { icon: Globe2, title: 'Four services, one place', description: 'Flights, hotels, tour packages and cabs — search and compare without switching apps.' },
-  { icon: BadgeCheck, title: 'Transparent, always', description: 'When a service has limits — like car rental not covering India yet — we say so up front.' },
+  { icon: ShieldCheck, title: 'No invented prices', description: 'Every fare, room rate and car price shown comes straight from a live supplier — never a placeholder.', color: 'var(--color-max-yellow)' },
+  { icon: Globe2, title: 'Four services, one place', description: 'Flights, hotels, tour packages and cabs — search and compare without switching apps.', color: 'var(--color-max-pink)' },
+  { icon: BadgeCheck, title: 'Transparent, always', description: 'When a service has limits — like car rental not covering India yet — we say so up front.', color: 'var(--color-max-blue)' },
 ];
 
 const TESTIMONIALS = [
@@ -154,20 +160,20 @@ export const LandingHome: React.FC<LandingHomeProps> = ({ currency, onNavigate }
 
   const destinations = packages.slice(0, 8);
   const featured = packages.slice(0, 3);
+  const destinationColors = ['var(--color-max-pink)', 'var(--color-max-yellow)', 'var(--color-max-blue)', 'var(--color-max-green)'];
 
   return (
-    <div className="space-y-20" style={{ fontFamily: 'var(--font-display)' }}>
-      {/* Hero + stats bar wrapped together so the parent's space-y-20 treats
+    <div className="space-y-24 pb-4" style={{ fontFamily: 'var(--font-display)' }}>
+      {/* Hero + stats bar wrapped together so the parent's space-y treats
           them as one unit — the negative margin overlap between them is
           otherwise fragile against a sibling-spacing utility fighting it. */}
       <div>
       {/* Hero — full-bleed: breaks out of the page's centered max-w-7xl
-          container to span the entire viewport width (left-1/2 +
-          -translate-x-1/2 + w-screen), regardless of how much side padding
-          the parent applies. The background image/gradient live in their
-          own layer so the stats card below can overlap the bottom edge
-          without being cut off by clipping. */}
-      <div className="relative left-1/2 right-1/2 -mx-[50vw] w-screen h-svh flex items-center overflow-hidden">
+          container to span the entire viewport width. A thick black bottom
+          border + scattered sticker shapes give it the maximalist framing;
+          the photo/gradient live in their own layer so the stats card below
+          can overlap the bottom edge without being cut off by clipping. */}
+      <div className="relative left-1/2 right-1/2 -mx-[50vw] w-screen h-svh flex items-center overflow-hidden border-b-8" style={{ borderColor: 'var(--color-ink)' }}>
         <div className="absolute inset-0" aria-hidden="true">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
@@ -176,100 +182,110 @@ export const LandingHome: React.FC<LandingHomeProps> = ({ currency, onNavigate }
             aria-hidden="true"
             className="absolute inset-0 w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-[color:var(--color-navy-900)]/90 via-[color:var(--color-navy-900)]/70 to-[color:var(--color-navy-900)]/40" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[color:var(--color-navy-900)]/90 via-[color:var(--color-navy-900)]/75 to-[color:var(--color-navy-900)]/50" />
+        </div>
+
+        {/* Scattered sticker shapes — decorative, hidden from a11y tree */}
+        <div className="absolute inset-0 pointer-events-none hidden sm:block" aria-hidden="true">
+          <Zap className="absolute top-28 right-[12%] w-10 h-10 -rotate-12" style={{ color: 'var(--color-max-yellow)' }} />
+          <Star className="absolute bottom-24 right-[22%] w-7 h-7 rotate-12 fill-current" style={{ color: 'var(--color-max-pink)' }} />
+          <div className="absolute top-1/3 right-[6%] w-16 h-16 rounded-full max-border" style={{ backgroundColor: 'var(--color-max-blue)' }} />
         </div>
 
         <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
-          <div className="max-w-2xl space-y-5">
+          <div className="max-w-2xl space-y-6">
             <div className="flex flex-wrap items-center gap-3">
               <span
-                className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold tracking-wide"
-                style={{ backgroundColor: 'var(--color-gold-500)', color: 'var(--color-navy-900)' }}
+                className="inline-flex items-center px-4 py-1.5 rounded-full text-xs font-black tracking-wide max-border max-shadow-sm -rotate-3"
+                style={{ backgroundColor: 'var(--color-max-yellow)', color: 'var(--color-ink)' }}
               >
                 SINCE 2009
               </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 backdrop-blur text-xs font-semibold border border-white/20 text-white">
-                <Sparkles className="w-3.5 h-3.5" style={{ color: 'var(--color-gold-400)' }} />
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold border-2 border-white/60 text-white bg-white/10 backdrop-blur">
+                <Sparkles className="w-3.5 h-3.5" style={{ color: 'var(--color-max-yellow)' }} />
                 Trusted by 10,000+ travellers from Bengaluru
               </span>
             </div>
 
-            <h1 className="text-4xl sm:text-6xl font-bold tracking-tight text-white leading-[1.05]">
-              One stop travel solutions
+            <h1 className="text-5xl sm:text-7xl font-black tracking-tight text-white leading-[0.95]">
+              One stop travel
               <br />
-              for{' '}
-              <span style={{ fontFamily: 'var(--font-accent)', fontStyle: 'italic', color: 'var(--color-gold-400)' }}>
-                all your travel needs
+              solutions for{' '}
+              <span className="inline-block -rotate-2" style={{ color: 'var(--color-max-yellow)' }}>
+                everything
               </span>
             </h1>
 
-            <p className="text-base sm:text-lg text-slate-200 leading-relaxed max-w-lg">
+            <p className="text-base sm:text-lg text-slate-100 leading-relaxed max-w-lg font-medium">
               Flights, hotels, tour packages and cabs — searched from real live suppliers. No guesswork, no invented prices.
             </p>
 
-            <div className="flex flex-wrap items-center gap-3 pt-2">
+            <div className="flex flex-wrap items-center gap-4 pt-2">
               <button
                 onClick={() => onNavigate('book')}
-                className="focus-ring flex items-center gap-2 px-6 py-3 rounded-full text-[color:var(--color-navy-900)] font-semibold text-sm transition-transform hover:scale-[1.03]"
-                style={{ backgroundColor: 'var(--color-gold-500)' }}
+                className="focus-ring max-press flex items-center gap-2 px-7 py-3.5 rounded-xl font-black text-sm max-border max-shadow"
+                style={{ backgroundColor: 'var(--color-max-yellow)', color: 'var(--color-ink)' }}
               >
                 Search flights
                 <ArrowRight className="w-4 h-4" />
               </button>
               <button
                 onClick={() => onNavigate('tours')}
-                className="focus-ring flex items-center gap-2 px-6 py-3 rounded-full bg-white/10 hover:bg-white/20 text-white font-semibold text-sm border border-white/25 backdrop-blur transition-colors"
+                className="focus-ring max-press flex items-center gap-2 px-7 py-3.5 rounded-xl font-black text-sm text-white max-border max-shadow"
+                style={{ backgroundColor: 'var(--color-max-pink)' }}
               >
                 Browse tour packages
               </button>
             </div>
           </div>
         </div>
-
       </div>
 
-      {/* Stats bar — a normal-flow sibling pulled up over the hero's bottom
-          edge with a negative margin, so its real height (2 rows on mobile,
-          1 row from sm up) is never clipped and always reserves its own
-          space in the layout, no manual spacer needed. */}
-      <div className="relative z-10 px-4 sm:px-10 -mt-14 sm:-mt-10">
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 rounded-2xl bg-white shadow-xl border border-slate-100 p-5 sm:p-7">
+      {/* Stats bar — four chunky, alternately-rotated sticker tiles instead
+          of one calm white card. */}
+      <div className="relative z-10 px-4 sm:px-10 -mt-10 sm:-mt-8">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 max-w-5xl mx-auto">
           {[
-            { value: '16+', label: 'Years of experience' },
-            { value: '10,000+', label: 'Travellers served' },
-            { value: '10', label: 'Curated tour packages' },
-            { value: '500+', label: 'Cars available per search' },
-          ].map((stat) => (
-            <div key={stat.label}>
-              <CountUpStat
-                value={stat.value}
-                className="block text-2xl sm:text-3xl font-bold"
-                style={{ color: 'var(--color-gold-600)' } as React.CSSProperties}
-              />
-              <div className="text-xs sm:text-sm text-slate-500 mt-0.5">{stat.label}</div>
+            { value: '16+', label: 'Years of experience', color: 'var(--color-max-yellow)' },
+            { value: '10,000+', label: 'Travellers served', color: 'var(--color-max-pink)' },
+            { value: '10', label: 'Curated tour packages', color: 'var(--color-max-blue)' },
+            { value: '500+', label: 'Cars available per search', color: 'var(--color-max-green)' },
+          ].map((stat, i) => (
+            <div
+              key={stat.label}
+              className={`rounded-2xl p-4 sm:p-5 max-border max-shadow-sm ${i % 2 === 0 ? '-rotate-2' : 'rotate-2'}`}
+              style={{ backgroundColor: stat.color }}
+            >
+              <CountUpStat value={stat.value} className="block text-2xl sm:text-3xl font-black" style={{ color: 'var(--color-ink)' } as React.CSSProperties} />
+              <div className="text-xs sm:text-sm font-bold mt-0.5" style={{ color: 'var(--color-ink)' }}>{stat.label}</div>
             </div>
           ))}
         </div>
       </div>
       </div>
 
-      {/* Why us */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        {WHY_US.map((point) => {
-          const Icon = point.icon;
-          return (
-            <div key={point.title} className="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
-              <Icon className="w-5 h-5" style={{ color: 'var(--color-gold-600)' }} />
-              <h3 className="font-semibold text-slate-900">{point.title}</h3>
-              <p className="text-sm text-slate-500 leading-relaxed">{point.description}</p>
-            </div>
-          );
-        })}
+      {/* Why us — color-blocked dot-textured section */}
+      <div className="relative left-1/2 right-1/2 -mx-[50vw] w-screen py-16" style={{ backgroundColor: 'var(--color-navy-900)' }}>
+        <div className="absolute inset-0 max-dots opacity-10 text-white" aria-hidden="true" />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 sm:grid-cols-3 gap-6">
+          {WHY_US.map((point, i) => {
+            const Icon = point.icon;
+            return (
+              <div key={point.title} className={`p-6 rounded-2xl bg-white max-border max-shadow space-y-3 ${i === 1 ? 'sm:-translate-y-3' : ''}`}>
+                <div className="w-11 h-11 rounded-xl max-border flex items-center justify-center" style={{ backgroundColor: point.color }}>
+                  <Icon className="w-5 h-5" style={{ color: 'var(--color-ink)' }} />
+                </div>
+                <h3 className="font-black text-slate-900 text-lg">{point.title}</h3>
+                <p className="text-sm text-slate-600 leading-relaxed">{point.description}</p>
+              </div>
+            );
+          })}
+        </div>
       </div>
 
       {/* About */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-        <div className="relative rounded-3xl overflow-hidden h-72 sm:h-96">
+        <div className="relative rounded-3xl overflow-hidden h-72 sm:h-96 max-border max-shadow rotate-1">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=1200"
@@ -277,21 +293,19 @@ export const LandingHome: React.FC<LandingHomeProps> = ({ currency, onNavigate }
             className="w-full h-full object-cover"
           />
           <div
-            className="absolute bottom-4 left-4 rounded-2xl px-5 py-4 text-white"
-            style={{ backgroundColor: 'var(--color-navy-900)' }}
+            className="absolute -bottom-4 -left-4 rounded-2xl px-5 py-4 text-white max-border max-shadow-sm -rotate-3"
+            style={{ backgroundColor: 'var(--color-max-orange)' }}
           >
-            <div className="text-2xl font-bold" style={{ color: 'var(--color-gold-400)' }}>
-              16+
-            </div>
-            <div className="text-xs text-slate-300">Years in travel</div>
+            <div className="text-2xl font-black">16+</div>
+            <div className="text-xs font-bold">Years in travel</div>
           </div>
         </div>
 
         <div className="space-y-4">
-          <span className="text-xs font-semibold tracking-widest uppercase" style={{ color: 'var(--color-gold-600)' }}>
+          <span className="inline-block text-xs font-black tracking-widest uppercase px-3 py-1 rounded-full max-border" style={{ backgroundColor: 'var(--color-max-blue)', color: 'white' }}>
             Who we are
           </span>
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900">
+          <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-slate-900">
             A Bengaluru travel desk that actually picks up the phone
           </h2>
           <p className="text-slate-600 leading-relaxed">
@@ -303,15 +317,17 @@ export const LandingHome: React.FC<LandingHomeProps> = ({ currency, onNavigate }
               'Tour packages with a full itinerary, not a brochure summary',
               'Honest about coverage — we say when a service has limits',
             ].map((item) => (
-              <li key={item} className="flex items-start gap-2.5 text-sm text-slate-600">
-                <BadgeCheck className="w-4 h-4 shrink-0 mt-0.5" style={{ color: 'var(--color-gold-600)' }} />
+              <li key={item} className="flex items-start gap-2.5 text-sm text-slate-700 font-medium">
+                <span className="w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5 max-border" style={{ backgroundColor: 'var(--color-max-yellow)' }}>
+                  <BadgeCheck className="w-3.5 h-3.5" style={{ color: 'var(--color-ink)' }} />
+                </span>
                 {item}
               </li>
             ))}
           </ul>
           <button
             onClick={() => onNavigate('book')}
-            className="focus-ring inline-flex items-center gap-2 px-6 py-3 rounded-full text-white font-semibold text-sm mt-2"
+            className="focus-ring max-press inline-flex items-center gap-2 px-6 py-3.5 rounded-xl text-white font-black text-sm mt-2 max-border max-shadow"
             style={{ backgroundColor: 'var(--color-navy-900)' }}
           >
             Explore our services
@@ -321,25 +337,25 @@ export const LandingHome: React.FC<LandingHomeProps> = ({ currency, onNavigate }
       </div>
 
       {/* Services */}
-      <div className="space-y-6">
+      <div className="space-y-8">
         <div className="text-center space-y-2">
-          <span className="text-xs font-semibold tracking-widest uppercase" style={{ color: 'var(--color-gold-600)' }}>
+          <span className="inline-block text-xs font-black tracking-widest uppercase px-3 py-1 rounded-full max-border" style={{ backgroundColor: 'var(--color-max-pink)', color: 'white' }}>
             What we do
           </span>
-          <h2 className="text-2xl sm:text-4xl font-bold tracking-tight text-slate-900">Every trip, one platform</h2>
-          <p className="text-sm text-slate-500 max-w-xl mx-auto">
+          <h2 className="text-3xl sm:text-5xl font-black tracking-tight text-slate-900">Every trip, one platform</h2>
+          <p className="text-sm text-slate-500 max-w-xl mx-auto font-medium">
             Four services that cover a journey end to end — each backed by live data, not guesswork.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           {SERVICES.map((service) => {
             const Icon = service.icon;
             return (
               <button
                 key={service.id}
                 onClick={() => onNavigate(service.id)}
-                className="group relative overflow-hidden text-left rounded-2xl text-white transition-transform hover:scale-[1.01]"
+                className="max-press group relative overflow-hidden text-left rounded-2xl text-white max-border max-shadow"
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
@@ -350,7 +366,7 @@ export const LandingHome: React.FC<LandingHomeProps> = ({ currency, onNavigate }
                 />
                 <div
                   className="absolute inset-0"
-                  style={{ background: 'linear-gradient(180deg, rgba(4,24,44,0.55) 0%, rgba(4,24,44,0.88) 65%, var(--color-navy-900) 100%)' }}
+                  style={{ background: 'linear-gradient(180deg, rgba(4,24,44,0.5) 0%, rgba(4,24,44,0.85) 65%, var(--color-navy-900) 100%)' }}
                   aria-hidden="true"
                 />
 
@@ -359,22 +375,22 @@ export const LandingHome: React.FC<LandingHomeProps> = ({ currency, onNavigate }
                     the absolutely-positioned image/gradient above, not on
                     top of them, regardless of DOM order. */}
                 <div className="relative p-6 flex flex-col gap-3 h-full">
-                  <div className="w-11 h-11 rounded-xl bg-white/10 backdrop-blur flex items-center justify-center">
-                    <Icon className="w-5 h-5" style={{ color: 'var(--color-gold-400)' }} />
+                  <div className="w-11 h-11 rounded-xl flex items-center justify-center max-border" style={{ backgroundColor: service.color }}>
+                    <Icon className="w-5 h-5" style={{ color: 'var(--color-ink)' }} />
                   </div>
-                  <h3 className="text-lg font-semibold">{service.title}</h3>
-                  <p className="text-sm" style={{ color: 'var(--color-gold-400)' }}>
+                  <h3 className="text-xl font-black">{service.title}</h3>
+                  <p className="text-sm font-bold" style={{ color: service.color }}>
                     {service.tagline}
                   </p>
-                  <ul className="space-y-1.5 text-sm text-slate-300">
+                  <ul className="space-y-1.5 text-sm text-slate-200">
                     {service.points.map((p) => (
                       <li key={p} className="flex items-start gap-2">
-                        <span className="mt-1.5 w-1 h-1 rounded-full bg-white/50 shrink-0" />
+                        <span className="mt-1.5 w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: service.color }} />
                         {p}
                       </li>
                     ))}
                   </ul>
-                  <span className="mt-auto pt-2 flex items-center gap-1.5 text-sm font-semibold" style={{ color: 'var(--color-gold-400)' }}>
+                  <span className="mt-auto pt-2 flex items-center gap-1.5 text-sm font-black" style={{ color: service.color }}>
                     Explore
                     <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
                   </span>
@@ -387,37 +403,40 @@ export const LandingHome: React.FC<LandingHomeProps> = ({ currency, onNavigate }
 
       {/* Popular destinations, pulled from the real tour package catalogue */}
       {destinations.length > 0 && (
-        <div className="space-y-6">
+        <div className="space-y-8">
           <div className="text-center space-y-2">
-            <span className="text-xs font-semibold tracking-widest uppercase" style={{ color: 'var(--color-gold-600)' }}>
+            <span className="inline-block text-xs font-black tracking-widest uppercase px-3 py-1 rounded-full max-border" style={{ backgroundColor: 'var(--color-max-blue)', color: 'white' }}>
               Where our travellers go
             </span>
-            <h2 className="text-2xl sm:text-4xl font-bold tracking-tight text-slate-900">Popular destinations</h2>
-            <p className="text-sm text-slate-500 max-w-xl mx-auto">Real packages, real itineraries — pulled straight from our catalogue.</p>
+            <h2 className="text-3xl sm:text-5xl font-black tracking-tight text-slate-900">Popular destinations</h2>
+            <p className="text-sm text-slate-500 max-w-xl mx-auto font-medium">Real packages, real itineraries — pulled straight from our catalogue.</p>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            {destinations.map((pkg) => (
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-5">
+            {destinations.map((pkg, i) => (
               <Link
                 key={pkg.id}
                 href={`/tour-packages/${pkg.slug}?currency=${currency}`}
-                className="group relative rounded-2xl overflow-hidden h-56 block"
+                className="max-press group relative rounded-2xl overflow-hidden h-56 block max-border max-shadow-sm"
               >
                 {pkg.images[0] && (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img src={pkg.images[0]} alt={pkg.name} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform" />
                 )}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
-                <span className="absolute top-3 right-3 text-[11px] font-semibold text-white bg-white/20 backdrop-blur px-2 py-1 rounded-full">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/15 to-transparent" />
+                <span
+                  className="absolute top-3 right-3 text-[11px] font-black text-white px-2 py-1 rounded-full max-border"
+                  style={{ backgroundColor: destinationColors[i % destinationColors.length] }}
+                >
                   {pkg.durationDays}D
                 </span>
                 <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
-                  <div className="flex items-center gap-1 text-xs" style={{ color: 'var(--color-gold-400)' }}>
+                  <div className="flex items-center gap-1 text-xs font-bold" style={{ color: 'var(--color-max-yellow)' }}>
                     <MapPin className="w-3 h-3" />
                     {pkg.destination}
                   </div>
-                  <div className="font-semibold leading-tight mt-0.5">{pkg.name}</div>
-                  <div className="text-xs text-slate-200 mt-1">from {formatPrice(pkg.priceUsd, currency)}</div>
+                  <div className="font-black leading-tight mt-0.5">{pkg.name}</div>
+                  <div className="text-xs text-slate-200 mt-1 font-semibold">from {formatPrice(pkg.priceUsd, currency)}</div>
                 </div>
               </Link>
             ))}
@@ -427,41 +446,41 @@ export const LandingHome: React.FC<LandingHomeProps> = ({ currency, onNavigate }
 
       {/* Featured packages */}
       {featured.length > 0 && (
-        <div className="space-y-6">
+        <div className="space-y-8">
           <div className="text-center space-y-2">
-            <span className="text-xs font-semibold tracking-widest uppercase" style={{ color: 'var(--color-gold-600)' }}>
+            <span className="inline-block text-xs font-black tracking-widest uppercase px-3 py-1 rounded-full max-border" style={{ backgroundColor: 'var(--color-max-green)', color: 'var(--color-ink)' }}>
               Handpicked holidays
             </span>
-            <h2 className="text-2xl sm:text-4xl font-bold tracking-tight text-slate-900">Featured tour packages</h2>
+            <h2 className="text-3xl sm:text-5xl font-black tracking-tight text-slate-900">Featured tour packages</h2>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
-            {featured.map((pkg) => (
-              <div key={pkg.id} className="bg-white rounded-2xl border border-slate-200 overflow-hidden flex flex-col">
-                <div className="h-44 bg-slate-100">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            {featured.map((pkg, i) => (
+              <div key={pkg.id} className={`bg-white rounded-2xl overflow-hidden flex flex-col max-border max-shadow ${i === 1 ? 'sm:-translate-y-3' : ''}`}>
+                <div className="h-44 bg-slate-100 border-b-[3px]" style={{ borderColor: 'var(--color-ink)' }}>
                   {pkg.images[0] && (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img src={pkg.images[0]} alt={pkg.name} className="w-full h-full object-cover" />
                   )}
                 </div>
                 <div className="p-5 flex-1 flex flex-col gap-2">
-                  <div className="flex items-center gap-1 text-xs text-slate-400">
+                  <div className="flex items-center gap-1 text-xs text-slate-400 font-semibold">
                     <MapPin className="w-3 h-3" />
                     {pkg.destination}
                     <span className="text-slate-300">·</span>
                     <Calendar className="w-3 h-3" />
                     {pkg.durationDays}D
                   </div>
-                  <h3 className="font-semibold text-slate-900">{pkg.name}</h3>
+                  <h3 className="font-black text-slate-900">{pkg.name}</h3>
                   <p className="text-sm text-slate-500 leading-relaxed">{pkg.summary}</p>
                   <div className="mt-auto pt-3 flex items-center justify-between">
                     <div>
-                      <div className="text-[11px] text-slate-400">from</div>
-                      <div className="text-lg font-bold text-slate-900">{formatPrice(pkg.priceUsd, currency)}</div>
+                      <div className="text-[11px] text-slate-400 font-semibold">from</div>
+                      <div className="text-lg font-black text-slate-900">{formatPrice(pkg.priceUsd, currency)}</div>
                     </div>
                     <Link
                       href={`/tour-packages/${pkg.slug}?currency=${currency}`}
-                      className="focus-ring px-4 py-2 rounded-full text-white text-sm font-semibold"
+                      className="focus-ring max-press px-4 py-2 rounded-full text-white text-sm font-black max-border max-shadow-sm"
                       style={{ backgroundColor: 'var(--color-navy-900)' }}
                     >
                       View package
@@ -475,71 +494,74 @@ export const LandingHome: React.FC<LandingHomeProps> = ({ currency, onNavigate }
       )}
 
       {/* Testimonials */}
-      <div className="space-y-6">
-        <div className="text-center space-y-2">
-          <span className="text-xs font-semibold tracking-widest uppercase" style={{ color: 'var(--color-gold-600)' }}>
-            Client feedback
-          </span>
-          <h2 className="text-2xl sm:text-4xl font-bold tracking-tight text-slate-900">What our travellers actually say</h2>
-        </div>
+      <div className="relative left-1/2 right-1/2 -mx-[50vw] w-screen py-16" style={{ backgroundColor: 'var(--color-max-yellow)' }}>
+        <div className="absolute inset-0 max-dots opacity-15" style={{ color: 'var(--color-ink)' }} aria-hidden="true" />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+          <div className="text-center space-y-2">
+            <span className="inline-block text-xs font-black tracking-widest uppercase px-3 py-1 rounded-full max-border bg-white">
+              Client feedback
+            </span>
+            <h2 className="text-3xl sm:text-5xl font-black tracking-tight text-slate-900">What our travellers actually say</h2>
+          </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {TESTIMONIALS.map((t) => (
-            <div key={t.name} className="bg-white rounded-2xl border border-slate-200 p-5 flex flex-col gap-3">
-              <div className="flex items-center gap-0.5">
-                {Array.from({ length: t.rating }).map((_, i) => (
-                  <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                ))}
-              </div>
-              <p className="text-sm text-slate-600 leading-relaxed" style={{ fontFamily: 'var(--font-accent)', fontStyle: 'italic' }}>
-                &ldquo;{t.quote}&rdquo;
-              </p>
-              <div className="mt-auto pt-2 border-t border-slate-100 flex items-center gap-3">
-                <div
-                  className="w-9 h-9 rounded-full flex items-center justify-center text-white text-xs font-semibold shrink-0"
-                  style={{ backgroundColor: 'var(--color-navy-900)' }}
-                >
-                  {t.name.split(' ').map((n) => n[0]).join('')}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {TESTIMONIALS.map((t, i) => (
+              <div key={t.name} className={`bg-white rounded-2xl p-5 flex flex-col gap-3 max-border max-shadow-sm ${i % 3 === 1 ? 'sm:-translate-y-2' : ''}`}>
+                <div className="flex items-center gap-0.5">
+                  {Array.from({ length: t.rating }).map((_, j) => (
+                    <Star key={j} className="w-3.5 h-3.5 fill-current" style={{ color: 'var(--color-max-orange)' }} />
+                  ))}
                 </div>
-                <div>
-                  <div className="text-sm font-semibold text-slate-900">{t.name}</div>
-                  <div className="text-xs text-slate-400">{t.location}</div>
+                <p className="text-sm text-slate-700 leading-relaxed" style={{ fontFamily: 'var(--font-accent)', fontStyle: 'italic' }}>
+                  &ldquo;{t.quote}&rdquo;
+                </p>
+                <div className="mt-auto pt-2 border-t-2 flex items-center gap-3" style={{ borderColor: 'var(--color-ink)' }}>
+                  <div
+                    className="w-9 h-9 rounded-full flex items-center justify-center text-white text-xs font-black shrink-0 max-border"
+                    style={{ backgroundColor: 'var(--color-navy-900)' }}
+                  >
+                    {t.name.split(' ').map((n) => n[0]).join('')}
+                  </div>
+                  <div>
+                    <div className="text-sm font-black text-slate-900">{t.name}</div>
+                    <div className="text-xs text-slate-500 font-medium">{t.location}</div>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
 
       {/* FAQ */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="space-y-2">
-          <span className="text-xs font-semibold tracking-widest uppercase" style={{ color: 'var(--color-gold-600)' }}>
+          <span className="inline-block text-xs font-black tracking-widest uppercase px-3 py-1 rounded-full max-border" style={{ backgroundColor: 'var(--color-max-purple)', color: 'white' }}>
             Good to know
           </span>
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900">Frequently asked questions</h2>
-          <p className="text-sm text-slate-500">Everything about how our live pricing actually works.</p>
+          <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-slate-900">Frequently asked questions</h2>
+          <p className="text-sm text-slate-500 font-medium">Everything about how our live pricing actually works.</p>
         </div>
 
-        <div className="lg:col-span-2 space-y-3">
+        <div className="lg:col-span-2 space-y-4">
           {FAQS.map((faq, i) => {
             const isOpen = openFaq === i;
             return (
-              <div key={faq.q} className="rounded-2xl border border-slate-200 overflow-hidden">
+              <div key={faq.q} className="rounded-2xl overflow-hidden max-border max-shadow-sm">
                 <button
                   onClick={() => setOpenFaq(isOpen ? null : i)}
-                  className="focus-ring w-full flex items-center justify-between gap-4 p-5 text-left"
+                  className="focus-ring w-full flex items-center justify-between gap-4 p-5 text-left bg-white"
                   aria-expanded={isOpen}
                 >
-                  <span className="font-semibold text-slate-900">{faq.q}</span>
+                  <span className="font-black text-slate-900">{faq.q}</span>
                   <span
-                    className="w-7 h-7 rounded-full flex items-center justify-center shrink-0"
-                    style={{ backgroundColor: isOpen ? 'var(--color-gold-500)' : '#f1f5f9', color: isOpen ? '#fff' : '#64748b' }}
+                    className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 max-border"
+                    style={{ backgroundColor: isOpen ? 'var(--color-max-yellow)' : 'white', color: 'var(--color-ink)' }}
                   >
-                    {isOpen ? <Minus className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5" />}
+                    {isOpen ? <Minus className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
                   </span>
                 </button>
-                {isOpen && <p className="px-5 pb-5 text-sm text-slate-500 leading-relaxed">{faq.a}</p>}
+                {isOpen && <p className="px-5 pb-5 text-sm text-slate-600 leading-relaxed bg-white">{faq.a}</p>}
               </div>
             );
           })}
@@ -548,31 +570,32 @@ export const LandingHome: React.FC<LandingHomeProps> = ({ currency, onNavigate }
 
       {/* Final CTA */}
       <div
-        className="relative rounded-3xl overflow-hidden p-10 sm:p-16 text-center"
-        style={{ backgroundColor: 'var(--color-navy-900)' }}
+        className="relative left-1/2 right-1/2 -mx-[50vw] w-screen overflow-hidden py-16 sm:py-20 text-center border-y-8"
+        style={{ backgroundColor: 'var(--color-navy-900)', borderColor: 'var(--color-max-yellow)' }}
       >
         <div
-          className="absolute inset-0 opacity-30 bg-cover bg-center"
+          className="absolute inset-0 opacity-25 bg-cover bg-center"
           style={{ backgroundImage: "url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1600')" }}
           aria-hidden="true"
         />
-        <div className="relative space-y-5">
-          <h2 className="text-2xl sm:text-4xl font-bold text-white max-w-xl mx-auto">Ready when you are</h2>
-          <p className="text-slate-300 max-w-lg mx-auto">
+        <div className="relative space-y-6 max-w-7xl mx-auto px-4">
+          <h2 className="text-3xl sm:text-6xl font-black text-white max-w-xl mx-auto leading-[0.95]">Ready when you are</h2>
+          <p className="text-slate-200 max-w-lg mx-auto font-medium">
             Search real live fares, real hotel rates, real tour packages, and real car rental — right now.
           </p>
-          <div className="flex flex-wrap items-center justify-center gap-3">
+          <div className="flex flex-wrap items-center justify-center gap-4">
             <button
               onClick={() => onNavigate('book')}
-              className="focus-ring flex items-center gap-2 px-6 py-3 rounded-full text-[color:var(--color-navy-900)] font-semibold text-sm"
-              style={{ backgroundColor: 'var(--color-gold-500)' }}
+              className="focus-ring max-press flex items-center gap-2 px-7 py-3.5 rounded-xl font-black text-sm max-border max-shadow"
+              style={{ backgroundColor: 'var(--color-max-yellow)', color: 'var(--color-ink)' }}
             >
               Start planning
               <ArrowRight className="w-4 h-4" />
             </button>
             <button
               onClick={() => onNavigate('tours')}
-              className="focus-ring px-6 py-3 rounded-full bg-white/10 hover:bg-white/20 text-white font-semibold text-sm border border-white/25 backdrop-blur transition-colors"
+              className="focus-ring max-press px-7 py-3.5 rounded-xl text-white font-black text-sm max-border max-shadow"
+              style={{ backgroundColor: 'var(--color-max-pink)' }}
             >
               Browse tour packages
             </button>
