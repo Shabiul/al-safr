@@ -31,11 +31,11 @@ import {
 type MainTab = 'home' | 'services' | 'bookings';
 type ServiceId = 'book' | 'hotels' | 'tours' | 'cabs';
 
-const SERVICE_TABS: { id: ServiceId; label: string; icon: React.ElementType }[] = [
-  { id: 'book', label: 'Flights', icon: Search },
-  { id: 'hotels', label: 'Hotels', icon: Building2 },
-  { id: 'tours', label: 'Tour Packages', icon: Compass },
-  { id: 'cabs', label: 'Cabs', icon: Car },
+const SERVICE_TABS: { id: ServiceId; label: string; icon: React.ElementType; color: string }[] = [
+  { id: 'book', label: 'Flights', icon: Search, color: 'var(--color-max-pink)' },
+  { id: 'hotels', label: 'Hotels', icon: Building2, color: 'var(--color-max-blue)' },
+  { id: 'tours', label: 'Tour Packages', icon: Compass, color: 'var(--color-max-orange)' },
+  { id: 'cabs', label: 'Cabs', icon: Car, color: 'var(--color-max-green)' },
 ];
 
 export default function Home() {
@@ -165,14 +165,17 @@ export default function Home() {
         {activeTab !== 'home' && (
           <>
             {/* Live Data Status Bar */}
-            <div className="bg-slate-50 border border-slate-200 rounded-2xl p-3.5 sm:p-4 flex flex-wrap items-center justify-between gap-3 text-sm">
+            <div className="bg-white rounded-2xl p-3.5 sm:p-4 flex flex-wrap items-center justify-between gap-3 text-sm border-b-[3px]" style={{ borderColor: 'var(--color-ink)' }}>
               <div className="flex flex-wrap items-center gap-3 text-slate-600">
-                <div className="flex items-center gap-1.5 font-medium text-slate-900">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" aria-hidden="true" />
+                <div
+                  className="flex items-center gap-1.5 font-black text-xs uppercase tracking-wide px-3 py-1.5 rounded-full max-border"
+                  style={{ backgroundColor: 'var(--color-max-green)', color: 'var(--color-ink)' }}
+                >
+                  <span className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: 'var(--color-ink)' }} aria-hidden="true" />
                   Live data stream
                 </div>
                 <span className="hidden sm:inline text-slate-300">•</span>
-                <span className="hidden sm:inline">
+                <span className="hidden sm:inline font-medium">
                   Synced {lastLiveSync || 'just now'}
                 </span>
               </div>
@@ -180,9 +183,9 @@ export default function Home() {
               <button
                 onClick={() => fetchLiveFlightData(searchParams.origin, searchParams.destination, searchParams.departureDate, searchParams.supersonicOnly, searchParams.cabinClass)}
                 disabled={isFetchingLive}
-                className="focus-ring flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 text-sm font-medium transition-colors disabled:opacity-50"
+                className="focus-ring max-press flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white text-slate-900 max-border text-sm font-black transition-colors disabled:opacity-50"
               >
-                <RefreshCw className={`w-3.5 h-3.5 ${isFetchingLive ? 'animate-spin text-brand-600' : ''}`} />
+                <RefreshCw className={`w-3.5 h-3.5 ${isFetchingLive ? 'animate-spin' : ''}`} />
                 {isFetchingLive ? 'Syncing…' : 'Refresh'}
               </button>
             </div>
@@ -194,7 +197,7 @@ export default function Home() {
             separate top-level tabs. */}
         {activeTab === 'services' && (
           <div className="space-y-6">
-            <div className="flex flex-wrap items-center gap-1.5 bg-slate-100 p-1.5 rounded-2xl w-fit">
+            <div className="flex flex-wrap items-center gap-2.5 w-fit">
               {SERVICE_TABS.map((service) => {
                 const Icon = service.icon;
                 const isActive = activeService === service.id;
@@ -204,9 +207,10 @@ export default function Home() {
                     type="button"
                     onClick={() => setActiveService(service.id)}
                     aria-current={isActive ? 'page' : undefined}
-                    className={`focus-ring flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-sm font-medium transition-colors ${
-                      isActive ? 'bg-white text-brand-700 shadow-sm' : 'text-slate-600 hover:text-slate-900'
+                    className={`focus-ring max-press flex items-center gap-1.5 px-3.5 py-2 rounded-full text-sm font-black max-border transition-colors ${
+                      isActive ? 'max-shadow-sm' : 'bg-white text-slate-600 hover:text-slate-900'
                     }`}
+                    style={isActive ? { backgroundColor: service.color, color: 'var(--color-ink)' } : undefined}
                   >
                     <Icon className="w-4 h-4" />
                     {service.label}
@@ -287,34 +291,40 @@ export default function Home() {
         {/* Tab View 2: Boarding Passes */}
         {activeTab === 'bookings' && (
           <div className="space-y-6">
-            <div className="flex items-center justify-between bg-white p-5 rounded-2xl border border-slate-200">
+            <div className="flex items-center justify-between bg-white p-5 rounded-2xl max-border max-shadow-sm">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center">
-                  <Ticket className="w-5 h-5" />
+                <div className="w-10 h-10 rounded-xl max-border flex items-center justify-center" style={{ backgroundColor: 'var(--color-max-pink)' }}>
+                  <Ticket className="w-5 h-5" style={{ color: 'var(--color-ink)' }} />
                 </div>
                 <div>
-                  <h2 className="text-lg font-semibold text-slate-900">My Trips</h2>
-                  <p className="text-sm text-slate-500">Your boarding passes and bookings.</p>
+                  <h2 className="text-lg font-black text-slate-900">My Trips</h2>
+                  <p className="text-sm text-slate-500 font-medium">Your boarding passes and bookings.</p>
                 </div>
               </div>
 
-              <span className="px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-sm font-medium">
+              <span className="px-3 py-1 rounded-full text-sm font-black max-border" style={{ backgroundColor: 'var(--color-max-yellow)', color: 'var(--color-ink)' }}>
                 {allBookings.length} {allBookings.length === 1 ? 'trip' : 'trips'}
               </span>
             </div>
 
             {allBookings.length === 0 ? (
-              <div className="p-12 text-center bg-white rounded-2xl border border-dashed border-slate-300 space-y-4">
-                <Plane className="w-10 h-10 text-slate-300 mx-auto -rotate-45" />
+              <div className="p-12 text-center bg-white rounded-2xl max-border space-y-4">
+                <div
+                  className="w-16 h-16 rounded-2xl max-border flex items-center justify-center mx-auto -rotate-3"
+                  style={{ backgroundColor: 'var(--color-max-blue)' }}
+                >
+                  <Plane className="w-8 h-8 -rotate-45" style={{ color: 'var(--color-ink)' }} />
+                </div>
                 <div>
-                  <h3 className="text-base font-semibold text-slate-900">No trips booked yet</h3>
-                  <p className="text-sm text-slate-500 mt-1 max-w-sm mx-auto">
+                  <h3 className="text-lg font-black text-slate-900">No trips booked yet</h3>
+                  <p className="text-sm text-slate-500 mt-1 max-w-sm mx-auto font-medium">
                     Search a flight, choose your seat, and your boarding pass will show up here.
                   </p>
                 </div>
                 <button
                   onClick={() => handleNavigate('book')}
-                  className="focus-ring py-2.5 px-6 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold transition-colors"
+                  className="focus-ring max-press py-2.5 px-6 rounded-xl text-sm font-black max-border max-shadow-sm"
+                  style={{ backgroundColor: 'var(--color-max-yellow)', color: 'var(--color-ink)' }}
                 >
                   Search flights
                 </button>
@@ -324,38 +334,38 @@ export default function Home() {
                 {allBookings.map((b) => (
                   <div
                     key={b.bookingRef}
-                    className="p-5 bg-white rounded-2xl border border-slate-200 hover:border-brand-300 transition-colors space-y-4"
+                    className="p-5 bg-white rounded-2xl max-border max-shadow-sm transition-colors space-y-4"
                   >
-                    <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                    <div className="flex items-center justify-between border-b-[3px] pb-3" style={{ borderColor: 'var(--color-ink)' }}>
                       <div>
-                        <span className="text-xs text-slate-400">
+                        <span className="text-xs text-slate-400 font-medium">
                           Ref: <strong className="text-slate-900 font-mono">{b.bookingRef}</strong>
                         </span>
-                        <div className="font-semibold text-sm text-slate-900">{b.passengerName}</div>
+                        <div className="font-black text-sm text-slate-900">{b.passengerName}</div>
                       </div>
-                      <span className="text-xs font-semibold text-brand-700 bg-brand-50 px-2.5 py-1 rounded-full">
+                      <span className="text-xs font-black px-2.5 py-1 rounded-full max-border" style={{ backgroundColor: 'var(--color-max-green)', color: 'var(--color-ink)' }}>
                         Seat {b.seatNumber}
                       </span>
                     </div>
 
                     <div className="flex items-center justify-between">
                       <div>
-                        <span className="text-xl font-semibold text-slate-900 font-mono">{b.flight.origin.code}</span>
-                        <span className="text-xs text-slate-500 block">{b.flight.departureTime}</span>
+                        <span className="text-xl font-black text-slate-900 font-mono">{b.flight.origin.code}</span>
+                        <span className="text-xs text-slate-500 block font-medium">{b.flight.departureTime}</span>
                       </div>
-                      <div className="text-xs text-slate-400 font-medium flex flex-col items-center">
+                      <div className="text-xs text-slate-400 font-bold flex flex-col items-center">
                         <span className="font-mono">{b.flight.flightNumber}</span>
-                        <ArrowRight className="w-4 h-4 text-brand-600 my-0.5" />
+                        <ArrowRight className="w-4 h-4 my-0.5" style={{ color: 'var(--color-max-pink)' }} />
                         <span>{b.flight.duration}</span>
                       </div>
                       <div className="text-right">
-                        <span className="text-xl font-semibold text-slate-900 font-mono">{b.flight.destination.code}</span>
-                        <span className="text-xs text-slate-500 block">{b.flight.arrivalTime}</span>
+                        <span className="text-xl font-black text-slate-900 font-mono">{b.flight.destination.code}</span>
+                        <span className="text-xs text-slate-500 block font-medium">{b.flight.arrivalTime}</span>
                       </div>
                     </div>
 
-                    <div className="pt-2 border-t border-slate-100 flex items-center justify-between">
-                      <span className="text-sm font-semibold text-slate-700">
+                    <div className="pt-2 border-t-[3px] flex items-center justify-between" style={{ borderColor: 'var(--color-ink)' }}>
+                      <span className="text-sm font-black text-slate-700">
                         {formatPrice(b.totalPriceUsd, currency)}
                       </span>
                       <button
@@ -363,7 +373,8 @@ export default function Home() {
                           setActiveBooking(b);
                           setIsBoardingPassOpen(true);
                         }}
-                        className="focus-ring py-1.5 px-3 rounded-lg bg-slate-900 hover:bg-brand-700 text-white text-xs font-semibold transition-colors flex items-center gap-1.5"
+                        className="focus-ring max-press py-1.5 px-3 rounded-lg text-white text-xs font-black transition-colors flex items-center gap-1.5 max-border"
+                        style={{ backgroundColor: 'var(--color-navy-900)' }}
                       >
                         <Printer className="w-3.5 h-3.5" />
                         View pass

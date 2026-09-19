@@ -37,12 +37,13 @@ export default async function TourPackageDetailPage({ params, searchParams }: Pa
   };
 
   return (
-    <div className="min-h-screen bg-white text-slate-900">
-      <header className="sticky top-0 z-40 w-full bg-white/90 backdrop-blur-md border-b border-slate-200">
+    <div className="min-h-screen bg-white text-slate-900" style={{ fontFamily: 'var(--font-display)' }}>
+      <header className="sticky top-0 z-40 w-full bg-white border-b-[3px]" style={{ borderColor: 'var(--color-ink)' }}>
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center gap-3">
           <Link
             href="/"
-            className="focus-ring flex items-center gap-2 text-sm font-medium text-slate-600 hover:text-brand-700 transition-colors"
+            className="focus-ring max-press flex items-center gap-2 text-sm font-black px-3 py-1.5 rounded-lg max-border"
+            style={{ backgroundColor: 'var(--color-max-yellow)', color: 'var(--color-ink)' }}
           >
             <ArrowLeft className="w-4 h-4" />
             Back to Al-Safr
@@ -51,7 +52,7 @@ export default async function TourPackageDetailPage({ params, searchParams }: Pa
       </header>
 
       <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-        <div className="h-64 sm:h-96 rounded-3xl bg-slate-100 overflow-hidden">
+        <div className="h-64 sm:h-96 rounded-3xl bg-slate-100 overflow-hidden max-border max-shadow">
           {pkg.images[0] ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={pkg.images[0]} alt={pkg.name} className="w-full h-full object-cover" />
@@ -64,19 +65,23 @@ export default async function TourPackageDetailPage({ params, searchParams }: Pa
 
         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
           <div className="space-y-2">
-            <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-slate-900">{pkg.name}</h1>
-            <p className="text-sm text-slate-500 flex items-center gap-1.5">
+            <span
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black uppercase tracking-wide max-border -rotate-2"
+              style={{ backgroundColor: 'var(--color-max-blue)', color: 'white' }}
+            >
+              <Calendar className="w-3.5 h-3.5" />
+              {pkg.durationDays} {pkg.durationDays === 1 ? 'day' : 'days'}
+            </span>
+            <h1 className="text-2xl sm:text-4xl font-black tracking-tight text-slate-900">{pkg.name}</h1>
+            <p className="text-sm text-slate-500 flex items-center gap-1.5 font-semibold">
               <MapPin className="w-4 h-4 shrink-0" />
               {pkg.destination}
-              <span className="text-slate-300">·</span>
-              <Calendar className="w-4 h-4 shrink-0" />
-              {pkg.durationDays} {pkg.durationDays === 1 ? 'day' : 'days'}
             </p>
           </div>
-          <div className="text-right shrink-0 space-y-3">
+          <div className="text-right shrink-0 space-y-3 rounded-2xl p-4 max-border max-shadow-sm rotate-1" style={{ backgroundColor: 'var(--color-max-yellow)' }}>
             <div>
-              <div className="text-2xl font-semibold text-slate-900">{formatPrice(pkg.priceUsd, currency)}</div>
-              <div className="text-xs text-slate-400">per person</div>
+              <div className="text-2xl font-black" style={{ color: 'var(--color-ink)' }}>{formatPrice(pkg.priceUsd, currency)}</div>
+              <div className="text-xs font-bold" style={{ color: 'var(--color-ink)' }}>per person</div>
             </div>
             <TourBookingFlow
               tourPackageId={pkg.id}
@@ -88,44 +93,61 @@ export default async function TourPackageDetailPage({ params, searchParams }: Pa
           </div>
         </div>
 
-        <p className="text-base text-slate-600 leading-relaxed max-w-3xl">{pkg.description}</p>
+        <p className="text-base text-slate-600 leading-relaxed max-w-3xl font-medium">{pkg.description}</p>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-3">
-            <h2 className="text-lg font-semibold text-slate-900">Itinerary</h2>
-            <ol className="space-y-4">
-              {pkg.itinerary.map((day) => (
-                <li key={day.day} className="flex gap-4">
-                  <div className="shrink-0 w-9 h-9 rounded-full bg-brand-50 text-brand-700 font-semibold text-sm flex items-center justify-center">
-                    {day.day}
-                  </div>
-                  <div>
-                    <div className="font-medium text-sm text-slate-900">{day.title}</div>
-                    <p className="text-sm text-slate-500 mt-0.5">{day.description}</p>
-                  </div>
-                </li>
-              ))}
+            <span className="inline-block text-xs font-black tracking-widest uppercase px-3 py-1 rounded-full max-border" style={{ backgroundColor: 'var(--color-max-pink)', color: 'white' }}>
+              Itinerary
+            </span>
+            <ol className="space-y-4 pt-2">
+              {pkg.itinerary.map((day, i) => {
+                const itineraryColors = ['var(--color-max-pink)', 'var(--color-max-yellow)', 'var(--color-max-blue)', 'var(--color-max-green)', 'var(--color-max-orange)', 'var(--color-max-purple)'];
+                const color = itineraryColors[i % itineraryColors.length];
+                return (
+                  <li key={day.day} className="flex gap-4 rounded-2xl p-4 max-border max-shadow-sm bg-white">
+                    <div
+                      className="shrink-0 w-9 h-9 rounded-full font-black text-sm flex items-center justify-center max-border"
+                      style={{ backgroundColor: color, color: 'var(--color-ink)' }}
+                    >
+                      {day.day}
+                    </div>
+                    <div>
+                      <div className="font-black text-sm text-slate-900">{day.title}</div>
+                      <p className="text-sm text-slate-500 mt-0.5 font-medium">{day.description}</p>
+                    </div>
+                  </li>
+                );
+              })}
             </ol>
           </div>
 
           <div className="space-y-6">
-            <div>
-              <h2 className="text-sm font-semibold text-slate-900 mb-2">Inclusions</h2>
-              <ul className="space-y-1.5">
+            <div className="rounded-2xl p-4 max-border max-shadow-sm bg-white">
+              <h2 className="inline-block text-xs font-black uppercase tracking-widest px-3 py-1 rounded-full max-border mb-3" style={{ backgroundColor: 'var(--color-max-green)', color: 'var(--color-ink)' }}>
+                Inclusions
+              </h2>
+              <ul className="space-y-2">
                 {pkg.inclusions.map((item, i) => (
-                  <li key={i} className="text-sm text-slate-600 flex items-start gap-2">
-                    <Check className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                  <li key={i} className="text-sm text-slate-700 flex items-start gap-2 font-medium">
+                    <span className="w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5 max-border" style={{ backgroundColor: 'var(--color-max-green)' }}>
+                      <Check className="w-3 h-3" style={{ color: 'var(--color-ink)' }} />
+                    </span>
                     {item}
                   </li>
                 ))}
               </ul>
             </div>
-            <div>
-              <h2 className="text-sm font-semibold text-slate-900 mb-2">Exclusions</h2>
-              <ul className="space-y-1.5">
+            <div className="rounded-2xl p-4 max-border max-shadow-sm bg-white">
+              <h2 className="inline-block text-xs font-black uppercase tracking-widest px-3 py-1 rounded-full max-border mb-3" style={{ backgroundColor: 'var(--color-max-orange)', color: 'white' }}>
+                Exclusions
+              </h2>
+              <ul className="space-y-2">
                 {pkg.exclusions.map((item, i) => (
-                  <li key={i} className="text-sm text-slate-600 flex items-start gap-2">
-                    <X className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
+                  <li key={i} className="text-sm text-slate-700 flex items-start gap-2 font-medium">
+                    <span className="w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5 max-border" style={{ backgroundColor: 'var(--color-max-orange)' }}>
+                      <X className="w-3 h-3 text-white" />
+                    </span>
                     {item}
                   </li>
                 ))}

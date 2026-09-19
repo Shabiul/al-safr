@@ -161,7 +161,7 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
   return (
     <div className="space-y-6">
       {/* MakeMyTrip-style search bar */}
-      <div className="bg-white rounded-3xl border border-slate-200 p-5 sm:p-7 shadow-sm">
+      <div className="bg-white rounded-3xl p-5 sm:p-7 max-border max-shadow">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
           {/* DESTINATION CARD */}
           <div ref={destRef} className="md:col-span-4 relative">
@@ -174,22 +174,23 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
               }}
               aria-haspopup="listbox"
               aria-expanded={isDestOpen}
-              className={`focus-ring w-full text-left p-4 rounded-2xl border transition-colors bg-slate-50 hover:bg-slate-100 ${
-                isDestOpen ? 'border-brand-400 bg-white ring-2 ring-brand-100' : 'border-slate-200'
+              className={`focus-ring w-full text-left p-4 rounded-2xl transition-colors bg-slate-50 hover:bg-slate-100 max-border ${
+                isDestOpen ? 'bg-white' : ''
               }`}
+              style={isDestOpen ? { boxShadow: '5px 5px 0 0 var(--color-max-blue)' } : undefined}
             >
-              <div className="flex items-center gap-1.5 text-slate-500 text-xs font-medium">
-                <MapPin className="w-3.5 h-3.5 text-brand-600" />
+              <div className="flex items-center gap-1.5 text-slate-500 text-xs font-black uppercase">
+                <MapPin className="w-3.5 h-3.5" style={{ color: 'var(--color-max-blue)' }} />
                 City, area or hotel
               </div>
-              <div className="mt-1 text-xl font-semibold text-slate-900 tracking-tight truncate">{destination || 'Where to?'}</div>
+              <div className="mt-1 text-xl font-black text-slate-900 tracking-tight truncate">{destination || 'Where to?'}</div>
             </button>
 
             {isDestOpen && (
               <div
                 role="listbox"
                 aria-label="Destination"
-                className="absolute top-full left-0 right-0 sm:w-96 mt-2 bg-white rounded-2xl border border-slate-200 shadow-xl z-50 p-4 space-y-3"
+                className="absolute top-full left-0 right-0 sm:w-96 mt-2 bg-white rounded-2xl z-50 p-4 space-y-3 max-border max-shadow"
               >
                 <div className="relative">
                   <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" aria-hidden="true" />
@@ -203,7 +204,7 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
                     placeholder="City, area, or hotel name…"
                     value={destSearch}
                     onChange={(e) => setDestSearch(e.target.value)}
-                    className="focus-ring w-full pl-9 pr-8 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 font-medium focus:border-brand-400 focus:bg-white"
+                    className="focus-ring w-full pl-9 pr-8 py-2.5 bg-slate-50 rounded-xl text-sm text-slate-900 font-bold max-border focus:bg-white"
                   />
                   {destSearch && (
                     <button
@@ -230,7 +231,7 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
                             setSelectedDest(null);
                             setIsDestOpen(false);
                           }}
-                          className="focus-ring px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-brand-50 hover:text-brand-700 text-xs text-slate-700 transition-colors"
+                          className="focus-ring px-2.5 py-1 rounded-full bg-slate-100 hover:bg-[var(--color-max-blue)] hover:text-white text-xs font-bold text-slate-700 transition-colors max-border"
                         >
                           {city}
                         </button>
@@ -239,7 +240,7 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
                   </div>
                 )}
 
-                {isSearchingDest && <p className="text-xs text-brand-600 animate-pulse">Searching destinations…</p>}
+                {isSearchingDest && <p className="text-xs font-bold animate-pulse" style={{ color: 'var(--color-max-blue)' }}>Searching destinations…</p>}
 
                 {!isSearchingDest && destSearchError && (
                   <p className="text-xs text-rose-600">{destSearchError}</p>
@@ -260,11 +261,11 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
                         }}
                         className="focus-ring w-full px-3 py-2.5 rounded-xl text-left hover:bg-slate-50 transition-colors flex items-center gap-3 group"
                       >
-                        <div className="w-9 h-9 rounded-lg bg-slate-100 text-slate-700 flex items-center justify-center group-hover:bg-brand-50 group-hover:text-brand-700">
+                        <div className="w-9 h-9 rounded-lg bg-slate-100 text-slate-700 flex items-center justify-center group-hover:bg-[var(--color-max-blue)] group-hover:text-white transition-colors">
                           <Building2 className="w-4 h-4" />
                         </div>
                         <div className="min-w-0">
-                          <div className="text-sm font-medium text-slate-900 truncate">{loc.label}</div>
+                          <div className="text-sm font-bold text-slate-900 truncate">{loc.label}</div>
                           <div className="text-xs text-slate-500">{loc.hotelCount.toLocaleString()} hotels</div>
                         </div>
                       </button>
@@ -283,9 +284,10 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
                       setSelectedDest(null);
                       setIsDestOpen(false);
                     }}
-                    className="focus-ring w-full px-3 py-2.5 rounded-xl text-left bg-brand-50 hover:bg-brand-100 transition-colors flex items-center gap-2 text-sm text-brand-900 font-medium"
+                    className="focus-ring w-full px-3 py-2.5 rounded-xl text-left transition-colors flex items-center gap-2 text-sm font-black max-border"
+                    style={{ backgroundColor: 'var(--color-max-yellow)', color: 'var(--color-ink)' }}
                   >
-                    <MapPin className="w-4 h-4 text-brand-600 shrink-0" />
+                    <MapPin className="w-4 h-4 shrink-0" />
                     Use &quot;{destSearch.trim()}&quot; as destination
                   </button>
                 )}
@@ -294,9 +296,9 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
           </div>
 
           {/* DATES CARD */}
-          <div className="md:col-span-4 p-4 rounded-2xl border border-slate-200 bg-slate-50">
-            <div className="flex items-center gap-1.5 text-slate-500 text-xs font-medium">
-              <Calendar className="w-3.5 h-3.5 text-brand-600" />
+          <div className="md:col-span-4 p-4 rounded-2xl bg-slate-50 max-border">
+            <div className="flex items-center gap-1.5 text-slate-500 text-xs font-black uppercase">
+              <Calendar className="w-3.5 h-3.5" style={{ color: 'var(--color-max-blue)' }} />
               Check-in &amp; check-out
             </div>
             <div className="grid grid-cols-2 gap-2 mt-1.5">
@@ -307,7 +309,7 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
                   type="date"
                   value={checkinDate}
                   onChange={(e) => setCheckinDate(e.target.value)}
-                  className="focus-ring w-full px-2 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-medium text-slate-900 cursor-pointer"
+                  className="focus-ring w-full px-2 py-1.5 bg-white rounded-lg text-xs font-bold text-slate-900 cursor-pointer max-border"
                 />
               </div>
               <div>
@@ -317,7 +319,7 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
                   type="date"
                   value={checkoutDate}
                   onChange={(e) => setCheckoutDate(e.target.value)}
-                  className="focus-ring w-full px-2 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-medium text-slate-900 cursor-pointer"
+                  className="focus-ring w-full px-2 py-1.5 bg-white rounded-lg text-xs font-bold text-slate-900 cursor-pointer max-border"
                 />
               </div>
             </div>
@@ -333,39 +335,39 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
               }}
               aria-haspopup="dialog"
               aria-expanded={isGuestsOpen}
-              className="focus-ring w-full text-left p-4 rounded-2xl border border-slate-200 bg-slate-50 hover:bg-slate-100 transition-colors"
+              className="focus-ring w-full text-left p-4 rounded-2xl bg-slate-50 hover:bg-slate-100 transition-colors max-border"
             >
-              <div className="flex items-center justify-between text-slate-500 text-xs font-medium">
+              <div className="flex items-center justify-between text-slate-500 text-xs font-black uppercase">
                 <span className="flex items-center gap-1.5">
-                  <Users className="w-3.5 h-3.5 text-brand-600" />
+                  <Users className="w-3.5 h-3.5" style={{ color: 'var(--color-max-blue)' }} />
                   Guests
                 </span>
                 <ChevronDown className="w-3 h-3 text-slate-400" aria-hidden="true" />
               </div>
-              <div className="mt-1 text-lg font-semibold text-slate-900">{adults} guest{adults === 1 ? '' : 's'}</div>
+              <div className="mt-1 text-lg font-black text-slate-900">{adults} guest{adults === 1 ? '' : 's'}</div>
               <div className="text-xs text-slate-500">{rooms} room{rooms === 1 ? '' : 's'}</div>
             </button>
 
             {isGuestsOpen && (
-              <div className="absolute top-full right-0 w-64 mt-2 bg-white rounded-2xl border border-slate-200 shadow-xl z-50 p-4 space-y-4">
+              <div className="absolute top-full right-0 w-64 mt-2 bg-white rounded-2xl z-50 p-4 space-y-4 max-border max-shadow">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-slate-700">Adults</span>
+                  <span className="text-sm font-black text-slate-700">Adults</span>
                   <div className="flex items-center gap-2">
-                    <button type="button" onClick={() => setAdults(Math.max(1, adults - 1))} aria-label="Decrease adults" className="focus-ring w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-sm flex items-center justify-center">−</button>
-                    <span className="font-semibold text-sm w-4 text-center" aria-live="polite">{adults}</span>
-                    <button type="button" onClick={() => setAdults(Math.min(16, adults + 1))} aria-label="Increase adults" className="focus-ring w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-sm flex items-center justify-center">+</button>
+                    <button type="button" onClick={() => setAdults(Math.max(1, adults - 1))} aria-label="Decrease adults" className="focus-ring w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-black text-sm flex items-center justify-center max-border">−</button>
+                    <span className="font-black text-sm w-4 text-center" aria-live="polite">{adults}</span>
+                    <button type="button" onClick={() => setAdults(Math.min(16, adults + 1))} aria-label="Increase adults" className="focus-ring w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-black text-sm flex items-center justify-center max-border">+</button>
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-slate-700">Rooms</span>
+                  <span className="text-sm font-black text-slate-700">Rooms</span>
                   <div className="flex items-center gap-2">
-                    <button type="button" onClick={() => setRooms(Math.max(1, rooms - 1))} aria-label="Decrease rooms" className="focus-ring w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-sm flex items-center justify-center">−</button>
-                    <span className="font-semibold text-sm w-4 text-center" aria-live="polite">{rooms}</span>
-                    <button type="button" onClick={() => setRooms(Math.min(8, rooms + 1))} aria-label="Increase rooms" className="focus-ring w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-sm flex items-center justify-center">+</button>
+                    <button type="button" onClick={() => setRooms(Math.max(1, rooms - 1))} aria-label="Decrease rooms" className="focus-ring w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-black text-sm flex items-center justify-center max-border">−</button>
+                    <span className="font-black text-sm w-4 text-center" aria-live="polite">{rooms}</span>
+                    <button type="button" onClick={() => setRooms(Math.min(8, rooms + 1))} aria-label="Increase rooms" className="focus-ring w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-black text-sm flex items-center justify-center max-border">+</button>
                   </div>
                 </div>
-                <div className="pt-2 border-t border-slate-100">
-                  <button type="button" onClick={() => setIsGuestsOpen(false)} className="focus-ring w-full py-1.5 bg-brand-600 hover:bg-brand-700 text-white rounded-lg text-sm font-medium transition-colors">Done</button>
+                <div className="pt-2 border-t-2" style={{ borderColor: 'var(--color-ink)' }}>
+                  <button type="button" onClick={() => setIsGuestsOpen(false)} className="focus-ring max-press w-full py-1.5 text-white rounded-lg text-sm font-black transition-colors max-border" style={{ backgroundColor: 'var(--color-max-blue)' }}>Done</button>
                 </div>
               </div>
             )}
@@ -376,7 +378,8 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
             <button
               onClick={runSearch}
               disabled={isLoading || !destination.trim()}
-              className="focus-ring w-full flex items-center justify-center gap-2 px-4 rounded-2xl bg-brand-600 hover:bg-brand-700 disabled:opacity-50 text-white text-sm font-semibold transition-colors shadow-sm hover:shadow-md"
+              className="focus-ring max-press w-full flex items-center justify-center gap-2 px-4 rounded-2xl disabled:opacity-50 text-white text-sm font-black transition-colors max-border max-shadow"
+              style={{ backgroundColor: 'var(--color-max-blue)' }}
             >
               {isLoading ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
               {isLoading ? 'Searching…' : 'Search'}
@@ -388,16 +391,16 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
       {hasSearched && (
         <div className="grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-5">
           {/* FILTERS SIDEBAR */}
-          <aside className="bg-white rounded-2xl border border-slate-200 p-5 space-y-6 h-fit lg:sticky lg:top-20">
-            <div className="flex items-center gap-1.5 text-sm font-semibold text-slate-900">
-              <SlidersHorizontal className="w-4 h-4 text-brand-600" />
+          <aside className="bg-white rounded-2xl p-5 space-y-6 h-fit lg:sticky lg:top-20 max-border max-shadow-sm">
+            <div className="flex items-center gap-1.5 text-sm font-black text-slate-900 uppercase">
+              <SlidersHorizontal className="w-4 h-4" style={{ color: 'var(--color-max-blue)' }} />
               Filters
             </div>
 
             <div className="space-y-2">
-              <div className="flex items-center justify-between text-xs font-medium text-slate-600">
+              <div className="flex items-center justify-between text-xs font-bold text-slate-600">
                 <span>Max price / night</span>
-                <span className="text-slate-900 font-semibold">{formatPrice(maxPrice, currency)}</span>
+                <span className="text-slate-900 font-black">{formatPrice(maxPrice, currency)}</span>
               </div>
               <input
                 type="range"
@@ -406,12 +409,12 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
                 step={25}
                 value={maxPrice}
                 onChange={(e) => setMaxPrice(Number(e.target.value))}
-                className="w-full accent-brand-600"
+                className="w-full accent-[var(--color-max-blue)]"
               />
             </div>
 
             <div className="space-y-2">
-              <span className="text-xs font-medium text-slate-600">Star rating</span>
+              <span className="text-xs font-bold text-slate-600">Star rating</span>
               <div className="space-y-1.5">
                 {[5, 4, 3, 2, 1].map((star) => (
                   <label key={star} className="flex items-center gap-2 text-sm text-slate-700 cursor-pointer">
@@ -419,7 +422,7 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
                       type="checkbox"
                       checked={starFilters.has(star)}
                       onChange={() => toggleStar(star)}
-                      className="rounded accent-brand-600"
+                      className="rounded accent-[var(--color-max-blue)]"
                     />
                     <span className="flex items-center gap-0.5">
                       {Array.from({ length: star }).map((_, i) => (
@@ -432,16 +435,17 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
             </div>
 
             <div className="space-y-2">
-              <span className="text-xs font-medium text-slate-600">Guest rating</span>
+              <span className="text-xs font-bold text-slate-600">Guest rating</span>
               <div className="flex flex-wrap gap-1.5">
                 {[0, 6, 7, 8, 9].map((r) => (
                   <button
                     key={r}
                     type="button"
                     onClick={() => setMinRating(r)}
-                    className={`focus-ring px-2.5 py-1 rounded-lg text-xs font-medium border transition-colors ${
-                      minRating === r ? 'bg-brand-600 border-brand-600 text-white' : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
+                    className={`focus-ring px-2.5 py-1 rounded-full text-xs font-black transition-colors max-border ${
+                      minRating === r ? 'text-white' : 'bg-white text-slate-600 hover:bg-slate-50'
                     }`}
+                    style={minRating === r ? { backgroundColor: 'var(--color-max-blue)' } : undefined}
                   >
                     {r === 0 ? 'Any' : `${r}+`}
                   </button>
@@ -454,14 +458,14 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
           <div className="space-y-3">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div>
-                <h2 className="text-lg font-semibold text-slate-900">
+                <h2 className="text-lg font-black text-slate-900">
                   {filteredSorted.length} {filteredSorted.length === 1 ? 'hotel' : 'hotels'} found
                   <span className="ml-2 text-sm font-normal text-slate-500">{destination}</span>
                 </h2>
                 {notice && <p className="text-xs text-slate-400">{notice}</p>}
               </div>
 
-              <div className="flex items-center bg-slate-100 p-1 rounded-xl text-xs sm:text-sm">
+              <div className="flex items-center bg-slate-100 p-1 rounded-xl text-xs sm:text-sm max-border">
                 {([
                   ['popularity', 'Popularity'],
                   ['price_low', 'Price: Low to High'],
@@ -473,9 +477,10 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
                     type="button"
                     onClick={() => setSortKey(key)}
                     aria-pressed={sortKey === key}
-                    className={`focus-ring px-3 py-1.5 rounded-lg font-medium transition-colors whitespace-nowrap ${
-                      sortKey === key ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-900'
+                    className={`focus-ring px-3 py-1.5 rounded-lg font-black transition-colors whitespace-nowrap ${
+                      sortKey === key ? 'bg-white text-slate-900' : 'text-slate-500 hover:text-slate-900'
                     }`}
+                    style={sortKey === key ? { backgroundColor: 'var(--color-max-blue)', color: 'white' } : undefined}
                   >
                     {label}
                   </button>
@@ -484,14 +489,16 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
             </div>
 
             {isLoading ? (
-              <div className="p-12 text-center bg-slate-50 rounded-2xl border border-slate-200 space-y-3">
-                <RefreshCw className="w-7 h-7 text-brand-600 animate-spin mx-auto" />
-                <div className="font-medium text-sm text-slate-700">Searching hotels…</div>
+              <div className="p-12 text-center bg-slate-50 rounded-2xl space-y-3 max-border">
+                <RefreshCw className="w-7 h-7 animate-spin mx-auto" style={{ color: 'var(--color-max-blue)' }} />
+                <div className="font-black text-sm text-slate-700">Searching hotels…</div>
               </div>
             ) : filteredSorted.length === 0 ? (
-              <div className="p-12 text-center bg-slate-50 rounded-2xl border border-dashed border-slate-300 space-y-2">
-                <Building2 className="w-8 h-8 text-slate-300 mx-auto" />
-                <div className="font-medium text-sm text-slate-700">No hotels match your filters</div>
+              <div className="p-12 text-center bg-slate-50 rounded-2xl border-2 border-dashed border-slate-300 space-y-2">
+                <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto max-border" style={{ backgroundColor: 'var(--color-max-blue)' }}>
+                  <Building2 className="w-7 h-7 text-white" />
+                </div>
+                <div className="font-black text-sm text-slate-700">No hotels match your filters</div>
                 <p className="text-sm text-slate-500 max-w-md mx-auto">{notice || 'Try a different destination, dates, or loosen your filters.'}</p>
               </div>
             ) : (
@@ -502,9 +509,9 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
                     href={hotel.bookingUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group bg-white rounded-2xl border border-slate-200 hover:border-brand-300 hover:shadow-md transition-all overflow-hidden flex flex-col sm:flex-row"
+                    className="group bg-white rounded-2xl hover:-translate-y-0.5 transition-all overflow-hidden flex flex-col sm:flex-row max-border max-shadow-sm"
                   >
-                    <div className="w-full sm:w-56 h-44 sm:h-auto shrink-0 bg-slate-100 overflow-hidden">
+                    <div className="w-full sm:w-56 h-44 sm:h-auto shrink-0 bg-slate-100 overflow-hidden border-b-[3px] sm:border-b-0 sm:border-r-[3px]" style={{ borderColor: 'var(--color-ink)' }}>
                       {hotel.photoUrl ? (
                         // eslint-disable-next-line @next/next/no-img-element
                         <img src={hotel.photoUrl} alt={hotel.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
@@ -518,7 +525,7 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
                     <div className="p-4 sm:p-5 flex-1 flex flex-col sm:flex-row sm:items-stretch gap-3">
                       <div className="flex-1 min-w-0 space-y-1.5">
                         <div className="flex items-start justify-between gap-2">
-                          <h3 className="font-semibold text-base text-slate-900 leading-snug">{hotel.name}</h3>
+                          <h3 className="font-black text-base text-slate-900 leading-snug">{hotel.name}</h3>
                           <ExternalLink className="w-3.5 h-3.5 text-slate-300 shrink-0 mt-1" />
                         </div>
 
@@ -539,10 +546,10 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
                         </p>
                       </div>
 
-                      <div className="flex sm:flex-col items-center sm:items-end justify-between sm:justify-center gap-2 sm:min-w-[120px] sm:border-l sm:border-slate-100 sm:pl-4">
+                      <div className="flex sm:flex-col items-center sm:items-end justify-between sm:justify-center gap-2 sm:min-w-[120px] sm:border-l-2 sm:pl-4" style={{ borderColor: 'var(--color-ink)' }}>
                         {hotel.reviewScore != null && (
                           <div className="flex items-center gap-1.5">
-                            <span className="text-xs font-semibold text-brand-700 bg-brand-50 px-2 py-1 rounded-full">
+                            <span className="text-xs font-black text-white px-2 py-1 rounded-full" style={{ backgroundColor: 'var(--color-max-blue)' }}>
                               {hotel.reviewScore.toFixed(1)}
                             </span>
                             {hotel.reviewCount != null && (
@@ -552,7 +559,7 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
                         )}
                         {hotel.priceUsd != null ? (
                           <div className="text-right">
-                            <div className="text-lg font-semibold text-slate-900">{formatPrice(hotel.priceUsd, currency)}</div>
+                            <div className="text-lg font-black text-slate-900">{formatPrice(hotel.priceUsd, currency)}</div>
                             <div className="text-[11px] text-slate-400">per night</div>
                           </div>
                         ) : (
