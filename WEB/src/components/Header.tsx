@@ -17,7 +17,6 @@ import {
   ArrowRight,
   Info,
   MessageCircle,
-  Search,
 } from 'lucide-react';
 import { CurrencyCode, CURRENCIES } from '@/services/flightData';
 

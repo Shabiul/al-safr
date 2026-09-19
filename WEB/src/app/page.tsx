@@ -62,7 +62,6 @@ export default function Home() {
   // Live Telemetry Stream State
   const [isFetchingLive, setIsFetchingLive] = useState(false);
   const [lastLiveSync, setLastLiveSync] = useState<string>('');
-  const [liveStreamConnected, setLiveStreamConnected] = useState<boolean>(false);
   const [dataSourceNotice, setDataSourceNotice] = useState<string>('');
 
   // Booking & Seat Modals
@@ -93,7 +92,6 @@ export default function Home() {
 
         setFlights(liveOptions);
         setLastLiveSync(new Date(data.timestamp).toLocaleTimeString());
-        setLiveStreamConnected(true);
         setDataSourceNotice(data.dataSourceNotice || '');
         setApiStatus('success');
       }
@@ -109,27 +107,26 @@ export default function Home() {
     fetchLiveFlightData(searchParams.origin, searchParams.destination, searchParams.departureDate, searchParams.supersonicOnly, searchParams.cabinClass);
   }, [fetchLiveFlightData, searchParams.origin, searchParams.destination, searchParams.departureDate, searchParams.supersonicOnly, searchParams.cabinClass]);
 
-  // Execute Search handler
+  // Execute Search handler — only updates searchParams; the effect above
+  // (keyed on searchParams' fields) is the single place that actually
+  // calls fetchLiveFlightData, so this never double-fetches.
   const handleSearch = (params: typeof searchParams) => {
     setSearchParams(params);
     setSelectedCabin(params.cabinClass);
-    fetchLiveFlightData(params.origin, params.destination, params.departureDate, params.supersonicOnly, params.cabinClass);
     setActiveService('book');
     setActiveTab('services');
   };
 
   // Quick search from Hero Ticket Card or Destination cards
   const handleQuickSearch = (origin: string, destination: string, date: string, cabin: 'economy' | 'business' | 'first') => {
-    const updated = {
-      ...searchParams,
+    setSearchParams((prev) => ({
+      ...prev,
       origin,
       destination,
       departureDate: date,
       cabinClass: cabin,
-    };
-    setSearchParams(updated);
+    }));
     setSelectedCabin(cabin);
-    fetchLiveFlightData(origin, destination, date, updated.supersonicOnly, cabin);
     setActiveService('book');
     setActiveTab('services');
   };

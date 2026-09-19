@@ -3,7 +3,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import {
   AIRPORTS,
-  Airport,
   CurrencyCode,
 } from '@/services/flightData';
 import {
@@ -48,7 +47,6 @@ interface FlightSearchProps {
 }
 
 export const FlightSearch: React.FC<FlightSearchProps> = ({
-  currency,
   origin,
   destination,
   departureDate,
