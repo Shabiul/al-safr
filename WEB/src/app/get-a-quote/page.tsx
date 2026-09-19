@@ -32,7 +32,7 @@ export default function GetAQuotePage() {
   if (status === 'done') {
     return (
       <StaticPageShell title="Quote request received">
-        <div className="p-8 rounded-2xl max-border max-shadow flex items-start gap-3" style={{ backgroundColor: 'var(--color-max-blue)' }}>
+        <div className="p-8 rounded-2xl max-border max-shadow flex items-start gap-3" style={{ backgroundColor: 'var(--color-ticket-orange)' }}>
           <CheckCircle2 className="w-6 h-6 shrink-0" style={{ color: 'var(--color-ink)' }} />
           <div>
             <h2 className="font-black text-slate-900">Thanks, {name.split(' ')[0]}.</h2>
@@ -51,7 +51,7 @@ export default function GetAQuotePage() {
       title="Get a quote"
       subtitle="Tell us what you're planning — quotes are free, and we usually reply the same day."
     >
-      <form onSubmit={handleSubmit} className="space-y-4 max-w-lg rounded-2xl max-border max-shadow bg-white p-5 sm:p-7">
+      <form onSubmit={handleSubmit} className="space-y-4 max-w-lg rounded-2xl max-border max-shadow bg-cream p-5 sm:p-7">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className="block text-xs font-black uppercase tracking-wide text-slate-900 mb-1">Your name</label>
@@ -83,7 +83,7 @@ export default function GetAQuotePage() {
             <select
               value={service}
               onChange={(e) => setService(e.target.value)}
-              className="focus-ring max-border w-full rounded-xl px-3 py-2.5 text-sm bg-white"
+              className="focus-ring max-border w-full rounded-xl px-3 py-2.5 text-sm bg-cream"
             >
               {SERVICES.map((s) => (
                 <option key={s} value={s}>{s}</option>
@@ -119,7 +119,7 @@ export default function GetAQuotePage() {
           type="submit"
           disabled={status === 'submitting'}
           className="focus-ring max-press w-full sm:w-auto px-8 disabled:opacity-50 rounded-xl py-3 font-black text-sm max-border max-shadow"
-          style={{ backgroundColor: 'var(--color-max-yellow)', color: 'var(--color-ink)' }}
+          style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'var(--color-ink)' }}
         >
           {status === 'submitting' ? 'Sending…' : 'Get free quote'}
         </button>

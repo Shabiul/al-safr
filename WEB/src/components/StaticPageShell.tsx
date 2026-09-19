@@ -14,13 +14,13 @@ interface StaticPageShellProps {
 export function StaticPageShell({ title, subtitle, wide, children }: StaticPageShellProps) {
   const maxWidth = wide ? 'max-w-5xl' : 'max-w-3xl';
   return (
-    <div className="min-h-screen bg-white text-slate-900">
-      <header className="sticky top-0 z-40 w-full bg-white border-b-[3px]" style={{ borderColor: 'var(--color-ink)' }}>
+    <div className="min-h-screen bg-cream text-slate-900">
+      <header className="sticky top-0 z-40 w-full bg-cream border-b-[3px]" style={{ borderColor: 'var(--color-ink)' }}>
         <div className={`${maxWidth} mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center gap-3`}>
           <Link
             href="/"
             className="focus-ring max-press inline-flex items-center gap-2 text-sm font-black px-3 py-1.5 rounded-lg max-border"
-            style={{ backgroundColor: 'var(--color-max-yellow)', color: 'var(--color-ink)' }}
+            style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'var(--color-ink)' }}
           >
             <ArrowLeft className="w-4 h-4" />
             Back to Al-Safr
@@ -32,7 +32,7 @@ export function StaticPageShell({ title, subtitle, wide, children }: StaticPageS
         <div className="space-y-3">
           <span
             className="inline-block text-xs font-black tracking-widest uppercase px-3 py-1 rounded-full max-border -rotate-2"
-            style={{ backgroundColor: 'var(--color-max-orange)', color: 'white' }}
+            style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'white' }}
           >
             Al-Safr
           </span>

@@ -38,11 +38,11 @@ export const FlightCard: React.FC<FlightCardProps> = ({
   const [logoFailed, setLogoFailed] = React.useState(false);
 
   return (
-    <div className="bg-white rounded-2xl max-border max-shadow-sm p-5 sm:p-6 space-y-5">
+    <div className="bg-cream rounded-2xl max-border max-shadow-sm p-5 sm:p-6 space-y-5">
       {/* Top Aircraft & Trend Ribbon */}
       <div className="flex flex-wrap items-center justify-between gap-3 border-b-2 pb-3" style={{ borderColor: 'var(--color-ink)' }}>
         <div className="flex items-center gap-2.5">
-          <div className="w-9 h-9 shrink-0 rounded-lg bg-white text-slate-800 flex items-center justify-center max-border overflow-hidden">
+          <div className="w-9 h-9 shrink-0 rounded-lg bg-cream text-slate-800 flex items-center justify-center max-border overflow-hidden">
             {flight.airlineCode && !logoFailed ? (
               <img
                 src={`https://images.kiwi.com/airlines/64/${flight.airlineCode}.png`}
@@ -62,7 +62,7 @@ export const FlightCard: React.FC<FlightCardProps> = ({
             {isSupersonic && (
               <span
                 className="inline-flex items-center gap-1 mt-1 text-[11px] font-black px-2 py-0.5 rounded-full max-border -rotate-2"
-                style={{ backgroundColor: 'var(--color-max-orange)', color: 'white' }}
+                style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'white' }}
               >
                 <Zap className="w-3 h-3 fill-current" aria-hidden="true" />
                 Supersonic — 40% faster
@@ -75,7 +75,7 @@ export const FlightCard: React.FC<FlightCardProps> = ({
         {flight.priceTrend.isLowest7Days ? (
           <span
             className="px-2.5 py-1 rounded-full text-xs font-black flex items-center gap-1 max-border rotate-1"
-            style={{ backgroundColor: 'var(--color-max-yellow)', color: 'var(--color-ink)' }}
+            style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'var(--color-ink)' }}
           >
             <TrendingDown className="w-3.5 h-3.5" aria-hidden="true" />
             {flight.priceTrend.changePercent}% · 7-DAY LOW
@@ -104,11 +104,11 @@ export const FlightCard: React.FC<FlightCardProps> = ({
               {flight.duration}
             </div>
             <div className="w-full flex items-center gap-1">
-              <div className="w-2.5 h-2.5 rounded-full max-border bg-white" aria-hidden="true"></div>
+              <div className="w-2.5 h-2.5 rounded-full max-border bg-cream" aria-hidden="true"></div>
               <div className="flex-1 border-t-2 border-dashed border-slate-300 relative">
-                <Plane className="w-3.5 h-3.5 absolute left-1/2 -top-2 -translate-x-1/2 rotate-90" style={{ color: 'var(--color-max-blue)' }} aria-hidden="true" />
+                <Plane className="w-3.5 h-3.5 absolute left-1/2 -top-2 -translate-x-1/2 rotate-90" style={{ color: 'var(--color-ticket-orange)' }} aria-hidden="true" />
               </div>
-              <div className="w-2.5 h-2.5 rounded-full max-border bg-white" aria-hidden="true"></div>
+              <div className="w-2.5 h-2.5 rounded-full max-border bg-cream" aria-hidden="true"></div>
             </div>
             <div className="text-[11px] text-slate-400 font-medium mt-1">
               {flight.stops === 0 ? 'Non-stop' : `${flight.stops} stop${flight.stops > 1 ? 's' : ''}`}
@@ -136,9 +136,9 @@ export const FlightCard: React.FC<FlightCardProps> = ({
                 aria-pressed={isSelected}
                 aria-label={`${CABIN_LABEL[cabin]}, ${formatPrice(flight.prices[cabin], currency)}`}
                 className={`focus-ring p-2.5 rounded-xl text-left transition-all flex flex-col justify-between max-border ${
-                  isSelected ? 'max-shadow-sm -translate-y-0.5' : 'bg-slate-50 hover:bg-white'
+                  isSelected ? 'max-shadow-sm -translate-y-0.5' : 'bg-slate-50 hover:bg-cream'
                 }`}
-                style={isSelected ? { backgroundColor: 'var(--color-max-yellow)' } : undefined}
+                style={isSelected ? { backgroundColor: 'var(--color-ticket-orange)' } : undefined}
               >
                 <div>
                   <span className="text-[11px] font-bold text-slate-500 block">{CABIN_LABEL[cabin]}</span>
@@ -170,7 +170,7 @@ export const FlightCard: React.FC<FlightCardProps> = ({
         <div className="flex flex-wrap items-center gap-2 text-xs text-slate-600 font-semibold">
           {flight.amenities.map((amenity, i) => (
             <span key={i} className="flex items-center gap-1 bg-slate-50 px-2 py-0.5 rounded-full max-border">
-              <ShieldCheck className="w-3 h-3" style={{ color: 'var(--color-max-blue)' }} aria-hidden="true" />
+              <ShieldCheck className="w-3 h-3" style={{ color: 'var(--color-ticket-orange)' }} aria-hidden="true" />
               {amenity}
             </span>
           ))}
@@ -180,7 +180,7 @@ export const FlightCard: React.FC<FlightCardProps> = ({
           type="button"
           onClick={() => onSelectFlight(flight, selectedCabin)}
           className="focus-ring max-press py-2.5 px-5 rounded-xl text-white font-black text-sm flex items-center gap-2 ml-auto max-border max-shadow-sm"
-          style={{ backgroundColor: 'var(--color-max-blue)' }}
+          style={{ backgroundColor: 'var(--color-ticket-orange)' }}
         >
           <Armchair className="w-4 h-4" aria-hidden="true" />
           Select seats
