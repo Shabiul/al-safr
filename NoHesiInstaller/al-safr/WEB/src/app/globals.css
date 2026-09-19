@@ -95,6 +95,19 @@
     background-image: radial-gradient(currentcolor 1.5px, transparent 1.5px);
     background-size: 20px 20px;
   }
+
+  /* Inverted (white) outline + shadow, for elements that sit directly on a
+     solid dark section background — a black shadow would disappear against
+     a black backdrop, so these swap it for white instead. */
+  .max-border-invert {
+    border: 3px solid #fff;
+  }
+  .max-shadow-invert {
+    box-shadow: 8px 8px 0 0 #fff;
+  }
+  .max-shadow-invert-sm {
+    box-shadow: 5px 5px 0 0 #fff;
+  }
 }
 
 ::-webkit-scrollbar {
