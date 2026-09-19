@@ -144,10 +144,10 @@ export const CabSearch: React.FC<CabSearchProps> = ({ currency }) => {
               className={`focus-ring w-full text-left p-4 rounded-2xl transition-colors bg-slate-50 hover:bg-slate-100 max-border ${
                 isDestOpen ? 'bg-white' : ''
               }`}
-              style={isDestOpen ? { boxShadow: '5px 5px 0 0 var(--color-max-green)' } : undefined}
+              style={isDestOpen ? { boxShadow: '5px 5px 0 0 var(--color-max-blue)' } : undefined}
             >
               <div className="flex items-center gap-1.5 text-slate-500 text-xs font-black uppercase">
-                <MapPin className="w-3.5 h-3.5" style={{ color: 'var(--color-max-green)' }} />
+                <MapPin className="w-3.5 h-3.5" style={{ color: 'var(--color-max-blue)' }} />
                 Pickup location
               </div>
               <div className="mt-1 text-xl font-black text-slate-900 tracking-tight truncate">{pickupLabel || 'Where from?'}</div>
@@ -192,7 +192,7 @@ export const CabSearch: React.FC<CabSearchProps> = ({ currency }) => {
                           key={city}
                           type="button"
                           onClick={() => pickLocation(city)}
-                          className="focus-ring px-2.5 py-1 rounded-full bg-slate-100 hover:bg-[var(--color-max-green)] hover:text-white text-xs font-bold text-slate-700 transition-colors max-border"
+                          className="focus-ring px-2.5 py-1 rounded-full bg-slate-100 hover:bg-[var(--color-max-blue)] hover:text-white text-xs font-bold text-slate-700 transition-colors max-border"
                         >
                           {city}
                         </button>
@@ -201,7 +201,7 @@ export const CabSearch: React.FC<CabSearchProps> = ({ currency }) => {
                   </div>
                 )}
 
-                {isSearchingDest && <p className="text-xs font-bold animate-pulse" style={{ color: 'var(--color-max-green)' }}>Searching…</p>}
+                {isSearchingDest && <p className="text-xs font-bold animate-pulse" style={{ color: 'var(--color-max-blue)' }}>Searching…</p>}
                 {!isSearchingDest && destSearchError && <p className="text-xs text-rose-600">{destSearchError}</p>}
 
                 {!isSearchingDest && liveLocations && liveLocations.length > 0 && (
@@ -219,7 +219,7 @@ export const CabSearch: React.FC<CabSearchProps> = ({ currency }) => {
                         }}
                         className="focus-ring w-full px-3 py-2.5 rounded-xl text-left hover:bg-slate-50 transition-colors flex items-center gap-3 group"
                       >
-                        <div className="w-9 h-9 rounded-lg bg-slate-100 text-slate-700 flex items-center justify-center group-hover:bg-[var(--color-max-green)] group-hover:text-white uppercase text-[10px] font-black transition-colors">
+                        <div className="w-9 h-9 rounded-lg bg-slate-100 text-slate-700 flex items-center justify-center group-hover:bg-[var(--color-max-blue)] group-hover:text-white uppercase text-[10px] font-black transition-colors">
                           {loc.country}
                         </div>
                         <div className="text-sm font-bold text-slate-900">{loc.name}</div>
@@ -237,7 +237,7 @@ export const CabSearch: React.FC<CabSearchProps> = ({ currency }) => {
 
           <div className="md:col-span-3 p-4 rounded-2xl bg-slate-50 max-border">
             <div className="flex items-center gap-1.5 text-slate-500 text-xs font-black uppercase">
-              <Calendar className="w-3.5 h-3.5" style={{ color: 'var(--color-max-green)' }} />
+              <Calendar className="w-3.5 h-3.5" style={{ color: 'var(--color-max-blue)' }} />
               Pickup
             </div>
             <label htmlFor="cab-pickup-datetime" className="sr-only">Pickup date and time</label>
@@ -252,7 +252,7 @@ export const CabSearch: React.FC<CabSearchProps> = ({ currency }) => {
 
           <div className="md:col-span-3 p-4 rounded-2xl bg-slate-50 max-border">
             <div className="flex items-center gap-1.5 text-slate-500 text-xs font-black uppercase">
-              <Calendar className="w-3.5 h-3.5" style={{ color: 'var(--color-max-green)' }} />
+              <Calendar className="w-3.5 h-3.5" style={{ color: 'var(--color-max-blue)' }} />
               Drop-off
             </div>
             <label htmlFor="cab-dropoff-datetime" className="sr-only">Drop-off date and time</label>
@@ -270,7 +270,7 @@ export const CabSearch: React.FC<CabSearchProps> = ({ currency }) => {
               onClick={runSearch}
               disabled={isLoading}
               className="focus-ring max-press w-full flex items-center justify-center gap-2 px-4 rounded-2xl disabled:opacity-50 text-white text-sm font-black transition-colors max-border max-shadow"
-              style={{ backgroundColor: 'var(--color-max-green)' }}
+              style={{ backgroundColor: 'var(--color-max-blue)' }}
             >
               {isLoading ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
               {isLoading ? 'Searching…' : 'Search'}
@@ -291,12 +291,12 @@ export const CabSearch: React.FC<CabSearchProps> = ({ currency }) => {
 
           {isLoading ? (
             <div className="p-12 text-center bg-slate-50 rounded-2xl space-y-3 max-border">
-              <RefreshCw className="w-7 h-7 animate-spin mx-auto" style={{ color: 'var(--color-max-green)' }} />
+              <RefreshCw className="w-7 h-7 animate-spin mx-auto" style={{ color: 'var(--color-max-blue)' }} />
               <div className="font-black text-sm text-slate-700">Searching cars…</div>
             </div>
           ) : cabs.length === 0 ? (
             <div className="p-12 text-center bg-slate-50 rounded-2xl border-2 border-dashed border-slate-300 space-y-2">
-              <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto max-border" style={{ backgroundColor: 'var(--color-max-green)' }}>
+              <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto max-border" style={{ backgroundColor: 'var(--color-max-blue)' }}>
                 <Car className="w-7 h-7 text-white" />
               </div>
               <div className="font-black text-sm text-slate-700">No cars found</div>
@@ -340,7 +340,7 @@ export const CabSearch: React.FC<CabSearchProps> = ({ currency }) => {
                     {cab.freeCancellation && (
                       <span
                         className="inline-flex items-center gap-1 text-[11px] font-black px-2 py-0.5 rounded-full w-fit text-white"
-                        style={{ backgroundColor: 'var(--color-max-green)' }}
+                        style={{ backgroundColor: 'var(--color-max-blue)' }}
                       >
                         <ShieldCheck className="w-3 h-3" />
                         Free cancellation

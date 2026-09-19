@@ -10,7 +10,6 @@ import {
   Car,
   ArrowRight,
   ShieldCheck,
-  Globe2,
   BadgeCheck,
   MapPin,
   Calendar,
@@ -18,6 +17,7 @@ import {
   Minus,
   Star,
   Zap,
+  Headset,
 } from 'lucide-react';
 import { CurrencyCode, formatPrice } from '@/services/flightData';
 import { TourPackage } from '@/services/tourPackageData';
@@ -46,7 +46,7 @@ const SERVICES: {
     tagline: 'Live domestic & international fares',
     points: ['Real-time fares via Google Flights, not cached estimates', 'Economy, Business and First cabin classes', 'Book directly into a real seat map'],
     image: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=800',
-    color: 'var(--color-max-pink)',
+    color: 'var(--color-max-orange)',
   },
   {
     id: 'hotels',
@@ -73,14 +73,17 @@ const SERVICES: {
     tagline: 'Self-drive, real supplier pricing',
     points: ['Live pricing via Booking.com', 'Covers Europe and parts of Asia today', 'Real transmission, seats and cancellation terms'],
     image: 'https://images.unsplash.com/photo-1502877338535-766e1452684a?w=800',
-    color: 'var(--color-max-green)',
+    color: 'var(--color-max-blue)',
   },
 ];
 
-const WHY_US = [
-  { icon: ShieldCheck, title: 'No invented prices', description: 'Every fare, room rate and car price shown comes straight from a live supplier — never a placeholder.', color: 'var(--color-max-yellow)' },
-  { icon: Globe2, title: 'Four services, one place', description: 'Flights, hotels, tour packages and cabs — search and compare without switching apps.', color: 'var(--color-max-pink)' },
-  { icon: BadgeCheck, title: 'Transparent, always', description: 'When a service has limits — like car rental not covering India yet — we say so up front.', color: 'var(--color-max-blue)' },
+const WHY_BOOK = [
+  { icon: Plane, title: 'Book real fares to any destination', description: 'Live pricing, sourced at the moment you search.' },
+  { icon: Building2, title: 'Choose from thousands of hotels', description: 'From budget stays to luxury resorts.' },
+  { icon: Compass, title: 'Best deals on curated holiday packages', description: '10 handpicked packages across 4 continents.' },
+  { icon: Car, title: 'Self-drive rentals, real supplier pricing', description: 'Covers Europe and parts of Asia today.' },
+  { icon: ShieldCheck, title: 'No invented prices, ever', description: 'Every fare and rate comes straight from a live supplier.' },
+  { icon: Headset, title: 'A real Bengaluru team behind it', description: 'Call us anytime — we actually pick up.' },
 ];
 
 const TESTIMONIALS = [
@@ -160,7 +163,7 @@ export const LandingHome: React.FC<LandingHomeProps> = ({ currency, onNavigate }
 
   const destinations = packages.slice(0, 8);
   const featured = packages.slice(0, 3);
-  const destinationColors = ['var(--color-max-pink)', 'var(--color-max-yellow)', 'var(--color-max-blue)', 'var(--color-max-green)'];
+  const destinationColors = ['var(--color-max-orange)', 'var(--color-max-yellow)', 'var(--color-max-blue)', 'var(--color-max-blue)'];
 
   return (
     <div className="space-y-24 pb-4" style={{ fontFamily: 'var(--font-display)' }}>
@@ -188,7 +191,7 @@ export const LandingHome: React.FC<LandingHomeProps> = ({ currency, onNavigate }
         {/* Scattered sticker shapes — decorative, hidden from a11y tree */}
         <div className="absolute inset-0 pointer-events-none hidden sm:block" aria-hidden="true">
           <Zap className="absolute top-28 right-[12%] w-10 h-10 -rotate-12" style={{ color: 'var(--color-max-yellow)' }} />
-          <Star className="absolute bottom-24 right-[22%] w-7 h-7 rotate-12 fill-current" style={{ color: 'var(--color-max-pink)' }} />
+          <Star className="absolute bottom-24 right-[22%] w-7 h-7 rotate-12 fill-current" style={{ color: 'var(--color-max-orange)' }} />
           <div className="absolute top-1/3 right-[6%] w-16 h-16 rounded-full max-border" style={{ backgroundColor: 'var(--color-max-blue)' }} />
         </div>
 
@@ -232,7 +235,7 @@ export const LandingHome: React.FC<LandingHomeProps> = ({ currency, onNavigate }
               <button
                 onClick={() => onNavigate('tours')}
                 className="focus-ring max-press flex items-center gap-2 px-7 py-3.5 rounded-xl font-black text-sm text-white max-border max-shadow"
-                style={{ backgroundColor: 'var(--color-max-pink)' }}
+                style={{ backgroundColor: 'var(--color-max-orange)' }}
               >
                 Browse tour packages
               </button>
@@ -247,9 +250,9 @@ export const LandingHome: React.FC<LandingHomeProps> = ({ currency, onNavigate }
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 max-w-5xl mx-auto">
           {[
             { value: '16+', label: 'Years of experience', color: 'var(--color-max-yellow)' },
-            { value: '10,000+', label: 'Travellers served', color: 'var(--color-max-pink)' },
+            { value: '10,000+', label: 'Travellers served', color: 'var(--color-max-orange)' },
             { value: '10', label: 'Curated tour packages', color: 'var(--color-max-blue)' },
-            { value: '500+', label: 'Cars available per search', color: 'var(--color-max-green)' },
+            { value: '500+', label: 'Cars available per search', color: 'var(--color-max-blue)' },
           ].map((stat, i) => (
             <div
               key={stat.label}
@@ -264,22 +267,45 @@ export const LandingHome: React.FC<LandingHomeProps> = ({ currency, onNavigate }
       </div>
       </div>
 
-      {/* Why us — color-blocked dot-textured section */}
-      <div className="relative left-1/2 right-1/2 -mx-[50vw] w-screen py-16" style={{ backgroundColor: 'var(--color-navy-900)' }}>
-        <div className="absolute inset-0 max-dots opacity-10 text-white" aria-hidden="true" />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 sm:grid-cols-3 gap-6">
-          {WHY_US.map((point, i) => {
-            const Icon = point.icon;
-            return (
-              <div key={point.title} className={`p-6 rounded-2xl bg-white max-border max-shadow space-y-3 ${i === 1 ? 'sm:-translate-y-3' : ''}`}>
-                <div className="w-11 h-11 rounded-xl max-border flex items-center justify-center" style={{ backgroundColor: point.color }}>
-                  <Icon className="w-5 h-5" style={{ color: 'var(--color-ink)' }} />
+      {/* Why Book — full-bleed photo section, 6-point trust grid. Icon
+          badges cycle through the 3 accent colors instead of the section
+          having its own hue, keeping the "exactly 3 colors, reused
+          everywhere" rule intact even on a full-bleed photo background. */}
+      <div className="relative left-1/2 right-1/2 -mx-[50vw] w-screen py-16 sm:py-20 overflow-hidden border-y-8" style={{ borderColor: 'var(--color-ink)' }}>
+        <div className="absolute inset-0" aria-hidden="true">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=1920&q=80"
+            alt=""
+            aria-hidden="true"
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+          <div className="absolute inset-0" style={{ backgroundColor: 'var(--color-navy-900)', opacity: 0.75 }} />
+        </div>
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+          <h2 className="text-3xl sm:text-5xl font-black tracking-tight text-white text-center">
+            Why book with{' '}
+            <span className="inline-block -rotate-2" style={{ color: 'var(--color-max-yellow)' }}>Al-Safr</span>?
+          </h2>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {WHY_BOOK.map((point, i) => {
+              const Icon = point.icon;
+              const accent = [ 'var(--color-max-blue)', 'var(--color-max-yellow)', 'var(--color-max-orange)' ][i % 3];
+              return (
+                <div key={point.title} className="flex items-start gap-4">
+                  <div className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 max-border max-shadow-sm" style={{ backgroundColor: accent }}>
+                    <Icon className="w-6 h-6" style={{ color: 'var(--color-ink)' }} />
+                  </div>
+                  <div>
+                    <h3 className="font-black text-white leading-snug">{point.title}</h3>
+                    <p className="text-sm text-slate-300 mt-1 font-medium">{point.description}</p>
+                  </div>
                 </div>
-                <h3 className="font-black text-slate-900 text-lg">{point.title}</h3>
-                <p className="text-sm text-slate-600 leading-relaxed">{point.description}</p>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
       </div>
 
@@ -339,7 +365,7 @@ export const LandingHome: React.FC<LandingHomeProps> = ({ currency, onNavigate }
       {/* Services */}
       <div className="space-y-8">
         <div className="text-center space-y-2">
-          <span className="inline-block text-xs font-black tracking-widest uppercase px-3 py-1 rounded-full max-border" style={{ backgroundColor: 'var(--color-max-pink)', color: 'white' }}>
+          <span className="inline-block text-xs font-black tracking-widest uppercase px-3 py-1 rounded-full max-border" style={{ backgroundColor: 'var(--color-max-orange)', color: 'white' }}>
             What we do
           </span>
           <h2 className="text-3xl sm:text-5xl font-black tracking-tight text-slate-900">Every trip, one platform</h2>
@@ -448,7 +474,7 @@ export const LandingHome: React.FC<LandingHomeProps> = ({ currency, onNavigate }
       {featured.length > 0 && (
         <div className="space-y-8">
           <div className="text-center space-y-2">
-            <span className="inline-block text-xs font-black tracking-widest uppercase px-3 py-1 rounded-full max-border" style={{ backgroundColor: 'var(--color-max-green)', color: 'var(--color-ink)' }}>
+            <span className="inline-block text-xs font-black tracking-widest uppercase px-3 py-1 rounded-full max-border" style={{ backgroundColor: 'var(--color-max-blue)', color: 'var(--color-ink)' }}>
               Handpicked holidays
             </span>
             <h2 className="text-3xl sm:text-5xl font-black tracking-tight text-slate-900">Featured tour packages</h2>
@@ -536,7 +562,7 @@ export const LandingHome: React.FC<LandingHomeProps> = ({ currency, onNavigate }
       {/* FAQ */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="space-y-2">
-          <span className="inline-block text-xs font-black tracking-widest uppercase px-3 py-1 rounded-full max-border" style={{ backgroundColor: 'var(--color-max-purple)', color: 'white' }}>
+          <span className="inline-block text-xs font-black tracking-widest uppercase px-3 py-1 rounded-full max-border" style={{ backgroundColor: 'var(--color-max-blue)', color: 'white' }}>
             Good to know
           </span>
           <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-slate-900">Frequently asked questions</h2>
@@ -595,7 +621,7 @@ export const LandingHome: React.FC<LandingHomeProps> = ({ currency, onNavigate }
             <button
               onClick={() => onNavigate('tours')}
               className="focus-ring max-press px-7 py-3.5 rounded-xl text-white font-black text-sm max-border max-shadow"
-              style={{ backgroundColor: 'var(--color-max-pink)' }}
+              style={{ backgroundColor: 'var(--color-max-orange)' }}
             >
               Browse tour packages
             </button>

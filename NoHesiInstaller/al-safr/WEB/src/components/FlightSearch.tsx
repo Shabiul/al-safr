@@ -236,7 +236,7 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
               className={`focus-ring px-3.5 py-1.5 rounded-lg font-black transition-colors ${
                 tripType === 'round' ? 'bg-white text-slate-900' : 'text-slate-500 hover:text-slate-900'
               }`}
-              style={tripType === 'round' ? { backgroundColor: 'var(--color-max-pink)', color: 'white' } : undefined}
+              style={tripType === 'round' ? { backgroundColor: 'var(--color-max-orange)', color: 'white' } : undefined}
             >
               Round trip
             </button>
@@ -247,7 +247,7 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
               className={`focus-ring px-3.5 py-1.5 rounded-lg font-black transition-colors ${
                 tripType === 'oneway' ? 'bg-white text-slate-900' : 'text-slate-500 hover:text-slate-900'
               }`}
-              style={tripType === 'oneway' ? { backgroundColor: 'var(--color-max-pink)', color: 'white' } : undefined}
+              style={tripType === 'oneway' ? { backgroundColor: 'var(--color-max-orange)', color: 'white' } : undefined}
             >
               One way
             </button>
@@ -279,7 +279,7 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
                   className={`focus-ring px-3 py-1 rounded-lg capitalize font-black transition-colors ${
                     curCabin === c ? 'bg-white text-slate-900' : 'text-slate-500 hover:text-slate-900'
                   }`}
-                  style={curCabin === c ? { backgroundColor: 'var(--color-max-pink)', color: 'white' } : undefined}
+                  style={curCabin === c ? { backgroundColor: 'var(--color-max-orange)', color: 'white' } : undefined}
                 >
                   {c}
                 </button>
@@ -304,14 +304,14 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
               className={`focus-ring w-full text-left p-4 rounded-2xl transition-colors bg-slate-50 hover:bg-slate-100 max-border ${
                 isOriginOpen ? 'bg-white' : ''
               }`}
-              style={isOriginOpen ? { boxShadow: '5px 5px 0 0 var(--color-max-pink)' } : undefined}
+              style={isOriginOpen ? { boxShadow: '5px 5px 0 0 var(--color-max-orange)' } : undefined}
             >
               <div className="flex items-center justify-between text-slate-500 text-xs font-black uppercase">
                 <span className="flex items-center gap-1.5">
-                  <PlaneTakeoff className="w-3.5 h-3.5" style={{ color: 'var(--color-max-pink)' }} />
+                  <PlaneTakeoff className="w-3.5 h-3.5" style={{ color: 'var(--color-max-orange)' }} />
                   From
                 </span>
-                <span className="text-[11px] text-white px-1.5 py-0.5 rounded font-black" style={{ backgroundColor: 'var(--color-max-pink)' }}>
+                <span className="text-[11px] text-white px-1.5 py-0.5 rounded font-black" style={{ backgroundColor: 'var(--color-max-orange)' }}>
                   {originInfo.code}
                 </span>
               </div>
@@ -373,7 +373,7 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
                           setOriginResolved(null);
                           setIsOriginOpen(false);
                         }}
-                        className="focus-ring px-2.5 py-1 rounded-full bg-slate-100 hover:bg-[var(--color-max-pink)] hover:text-white text-xs font-bold text-slate-700 transition-colors max-border"
+                        className="focus-ring px-2.5 py-1 rounded-full bg-slate-100 hover:bg-[var(--color-max-orange)] hover:text-white text-xs font-bold text-slate-700 transition-colors max-border"
                       >
                         {city}
                       </button>
@@ -383,7 +383,7 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
 
                 {/* Filtered Airports List */}
                 {isSearchingOrigin && (
-                  <p className="text-xs font-bold animate-pulse" style={{ color: 'var(--color-max-pink)' }}>Searching live airport data…</p>
+                  <p className="text-xs font-bold animate-pulse" style={{ color: 'var(--color-max-orange)' }}>Searching live airport data…</p>
                 )}
                 <div className="max-h-56 overflow-y-auto space-y-1 divide-y divide-slate-100 pt-1">
                   {filteredOrigins.map((a) => (
@@ -400,7 +400,7 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
                       className="focus-ring w-full px-3 py-2.5 rounded-xl text-left hover:bg-slate-50 transition-colors flex items-center justify-between group"
                     >
                       <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-lg bg-slate-100 text-slate-700 font-black text-xs flex items-center justify-center group-hover:bg-[var(--color-max-pink)] group-hover:text-white transition-colors">
+                        <div className="w-9 h-9 rounded-lg bg-slate-100 text-slate-700 font-black text-xs flex items-center justify-center group-hover:bg-[var(--color-max-orange)] group-hover:text-white transition-colors">
                           {a.code}
                         </div>
                         <div>
@@ -410,7 +410,7 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
                           <div className="text-xs text-slate-500 truncate max-w-[190px]">{a.name}</div>
                         </div>
                       </div>
-                      {curOrigin === a.code && <Check className="w-4 h-4 shrink-0" style={{ color: 'var(--color-max-pink)' }} />}
+                      {curOrigin === a.code && <Check className="w-4 h-4 shrink-0" style={{ color: 'var(--color-max-orange)' }} />}
                     </button>
                   ))}
 
@@ -463,14 +463,14 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
               className={`focus-ring w-full text-left p-4 rounded-2xl transition-colors bg-slate-50 hover:bg-slate-100 max-border ${
                 isDestOpen ? 'bg-white' : ''
               }`}
-              style={isDestOpen ? { boxShadow: '5px 5px 0 0 var(--color-max-pink)' } : undefined}
+              style={isDestOpen ? { boxShadow: '5px 5px 0 0 var(--color-max-orange)' } : undefined}
             >
               <div className="flex items-center justify-between text-slate-500 text-xs font-black uppercase">
                 <span className="flex items-center gap-1.5">
-                  <PlaneLanding className="w-3.5 h-3.5" style={{ color: 'var(--color-max-pink)' }} />
+                  <PlaneLanding className="w-3.5 h-3.5" style={{ color: 'var(--color-max-orange)' }} />
                   To
                 </span>
-                <span className="text-[11px] text-white px-1.5 py-0.5 rounded font-black" style={{ backgroundColor: 'var(--color-max-pink)' }}>
+                <span className="text-[11px] text-white px-1.5 py-0.5 rounded font-black" style={{ backgroundColor: 'var(--color-max-orange)' }}>
                   {destInfo.code}
                 </span>
               </div>
@@ -532,7 +532,7 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
                           setDestResolved(null);
                           setIsDestOpen(false);
                         }}
-                        className="focus-ring px-2.5 py-1 rounded-full bg-slate-100 hover:bg-[var(--color-max-pink)] hover:text-white text-xs font-bold text-slate-700 transition-colors max-border"
+                        className="focus-ring px-2.5 py-1 rounded-full bg-slate-100 hover:bg-[var(--color-max-orange)] hover:text-white text-xs font-bold text-slate-700 transition-colors max-border"
                       >
                         {city}
                       </button>
@@ -542,7 +542,7 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
 
                 {/* Filtered Airports List */}
                 {isSearchingDest && (
-                  <p className="text-xs font-bold animate-pulse" style={{ color: 'var(--color-max-pink)' }}>Searching live airport data…</p>
+                  <p className="text-xs font-bold animate-pulse" style={{ color: 'var(--color-max-orange)' }}>Searching live airport data…</p>
                 )}
                 <div className="max-h-56 overflow-y-auto space-y-1 divide-y divide-slate-100 pt-1">
                   {filteredDests.map((a) => (
@@ -559,7 +559,7 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
                       className="focus-ring w-full px-3 py-2.5 rounded-xl text-left hover:bg-slate-50 transition-colors flex items-center justify-between group"
                     >
                       <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-lg bg-slate-100 text-slate-700 font-black text-xs flex items-center justify-center group-hover:bg-[var(--color-max-pink)] group-hover:text-white transition-colors">
+                        <div className="w-9 h-9 rounded-lg bg-slate-100 text-slate-700 font-black text-xs flex items-center justify-center group-hover:bg-[var(--color-max-orange)] group-hover:text-white transition-colors">
                           {a.code}
                         </div>
                         <div>
@@ -569,7 +569,7 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
                           <div className="text-xs text-slate-500 truncate max-w-[190px]">{a.name}</div>
                         </div>
                       </div>
-                      {curDest === a.code && <Check className="w-4 h-4 shrink-0" style={{ color: 'var(--color-max-pink)' }} />}
+                      {curDest === a.code && <Check className="w-4 h-4 shrink-0" style={{ color: 'var(--color-max-orange)' }} />}
                     </button>
                   ))}
 
@@ -599,7 +599,7 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
             <div className="p-4 rounded-2xl bg-slate-50 max-border">
               <div className="flex items-center justify-between text-slate-500 text-xs font-black uppercase">
                 <span className="flex items-center gap-1.5">
-                  <Calendar className="w-3.5 h-3.5" style={{ color: 'var(--color-max-pink)' }} />
+                  <Calendar className="w-3.5 h-3.5" style={{ color: 'var(--color-max-orange)' }} />
                   Departure {tripType === 'round' && '& return'}
                 </span>
               </div>
@@ -650,7 +650,7 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
             >
               <div className="flex items-center justify-between text-slate-500 text-xs font-black uppercase">
                 <span className="flex items-center gap-1.5">
-                  <Users className="w-3.5 h-3.5" style={{ color: 'var(--color-max-pink)' }} />
+                  <Users className="w-3.5 h-3.5" style={{ color: 'var(--color-max-orange)' }} />
                   Travelers
                 </span>
                 <ChevronDown className="w-3 h-3 text-slate-400" aria-hidden="true" />
@@ -697,7 +697,7 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
                     type="button"
                     onClick={() => setIsPassengerOpen(false)}
                     className="focus-ring max-press w-full py-1.5 text-white rounded-lg text-sm font-black transition-colors max-border"
-                    style={{ backgroundColor: 'var(--color-max-pink)' }}
+                    style={{ backgroundColor: 'var(--color-max-orange)' }}
                   >
                     Done
                   </button>
@@ -712,7 +712,7 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
           <button
             type="submit"
             className="focus-ring max-press py-3.5 px-8 rounded-2xl text-white font-black text-sm transition-colors flex items-center justify-center gap-2 group max-border max-shadow"
-            style={{ backgroundColor: 'var(--color-max-pink)' }}
+            style={{ backgroundColor: 'var(--color-max-orange)' }}
           >
             <Search className="w-4 h-4 transition-transform group-hover:scale-110" />
             Search flights

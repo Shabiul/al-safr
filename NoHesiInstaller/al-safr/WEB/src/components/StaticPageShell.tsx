@@ -32,7 +32,7 @@ export function StaticPageShell({ title, subtitle, wide, children }: StaticPageS
         <div className="space-y-3">
           <span
             className="inline-block text-xs font-black tracking-widest uppercase px-3 py-1 rounded-full max-border -rotate-2"
-            style={{ backgroundColor: 'var(--color-max-pink)', color: 'white' }}
+            style={{ backgroundColor: 'var(--color-max-orange)', color: 'white' }}
           >
             Al-Safr
           </span>

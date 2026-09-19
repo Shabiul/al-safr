@@ -170,7 +170,7 @@ export const FlightCard: React.FC<FlightCardProps> = ({
         <div className="flex flex-wrap items-center gap-2 text-xs text-slate-600 font-semibold">
           {flight.amenities.map((amenity, i) => (
             <span key={i} className="flex items-center gap-1 bg-slate-50 px-2 py-0.5 rounded-full max-border">
-              <ShieldCheck className="w-3 h-3" style={{ color: 'var(--color-max-green)' }} aria-hidden="true" />
+              <ShieldCheck className="w-3 h-3" style={{ color: 'var(--color-max-blue)' }} aria-hidden="true" />
               {amenity}
             </span>
           ))}
