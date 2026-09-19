@@ -161,7 +161,7 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
   return (
     <div className="space-y-6">
       {/* MakeMyTrip-style search bar */}
-      <div className="bg-white rounded-3xl p-5 sm:p-7 max-border max-shadow">
+      <div className="bg-cream rounded-3xl p-5 sm:p-7 max-border max-shadow">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
           {/* DESTINATION CARD */}
           <div ref={destRef} className="md:col-span-4 relative">
@@ -175,12 +175,12 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
               aria-haspopup="listbox"
               aria-expanded={isDestOpen}
               className={`focus-ring w-full text-left p-4 rounded-2xl transition-colors bg-slate-50 hover:bg-slate-100 max-border ${
-                isDestOpen ? 'bg-white' : ''
+                isDestOpen ? 'bg-cream' : ''
               }`}
-              style={isDestOpen ? { boxShadow: '5px 5px 0 0 var(--color-max-blue)' } : undefined}
+              style={isDestOpen ? { boxShadow: '5px 5px 0 0 var(--color-ticket-orange)' } : undefined}
             >
               <div className="flex items-center gap-1.5 text-slate-500 text-xs font-black uppercase">
-                <MapPin className="w-3.5 h-3.5" style={{ color: 'var(--color-max-blue)' }} />
+                <MapPin className="w-3.5 h-3.5" style={{ color: 'var(--color-ticket-orange)' }} />
                 City, area or hotel
               </div>
               <div className="mt-1 text-xl font-black text-slate-900 tracking-tight truncate">{destination || 'Where to?'}</div>
@@ -190,7 +190,7 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
               <div
                 role="listbox"
                 aria-label="Destination"
-                className="absolute top-full left-0 right-0 sm:w-96 mt-2 bg-white rounded-2xl z-50 p-4 space-y-3 max-border max-shadow"
+                className="absolute top-full left-0 right-0 sm:w-96 mt-2 bg-cream rounded-2xl z-50 p-4 space-y-3 max-border max-shadow"
               >
                 <div className="relative">
                   <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" aria-hidden="true" />
@@ -204,7 +204,7 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
                     placeholder="City, area, or hotel name…"
                     value={destSearch}
                     onChange={(e) => setDestSearch(e.target.value)}
-                    className="focus-ring w-full pl-9 pr-8 py-2.5 bg-slate-50 rounded-xl text-sm text-slate-900 font-bold max-border focus:bg-white"
+                    className="focus-ring w-full pl-9 pr-8 py-2.5 bg-slate-50 rounded-xl text-sm text-slate-900 font-bold max-border focus:bg-cream"
                   />
                   {destSearch && (
                     <button
@@ -231,7 +231,7 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
                             setSelectedDest(null);
                             setIsDestOpen(false);
                           }}
-                          className="focus-ring px-2.5 py-1 rounded-full bg-slate-100 hover:bg-[var(--color-max-blue)] hover:text-white text-xs font-bold text-slate-700 transition-colors max-border"
+                          className="focus-ring px-2.5 py-1 rounded-full bg-slate-100 hover:bg-[var(--color-ticket-orange)] hover:text-white text-xs font-bold text-slate-700 transition-colors max-border"
                         >
                           {city}
                         </button>
@@ -240,7 +240,7 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
                   </div>
                 )}
 
-                {isSearchingDest && <p className="text-xs font-bold animate-pulse" style={{ color: 'var(--color-max-blue)' }}>Searching destinations…</p>}
+                {isSearchingDest && <p className="text-xs font-bold animate-pulse" style={{ color: 'var(--color-ticket-orange)' }}>Searching destinations…</p>}
 
                 {!isSearchingDest && destSearchError && (
                   <p className="text-xs text-rose-600">{destSearchError}</p>
@@ -261,7 +261,7 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
                         }}
                         className="focus-ring w-full px-3 py-2.5 rounded-xl text-left hover:bg-slate-50 transition-colors flex items-center gap-3 group"
                       >
-                        <div className="w-9 h-9 rounded-lg bg-slate-100 text-slate-700 flex items-center justify-center group-hover:bg-[var(--color-max-blue)] group-hover:text-white transition-colors">
+                        <div className="w-9 h-9 rounded-lg bg-slate-100 text-slate-700 flex items-center justify-center group-hover:bg-[var(--color-ticket-orange)] group-hover:text-white transition-colors">
                           <Building2 className="w-4 h-4" />
                         </div>
                         <div className="min-w-0">
@@ -285,7 +285,7 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
                       setIsDestOpen(false);
                     }}
                     className="focus-ring w-full px-3 py-2.5 rounded-xl text-left transition-colors flex items-center gap-2 text-sm font-black max-border"
-                    style={{ backgroundColor: 'var(--color-max-yellow)', color: 'var(--color-ink)' }}
+                    style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'var(--color-ink)' }}
                   >
                     <MapPin className="w-4 h-4 shrink-0" />
                     Use &quot;{destSearch.trim()}&quot; as destination
@@ -298,7 +298,7 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
           {/* DATES CARD */}
           <div className="md:col-span-4 p-4 rounded-2xl bg-slate-50 max-border">
             <div className="flex items-center gap-1.5 text-slate-500 text-xs font-black uppercase">
-              <Calendar className="w-3.5 h-3.5" style={{ color: 'var(--color-max-blue)' }} />
+              <Calendar className="w-3.5 h-3.5" style={{ color: 'var(--color-ticket-orange)' }} />
               Check-in &amp; check-out
             </div>
             <div className="grid grid-cols-2 gap-2 mt-1.5">
@@ -309,7 +309,7 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
                   type="date"
                   value={checkinDate}
                   onChange={(e) => setCheckinDate(e.target.value)}
-                  className="focus-ring w-full px-2 py-1.5 bg-white rounded-lg text-xs font-bold text-slate-900 cursor-pointer max-border"
+                  className="focus-ring w-full px-2 py-1.5 bg-cream rounded-lg text-xs font-bold text-slate-900 cursor-pointer max-border"
                 />
               </div>
               <div>
@@ -319,7 +319,7 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
                   type="date"
                   value={checkoutDate}
                   onChange={(e) => setCheckoutDate(e.target.value)}
-                  className="focus-ring w-full px-2 py-1.5 bg-white rounded-lg text-xs font-bold text-slate-900 cursor-pointer max-border"
+                  className="focus-ring w-full px-2 py-1.5 bg-cream rounded-lg text-xs font-bold text-slate-900 cursor-pointer max-border"
                 />
               </div>
             </div>
@@ -339,7 +339,7 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
             >
               <div className="flex items-center justify-between text-slate-500 text-xs font-black uppercase">
                 <span className="flex items-center gap-1.5">
-                  <Users className="w-3.5 h-3.5" style={{ color: 'var(--color-max-blue)' }} />
+                  <Users className="w-3.5 h-3.5" style={{ color: 'var(--color-ticket-orange)' }} />
                   Guests
                 </span>
                 <ChevronDown className="w-3 h-3 text-slate-400" aria-hidden="true" />
@@ -349,7 +349,7 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
             </button>
 
             {isGuestsOpen && (
-              <div className="absolute top-full right-0 w-64 mt-2 bg-white rounded-2xl z-50 p-4 space-y-4 max-border max-shadow">
+              <div className="absolute top-full right-0 w-64 mt-2 bg-cream rounded-2xl z-50 p-4 space-y-4 max-border max-shadow">
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-black text-slate-700">Adults</span>
                   <div className="flex items-center gap-2">
@@ -367,7 +367,7 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
                   </div>
                 </div>
                 <div className="pt-2 border-t-2" style={{ borderColor: 'var(--color-ink)' }}>
-                  <button type="button" onClick={() => setIsGuestsOpen(false)} className="focus-ring max-press w-full py-1.5 text-white rounded-lg text-sm font-black transition-colors max-border" style={{ backgroundColor: 'var(--color-max-blue)' }}>Done</button>
+                  <button type="button" onClick={() => setIsGuestsOpen(false)} className="focus-ring max-press w-full py-1.5 text-white rounded-lg text-sm font-black transition-colors max-border" style={{ backgroundColor: 'var(--color-ticket-orange)' }}>Done</button>
                 </div>
               </div>
             )}
@@ -379,7 +379,7 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
               onClick={runSearch}
               disabled={isLoading || !destination.trim()}
               className="focus-ring max-press w-full flex items-center justify-center gap-2 px-4 rounded-2xl disabled:opacity-50 text-white text-sm font-black transition-colors max-border max-shadow"
-              style={{ backgroundColor: 'var(--color-max-blue)' }}
+              style={{ backgroundColor: 'var(--color-ticket-orange)' }}
             >
               {isLoading ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
               {isLoading ? 'Searching…' : 'Search'}
@@ -391,9 +391,9 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
       {hasSearched && (
         <div className="grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-5">
           {/* FILTERS SIDEBAR */}
-          <aside className="bg-white rounded-2xl p-5 space-y-6 h-fit lg:sticky lg:top-20 max-border max-shadow-sm">
+          <aside className="bg-cream rounded-2xl p-5 space-y-6 h-fit lg:sticky lg:top-20 max-border max-shadow-sm">
             <div className="flex items-center gap-1.5 text-sm font-black text-slate-900 uppercase">
-              <SlidersHorizontal className="w-4 h-4" style={{ color: 'var(--color-max-blue)' }} />
+              <SlidersHorizontal className="w-4 h-4" style={{ color: 'var(--color-ticket-orange)' }} />
               Filters
             </div>
 
@@ -409,7 +409,7 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
                 step={25}
                 value={maxPrice}
                 onChange={(e) => setMaxPrice(Number(e.target.value))}
-                className="w-full accent-[var(--color-max-blue)]"
+                className="w-full accent-[var(--color-ticket-orange)]"
               />
             </div>
 
@@ -422,7 +422,7 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
                       type="checkbox"
                       checked={starFilters.has(star)}
                       onChange={() => toggleStar(star)}
-                      className="rounded accent-[var(--color-max-blue)]"
+                      className="rounded accent-[var(--color-ticket-orange)]"
                     />
                     <span className="flex items-center gap-0.5">
                       {Array.from({ length: star }).map((_, i) => (
@@ -443,9 +443,9 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
                     type="button"
                     onClick={() => setMinRating(r)}
                     className={`focus-ring px-2.5 py-1 rounded-full text-xs font-black transition-colors max-border ${
-                      minRating === r ? 'text-white' : 'bg-white text-slate-600 hover:bg-slate-50'
+                      minRating === r ? 'text-white' : 'bg-cream text-slate-600 hover:bg-slate-50'
                     }`}
-                    style={minRating === r ? { backgroundColor: 'var(--color-max-blue)' } : undefined}
+                    style={minRating === r ? { backgroundColor: 'var(--color-ticket-orange)' } : undefined}
                   >
                     {r === 0 ? 'Any' : `${r}+`}
                   </button>
@@ -478,9 +478,9 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
                     onClick={() => setSortKey(key)}
                     aria-pressed={sortKey === key}
                     className={`focus-ring px-3 py-1.5 rounded-lg font-black transition-colors whitespace-nowrap ${
-                      sortKey === key ? 'bg-white text-slate-900' : 'text-slate-500 hover:text-slate-900'
+                      sortKey === key ? 'bg-cream text-slate-900' : 'text-slate-500 hover:text-slate-900'
                     }`}
-                    style={sortKey === key ? { backgroundColor: 'var(--color-max-blue)', color: 'white' } : undefined}
+                    style={sortKey === key ? { backgroundColor: 'var(--color-ticket-orange)', color: 'white' } : undefined}
                   >
                     {label}
                   </button>
@@ -490,12 +490,12 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
 
             {isLoading ? (
               <div className="p-12 text-center bg-slate-50 rounded-2xl space-y-3 max-border">
-                <RefreshCw className="w-7 h-7 animate-spin mx-auto" style={{ color: 'var(--color-max-blue)' }} />
+                <RefreshCw className="w-7 h-7 animate-spin mx-auto" style={{ color: 'var(--color-ticket-orange)' }} />
                 <div className="font-black text-sm text-slate-700">Searching hotels…</div>
               </div>
             ) : filteredSorted.length === 0 ? (
               <div className="p-12 text-center bg-slate-50 rounded-2xl border-2 border-dashed border-slate-300 space-y-2">
-                <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto max-border" style={{ backgroundColor: 'var(--color-max-blue)' }}>
+                <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto max-border" style={{ backgroundColor: 'var(--color-ticket-orange)' }}>
                   <Building2 className="w-7 h-7 text-white" />
                 </div>
                 <div className="font-black text-sm text-slate-700">No hotels match your filters</div>
@@ -506,7 +506,7 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
                 {filteredSorted.map((hotel) => (
                   <div
                     key={hotel.id}
-                    className="group bg-white rounded-2xl hover:-translate-y-0.5 transition-transform overflow-hidden flex flex-col sm:flex-row max-border max-shadow-sm"
+                    className="group bg-cream rounded-2xl hover:-translate-y-0.5 transition-transform overflow-hidden flex flex-col sm:flex-row max-border max-shadow-sm"
                   >
                     <div className="w-full sm:w-56 h-44 sm:h-auto shrink-0 bg-slate-100 overflow-hidden border-b-[3px] sm:border-b-0 sm:border-r-[3px]" style={{ borderColor: 'var(--color-ink)' }}>
                       {hotel.photoUrl ? (
@@ -543,7 +543,7 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
                       <div className="flex sm:flex-col items-center sm:items-end justify-between sm:justify-center gap-2 sm:min-w-[120px] sm:border-l-2 sm:pl-4" style={{ borderColor: 'var(--color-ink)' }}>
                         {hotel.reviewScore != null && (
                           <div className="flex items-center gap-1.5">
-                            <span className="text-xs font-black text-white px-2 py-1 rounded-full" style={{ backgroundColor: 'var(--color-max-blue)' }}>
+                            <span className="text-xs font-black text-white px-2 py-1 rounded-full" style={{ backgroundColor: 'var(--color-ticket-orange)' }}>
                               {hotel.reviewScore.toFixed(1)}
                             </span>
                             {hotel.reviewCount != null && (

@@ -169,15 +169,15 @@ export const LandingHome: React.FC<LandingHomeProps> = ({ currency, onNavigate }
           left, a real color photo in a sticker-bordered frame sits right.
           Letting the photo run at full color (rather than a dimmed
           full-bleed background) is the whole point of this layout. */}
-      <div className="relative left-1/2 right-1/2 -mx-[50vw] w-screen overflow-hidden border-b-8 border-black bg-white">
+      <div className="relative left-1/2 right-1/2 -mx-[50vw] w-screen overflow-hidden border-b-8 border-black bg-cream">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="space-y-6 relative z-10">
             <div className="flex flex-wrap items-center gap-3">
-              <span className="inline-flex items-center px-4 py-1.5 rounded-full text-xs font-black tracking-wide max-border max-shadow-sm -rotate-3 bg-black text-white">
+              <span className="inline-flex items-center px-4 py-1.5 rounded-full text-xs font-black tracking-wide max-border max-shadow-sm -rotate-3 bg-ticket-orange text-black">
                 SINCE 2009
               </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold max-border text-black bg-white">
-                <Sparkles className="w-3.5 h-3.5 text-black" />
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold max-border text-black bg-cream">
+                <Sparkles className="w-3.5 h-3.5 text-ticket-orange" />
                 Trusted by 10,000+ travellers from Bengaluru
               </span>
             </div>
@@ -186,7 +186,7 @@ export const LandingHome: React.FC<LandingHomeProps> = ({ currency, onNavigate }
               One stop travel
               <br />
               solutions for{' '}
-              <span className="inline-block px-2 -rotate-2 bg-black text-white max-border max-shadow-sm">
+              <span className="inline-block px-2 -rotate-2 bg-ticket-orange text-black max-border max-shadow-sm">
                 everything
               </span>
             </h1>
@@ -205,7 +205,7 @@ export const LandingHome: React.FC<LandingHomeProps> = ({ currency, onNavigate }
               </button>
               <button
                 onClick={() => onNavigate('tours')}
-                className="focus-ring max-press flex items-center gap-2 px-7 py-3.5 rounded-xl font-black text-sm text-black bg-white max-border max-shadow"
+                className="focus-ring max-press flex items-center gap-2 px-7 py-3.5 rounded-xl font-black text-sm text-black bg-cream max-border max-shadow"
               >
                 Browse tour packages
               </button>
@@ -223,9 +223,9 @@ export const LandingHome: React.FC<LandingHomeProps> = ({ currency, onNavigate }
             </div>
             {/* Scattered sticker shapes, layered over the photo's frame */}
             <div className="absolute inset-0 pointer-events-none hidden sm:block" aria-hidden="true">
-              <Zap className="absolute -top-4 -left-4 w-12 h-12 -rotate-12 fill-white text-black" />
+              <Zap className="absolute -top-4 -left-4 w-12 h-12 -rotate-12 fill-ticket-orange text-black" />
               <Star className="absolute -bottom-5 -right-3 w-9 h-9 rotate-12 fill-black text-black" />
-              <div className="absolute top-1/4 -right-5 w-16 h-16 rounded-full bg-white border-[3px] border-black flex items-center justify-center text-xs font-black -rotate-6">
+              <div className="absolute top-1/4 -right-5 w-16 h-16 rounded-full bg-ticket-orange border-[3px] border-black flex items-center justify-center text-xs font-black text-black -rotate-6">
                 16+ yrs
               </div>
             </div>
@@ -240,9 +240,9 @@ export const LandingHome: React.FC<LandingHomeProps> = ({ currency, onNavigate }
       <div className="relative z-10 px-4 sm:px-10 -mt-10 sm:-mt-8">
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 max-w-5xl mx-auto">
           {[
-            { value: '16+', label: 'Years of experience', bg: 'bg-white', text: 'text-black' },
+            { value: '16+', label: 'Years of experience', bg: 'bg-cream', text: 'text-black' },
             { value: '10,000+', label: 'Travellers served', bg: 'bg-black', text: 'text-white' },
-            { value: '10', label: 'Curated tour packages', bg: 'bg-white', text: 'text-black' },
+            { value: '10', label: 'Curated tour packages', bg: 'bg-ticket-orange', text: 'text-black' },
             { value: '500+', label: 'Cars available per search', bg: 'bg-black', text: 'text-white' },
           ].map((stat, i) => (
             <div
@@ -261,7 +261,7 @@ export const LandingHome: React.FC<LandingHomeProps> = ({ currency, onNavigate }
           instead of a dimmed full-bleed background photo. */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
         <div className="text-center space-y-2">
-          <span className="inline-block text-xs font-black tracking-widest uppercase px-3 py-1 rounded-full max-border bg-black text-white">
+          <span className="inline-block text-xs font-black tracking-widest uppercase px-3 py-1 rounded-full max-border bg-ticket-orange text-black">
             Trust
           </span>
           <h2 className="text-3xl sm:text-5xl font-black tracking-tight text-slate-900">
@@ -274,9 +274,9 @@ export const LandingHome: React.FC<LandingHomeProps> = ({ currency, onNavigate }
           {WHY_BOOK.map((point) => {
             const Icon = point.icon;
             return (
-              <div key={point.title} className="flex items-start gap-4 rounded-2xl p-5 max-border max-shadow-sm bg-white">
-                <div className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 max-border bg-black">
-                  <Icon className="w-6 h-6 text-white" />
+              <div key={point.title} className="flex items-start gap-4 rounded-2xl p-5 max-border max-shadow-sm bg-cream">
+                <div className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 max-border bg-ticket-orange">
+                  <Icon className="w-6 h-6 text-black" />
                 </div>
                 <div>
                   <h3 className="font-black text-slate-900 leading-snug">{point.title}</h3>
@@ -297,7 +297,7 @@ export const LandingHome: React.FC<LandingHomeProps> = ({ currency, onNavigate }
             alt="Travel planning"
             className="w-full h-full object-cover"
           />
-          <div className="absolute -bottom-4 -left-4 rounded-2xl px-5 py-4 text-white bg-black max-border max-shadow-sm -rotate-3">
+          <div className="absolute -bottom-4 -left-4 rounded-2xl px-5 py-4 text-black bg-ticket-orange max-border max-shadow-sm -rotate-3">
             <div className="text-2xl font-black">16+</div>
             <div className="text-xs font-bold">Years in travel</div>
           </div>
@@ -320,7 +320,7 @@ export const LandingHome: React.FC<LandingHomeProps> = ({ currency, onNavigate }
               'Honest about coverage — we say when a service has limits',
             ].map((item) => (
               <li key={item} className="flex items-start gap-2.5 text-sm text-slate-700 font-medium">
-                <span className="w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5 max-border bg-white">
+                <span className="w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5 max-border bg-cream">
                   <BadgeCheck className="w-3.5 h-3.5 text-black" />
                 </span>
                 {item}
@@ -375,7 +375,7 @@ export const LandingHome: React.FC<LandingHomeProps> = ({ currency, onNavigate }
                     the absolutely-positioned image/gradient above, not on
                     top of them, regardless of DOM order. */}
                 <div className="relative p-6 flex flex-col gap-3 h-full">
-                  <div className="w-11 h-11 rounded-xl flex items-center justify-center max-border bg-white">
+                  <div className="w-11 h-11 rounded-xl flex items-center justify-center max-border bg-cream">
                     <Icon className="w-5 h-5 text-black" />
                   </div>
                   <h3 className="text-xl font-black">{service.title}</h3>
@@ -385,7 +385,7 @@ export const LandingHome: React.FC<LandingHomeProps> = ({ currency, onNavigate }
                   <ul className="space-y-1.5 text-sm text-slate-200">
                     {service.points.map((p) => (
                       <li key={p} className="flex items-start gap-2">
-                        <span className="mt-1.5 w-1.5 h-1.5 rounded-full shrink-0 bg-white" />
+                        <span className="mt-1.5 w-1.5 h-1.5 rounded-full shrink-0 bg-cream" />
                         {p}
                       </li>
                     ))}
@@ -424,7 +424,7 @@ export const LandingHome: React.FC<LandingHomeProps> = ({ currency, onNavigate }
                   <img src={pkg.images[0]} alt={pkg.name} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform" />
                 )}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-transparent" />
-                <span className="absolute top-3 right-3 text-[11px] font-black text-black bg-white px-2 py-1 rounded-full max-border">
+                <span className="absolute top-3 right-3 text-[11px] font-black text-black bg-ticket-orange px-2 py-1 rounded-full max-border">
                   {pkg.durationDays}D
                 </span>
                 <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
@@ -453,7 +453,7 @@ export const LandingHome: React.FC<LandingHomeProps> = ({ currency, onNavigate }
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {featured.map((pkg, i) => (
-              <div key={pkg.id} className={`bg-white rounded-2xl overflow-hidden flex flex-col max-border max-shadow ${i === 1 ? 'sm:-translate-y-3' : ''}`}>
+              <div key={pkg.id} className={`bg-cream rounded-2xl overflow-hidden flex flex-col max-border max-shadow ${i === 1 ? 'sm:-translate-y-3' : ''}`}>
                 <div className="h-44 bg-slate-100 border-b-[3px] border-black">
                   {pkg.images[0] && (
                     // eslint-disable-next-line @next/next/no-img-element
@@ -477,7 +477,7 @@ export const LandingHome: React.FC<LandingHomeProps> = ({ currency, onNavigate }
                     </div>
                     <Link
                       href={`/tour-packages/${pkg.slug}?currency=${currency}`}
-                      className="focus-ring max-press px-4 py-2 rounded-full text-white text-sm font-black max-border max-shadow-sm bg-black"
+                      className="focus-ring max-press px-4 py-2 rounded-full text-black text-sm font-black max-border max-shadow-sm bg-ticket-orange"
                     >
                       View package
                     </Link>
@@ -495,7 +495,7 @@ export const LandingHome: React.FC<LandingHomeProps> = ({ currency, onNavigate }
         <div className="absolute inset-0 max-dots opacity-15 text-white" aria-hidden="true" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
           <div className="text-center space-y-2">
-            <span className="inline-block text-xs font-black tracking-widest uppercase px-3 py-1 rounded-full max-border bg-white text-black">
+            <span className="inline-block text-xs font-black tracking-widest uppercase px-3 py-1 rounded-full max-border bg-cream text-black">
               Client feedback
             </span>
             <h2 className="text-3xl sm:text-5xl font-black tracking-tight text-white">What our travellers actually say</h2>
@@ -503,10 +503,10 @@ export const LandingHome: React.FC<LandingHomeProps> = ({ currency, onNavigate }
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {TESTIMONIALS.map((t, i) => (
-              <div key={t.name} className={`bg-white rounded-2xl p-5 flex flex-col gap-3 max-border-invert max-shadow-invert-sm ${i % 3 === 1 ? 'sm:-translate-y-2' : ''}`}>
+              <div key={t.name} className={`bg-cream rounded-2xl p-5 flex flex-col gap-3 max-border-invert max-shadow-invert-sm ${i % 3 === 1 ? 'sm:-translate-y-2' : ''}`}>
                 <div className="flex items-center gap-0.5">
                   {Array.from({ length: t.rating }).map((_, j) => (
-                    <Star key={j} className="w-3.5 h-3.5 fill-black text-black" />
+                    <Star key={j} className="w-3.5 h-3.5 fill-ticket-orange text-ticket-orange" />
                   ))}
                 </div>
                 <p className="text-sm text-slate-700 leading-relaxed" style={{ fontFamily: 'var(--font-accent)', fontStyle: 'italic' }}>
@@ -544,15 +544,15 @@ export const LandingHome: React.FC<LandingHomeProps> = ({ currency, onNavigate }
               <div key={faq.q} className="rounded-2xl overflow-hidden max-border max-shadow-sm">
                 <button
                   onClick={() => setOpenFaq(isOpen ? null : i)}
-                  className="focus-ring w-full flex items-center justify-between gap-4 p-5 text-left bg-white"
+                  className="focus-ring w-full flex items-center justify-between gap-4 p-5 text-left bg-cream"
                   aria-expanded={isOpen}
                 >
                   <span className="font-black text-slate-900">{faq.q}</span>
-                  <span className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 max-border ${isOpen ? 'bg-black text-white' : 'bg-white text-black'}`}>
+                  <span className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 max-border ${isOpen ? 'bg-ticket-orange text-black' : 'bg-cream text-black'}`}>
                     {isOpen ? <Minus className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
                   </span>
                 </button>
-                {isOpen && <p className="px-5 pb-5 text-sm text-slate-600 leading-relaxed bg-white">{faq.a}</p>}
+                {isOpen && <p className="px-5 pb-5 text-sm text-slate-600 leading-relaxed bg-cream">{faq.a}</p>}
               </div>
             );
           })}
@@ -575,7 +575,7 @@ export const LandingHome: React.FC<LandingHomeProps> = ({ currency, onNavigate }
           <div className="flex flex-wrap items-center justify-center gap-4">
             <button
               onClick={() => onNavigate('book')}
-              className="focus-ring max-press flex items-center gap-2 px-7 py-3.5 rounded-xl font-black text-sm max-border-invert max-shadow-invert bg-white text-black"
+              className="focus-ring max-press flex items-center gap-2 px-7 py-3.5 rounded-xl font-black text-sm max-border-invert max-shadow-invert bg-ticket-orange text-black"
             >
               Start planning
               <ArrowRight className="w-4 h-4" />

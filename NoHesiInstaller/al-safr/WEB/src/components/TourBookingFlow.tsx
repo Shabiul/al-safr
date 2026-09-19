@@ -103,7 +103,7 @@ export function TourBookingFlow({ tourPackageId, packageName, destination, price
       <button
         onClick={open}
         className="focus-ring max-press w-full sm:w-auto px-6 py-3 rounded-xl font-black text-sm flex items-center justify-center gap-2 max-border max-shadow"
-        style={{ backgroundColor: 'var(--color-max-orange)', color: 'white' }}
+        style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'white' }}
       >
         Book Now
         <ArrowRight className="w-4 h-4" />
@@ -113,13 +113,13 @@ export function TourBookingFlow({ tourPackageId, packageName, destination, price
         <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 text-left" style={{ fontFamily: 'var(--font-display)' }}>
           <div className="absolute inset-0 bg-slate-900/50 backdrop-blur-sm" onClick={close} aria-hidden="true" />
 
-          <div className="relative w-full sm:max-w-lg bg-white rounded-t-3xl sm:rounded-3xl max-h-[92vh] overflow-y-auto max-border max-shadow">
-            <div className="sticky top-0 bg-white border-b-[3px] px-6 py-4 flex items-center justify-between" style={{ borderColor: 'var(--color-ink)' }}>
+          <div className="relative w-full sm:max-w-lg bg-cream rounded-t-3xl sm:rounded-3xl max-h-[92vh] overflow-y-auto max-border max-shadow">
+            <div className="sticky top-0 bg-cream border-b-[3px] px-6 py-4 flex items-center justify-between" style={{ borderColor: 'var(--color-ink)' }}>
               <div>
                 <h2 className="font-black text-slate-900">{step === 4 ? 'Booking confirmed' : 'Book this trip'}</h2>
                 <p className="text-xs text-slate-500 mt-0.5 font-semibold">{packageName} · {destination}</p>
               </div>
-              <button onClick={close} className="focus-ring max-press p-1.5 rounded-lg text-slate-600 max-border" style={{ backgroundColor: 'var(--color-max-yellow)' }}>
+              <button onClick={close} className="focus-ring max-press p-1.5 rounded-lg text-slate-600 max-border" style={{ backgroundColor: 'var(--color-ticket-orange)' }}>
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -130,7 +130,7 @@ export function TourBookingFlow({ tourPackageId, packageName, destination, price
                   <div
                     key={s}
                     className="h-2.5 flex-1 rounded-full max-border"
-                    style={{ backgroundColor: s <= step ? 'var(--color-max-blue)' : 'white' }}
+                    style={{ backgroundColor: s <= step ? 'var(--color-ticket-orange)' : 'white' }}
                   />
                 ))}
               </div>
@@ -139,9 +139,9 @@ export function TourBookingFlow({ tourPackageId, packageName, destination, price
             <div className="p-6 space-y-5">
               {step === 1 && (
                 <div className="space-y-4">
-                  <p className="text-xs font-black uppercase tracking-wide px-2 py-1 rounded-full max-border inline-block" style={{ backgroundColor: 'var(--color-max-yellow)', color: 'var(--color-ink)' }}>Step 1 of 3 · Trip details</p>
+                  <p className="text-xs font-black uppercase tracking-wide px-2 py-1 rounded-full max-border inline-block" style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'var(--color-ink)' }}>Step 1 of 3 · Trip details</p>
                   <label className="space-y-1.5 block">
-                    <span className="text-sm font-bold text-slate-700 flex items-center gap-1.5"><Calendar className="w-4 h-4" style={{ color: 'var(--color-max-blue)' }} />Travel date</span>
+                    <span className="text-sm font-bold text-slate-700 flex items-center gap-1.5"><Calendar className="w-4 h-4" style={{ color: 'var(--color-ticket-orange)' }} />Travel date</span>
                     <input
                       type="date"
                       min={todayIso()}
@@ -151,7 +151,7 @@ export function TourBookingFlow({ tourPackageId, packageName, destination, price
                     />
                   </label>
                   <label className="space-y-1.5 block">
-                    <span className="text-sm font-bold text-slate-700 flex items-center gap-1.5"><Users className="w-4 h-4" style={{ color: 'var(--color-max-blue)' }} />Travelers</span>
+                    <span className="text-sm font-bold text-slate-700 flex items-center gap-1.5"><Users className="w-4 h-4" style={{ color: 'var(--color-ticket-orange)' }} />Travelers</span>
                     <div className="flex items-center gap-3">
                       <button
                         type="button"
@@ -172,7 +172,7 @@ export function TourBookingFlow({ tourPackageId, packageName, destination, price
                       </button>
                     </div>
                   </label>
-                  <div className="rounded-xl p-4 flex items-center justify-between max-border" style={{ backgroundColor: 'var(--color-max-blue)' }}>
+                  <div className="rounded-xl p-4 flex items-center justify-between max-border" style={{ backgroundColor: 'var(--color-ticket-orange)' }}>
                     <span className="text-sm font-bold" style={{ color: 'var(--color-ink)' }}>Estimated total</span>
                     <span className="text-lg font-black" style={{ color: 'var(--color-ink)' }}>{formatPrice(total, currency)}</span>
                   </div>
@@ -181,7 +181,7 @@ export function TourBookingFlow({ tourPackageId, packageName, destination, price
 
               {step === 2 && (
                 <div className="space-y-4">
-                  <p className="text-xs font-black uppercase tracking-wide px-2 py-1 rounded-full max-border inline-block" style={{ backgroundColor: 'var(--color-max-yellow)', color: 'var(--color-ink)' }}>Step 2 of 3 · Your details</p>
+                  <p className="text-xs font-black uppercase tracking-wide px-2 py-1 rounded-full max-border inline-block" style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'var(--color-ink)' }}>Step 2 of 3 · Your details</p>
                   <label className="space-y-1.5 block">
                     <span className="text-sm font-bold text-slate-700">Full name</span>
                     <input
@@ -228,7 +228,7 @@ export function TourBookingFlow({ tourPackageId, packageName, destination, price
 
               {step === 3 && (
                 <div className="space-y-4">
-                  <p className="text-xs font-black uppercase tracking-wide px-2 py-1 rounded-full max-border inline-block" style={{ backgroundColor: 'var(--color-max-yellow)', color: 'var(--color-ink)' }}>Step 3 of 3 · Review &amp; confirm</p>
+                  <p className="text-xs font-black uppercase tracking-wide px-2 py-1 rounded-full max-border inline-block" style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'var(--color-ink)' }}>Step 3 of 3 · Review &amp; confirm</p>
                   <div className="rounded-xl divide-y-2 max-border" style={{ borderColor: 'var(--color-ink)' }}>
                     <div className="px-4 py-3 flex items-center justify-between text-sm" style={{ borderColor: 'var(--color-ink)' }}>
                       <span className="text-slate-500 font-semibold">Package</span>
@@ -246,7 +246,7 @@ export function TourBookingFlow({ tourPackageId, packageName, destination, price
                       <span className="text-slate-500 font-semibold">Contact</span>
                       <span className="font-black text-slate-900 text-right">{name}<br /><span className="text-xs text-slate-400 font-semibold">{email} · {phone}</span></span>
                     </div>
-                    <div className="px-4 py-3 flex items-center justify-between" style={{ backgroundColor: 'var(--color-max-blue)' }}>
+                    <div className="px-4 py-3 flex items-center justify-between" style={{ backgroundColor: 'var(--color-ticket-orange)' }}>
                       <span className="text-sm font-bold" style={{ color: 'var(--color-ink)' }}>Total</span>
                       <span className="text-lg font-black" style={{ color: 'var(--color-ink)' }}>{formatPrice(total, currency)}</span>
                     </div>
@@ -259,7 +259,7 @@ export function TourBookingFlow({ tourPackageId, packageName, destination, price
 
               {step === 4 && (
                 <div className="text-center py-4 space-y-3">
-                  <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto max-border max-shadow-sm" style={{ backgroundColor: 'var(--color-max-blue)' }}>
+                  <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto max-border max-shadow-sm" style={{ backgroundColor: 'var(--color-ticket-orange)' }}>
                     <CheckCircle2 className="w-8 h-8" style={{ color: 'var(--color-ink)' }} />
                   </div>
                   <h3 className="font-black text-slate-900 text-lg">Thanks, {name.split(' ')[0]}!</h3>
@@ -270,14 +270,14 @@ export function TourBookingFlow({ tourPackageId, packageName, destination, price
                   <button
                     onClick={close}
                     className="focus-ring max-press mt-2 px-6 py-2.5 rounded-xl font-black text-sm max-border max-shadow-sm"
-                    style={{ backgroundColor: 'var(--color-max-orange)', color: 'white' }}
+                    style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'white' }}
                   >
                     Done
                   </button>
                 </div>
               )}
 
-              {error && step !== 4 && <p className="text-sm font-bold" style={{ color: 'var(--color-max-orange)' }}>{error}</p>}
+              {error && step !== 4 && <p className="text-sm font-bold" style={{ color: 'var(--color-ticket-orange)' }}>{error}</p>}
 
               {step !== 4 && (
                 <div className="flex items-center gap-3 pt-2">
@@ -296,7 +296,7 @@ export function TourBookingFlow({ tourPackageId, packageName, destination, price
                     <button
                       onClick={goNext}
                       className="focus-ring max-press flex-1 flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl text-sm font-black max-border max-shadow-sm"
-                      style={{ backgroundColor: 'var(--color-max-blue)', color: 'white' }}
+                      style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'white' }}
                     >
                       Continue
                       <ArrowRight className="w-4 h-4" />
@@ -306,7 +306,7 @@ export function TourBookingFlow({ tourPackageId, packageName, destination, price
                       onClick={handleConfirm}
                       disabled={isSubmitting}
                       className="focus-ring max-press flex-1 flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl disabled:opacity-50 text-sm font-black max-border max-shadow-sm"
-                      style={{ backgroundColor: 'var(--color-max-blue)', color: 'var(--color-ink)' }}
+                      style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'var(--color-ink)' }}
                     >
                       {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Confirm booking'}
                     </button>

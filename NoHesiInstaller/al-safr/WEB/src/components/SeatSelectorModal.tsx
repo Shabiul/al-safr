@@ -109,17 +109,17 @@ export const SeatSelectorModal: React.FC<SeatSelectorModalProps> = ({
       aria-label="Choose seat and passenger details"
       className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 overflow-y-auto"
     >
-      <div className="bg-white w-full max-w-5xl rounded-2xl overflow-hidden flex flex-col max-h-[90vh] max-border max-shadow">
+      <div className="bg-cream w-full max-w-5xl rounded-2xl overflow-hidden flex flex-col max-h-[90vh] max-border max-shadow">
         {/* Modal Header */}
         <div className="p-5 bg-slate-50 border-b-[3px] flex items-center justify-between gap-3" style={{ borderColor: 'var(--color-ink)' }}>
           <div className="flex items-center gap-3 min-w-0">
-            <div className="w-9 h-9 rounded-lg text-white flex items-center justify-center shrink-0 max-border" style={{ backgroundColor: 'var(--color-max-blue)' }}>
+            <div className="w-9 h-9 rounded-lg text-white flex items-center justify-center shrink-0 max-border" style={{ backgroundColor: 'var(--color-ticket-orange)' }}>
               <Armchair className="w-5 h-5" />
             </div>
             <div className="min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
                 <h3 className="text-base font-black text-slate-900">Choose your seat</h3>
-                <span className="px-2 py-0.5 rounded-full text-xs font-black font-mono max-border" style={{ backgroundColor: 'var(--color-max-yellow)' }}>
+                <span className="px-2 py-0.5 rounded-full text-xs font-black font-mono max-border" style={{ backgroundColor: 'var(--color-ticket-orange)' }}>
                   {flight.flightNumber}
                 </span>
               </div>
@@ -133,7 +133,7 @@ export const SeatSelectorModal: React.FC<SeatSelectorModalProps> = ({
             type="button"
             onClick={onClose}
             aria-label="Close"
-            className="focus-ring max-press p-1.5 rounded-lg text-slate-900 shrink-0 max-border bg-white"
+            className="focus-ring max-press p-1.5 rounded-lg text-slate-900 shrink-0 max-border bg-cream"
           >
             <X className="w-5 h-5" />
           </button>
@@ -146,7 +146,7 @@ export const SeatSelectorModal: React.FC<SeatSelectorModalProps> = ({
             {/* Cabin Class Switcher */}
             <div className="flex items-center justify-between flex-wrap gap-2">
               <span className="text-xs font-black text-slate-600 uppercase tracking-wide">Cabin</span>
-              <div className="flex items-center bg-white p-1 rounded-lg text-sm max-border">
+              <div className="flex items-center bg-cream p-1 rounded-lg text-sm max-border">
                 {(['economy', 'business', 'first'] as const).map((c) => (
                   <button
                     key={c}
@@ -169,16 +169,16 @@ export const SeatSelectorModal: React.FC<SeatSelectorModalProps> = ({
 
             {/* Aircraft Nose Indicator */}
             <div className="flex flex-col items-center">
-              <div className="w-24 h-10 border-t-[3px] border-x-[3px] rounded-t-full bg-white flex items-center justify-center text-[11px] text-slate-500 font-bold" style={{ borderColor: 'var(--color-ink)' }}>
+              <div className="w-24 h-10 border-t-[3px] border-x-[3px] rounded-t-full bg-cream flex items-center justify-center text-[11px] text-slate-500 font-bold" style={{ borderColor: 'var(--color-ink)' }}>
                 Cockpit
               </div>
             </div>
 
             {/* Seat Map Visualizer */}
-            <div className="bg-white p-6 rounded-2xl space-y-4 max-h-96 overflow-y-auto max-border max-shadow-sm">
+            <div className="bg-cream p-6 rounded-2xl space-y-4 max-h-96 overflow-y-auto max-border max-shadow-sm">
               {/* First (Rows 1-2) */}
               <div className="space-y-2 border-b-2 border-slate-100 pb-4">
-                <div className="flex items-center justify-between text-xs font-black px-3 py-1 rounded-lg max-border" style={{ backgroundColor: 'var(--color-max-yellow)' }}>
+                <div className="flex items-center justify-between text-xs font-black px-3 py-1 rounded-lg max-border" style={{ backgroundColor: 'var(--color-ticket-orange)' }}>
                   <span>First (Rows 1–2)</span>
                   <span className="font-bold">1-2-1 suites</span>
                 </div>
@@ -205,9 +205,9 @@ export const SeatSelectorModal: React.FC<SeatSelectorModalProps> = ({
                                 ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
                                 : isSelected
                                 ? 'text-white scale-105 max-shadow-sm'
-                                : 'bg-white hover:bg-yellow-50 text-slate-900'
+                                : 'bg-cream hover:bg-yellow-50 text-slate-900'
                             }`}
-                            style={isSelected ? { backgroundColor: 'var(--color-max-blue)' } : undefined}
+                            style={isSelected ? { backgroundColor: 'var(--color-ticket-orange)' } : undefined}
                           >
                             <Armchair className="w-4 h-4" aria-hidden="true" />
                             <span className="text-[10px]">{seatId}</span>
@@ -221,7 +221,7 @@ export const SeatSelectorModal: React.FC<SeatSelectorModalProps> = ({
 
               {/* Business (Rows 4-6) */}
               <div className="space-y-2 border-b-2 border-slate-100 pb-4">
-                <div className="flex items-center justify-between text-xs font-black text-white px-3 py-1 rounded-lg max-border" style={{ backgroundColor: 'var(--color-max-blue)' }}>
+                <div className="flex items-center justify-between text-xs font-black text-white px-3 py-1 rounded-lg max-border" style={{ backgroundColor: 'var(--color-ticket-orange)' }}>
                   <span>Business (Rows 4–6)</span>
                   <span className="font-bold">2-2 lie-flat</span>
                 </div>
@@ -248,9 +248,9 @@ export const SeatSelectorModal: React.FC<SeatSelectorModalProps> = ({
                                 ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
                                 : isSelected
                                 ? 'text-white scale-105 max-shadow-sm'
-                                : 'bg-white hover:bg-purple-50 text-slate-900'
+                                : 'bg-cream hover:bg-purple-50 text-slate-900'
                             }`}
-                            style={isSelected ? { backgroundColor: 'var(--color-max-blue)' } : undefined}
+                            style={isSelected ? { backgroundColor: 'var(--color-ticket-orange)' } : undefined}
                           >
                             <span className="text-[10px]">{seatId}</span>
                           </button>
@@ -290,9 +290,9 @@ export const SeatSelectorModal: React.FC<SeatSelectorModalProps> = ({
                                 ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
                                 : isSelected
                                 ? 'text-white scale-105 max-shadow-sm'
-                                : 'bg-white hover:bg-slate-100 text-slate-700'
+                                : 'bg-cream hover:bg-slate-100 text-slate-700'
                             }`}
-                            style={isSelected ? { backgroundColor: 'var(--color-max-blue)' } : undefined}
+                            style={isSelected ? { backgroundColor: 'var(--color-ticket-orange)' } : undefined}
                           >
                             {seatId}
                           </button>
@@ -306,15 +306,15 @@ export const SeatSelectorModal: React.FC<SeatSelectorModalProps> = ({
 
             {/* Seat Map Legend */}
             <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-slate-700 font-bold pt-2">
-              <div className="flex items-center gap-2 px-2.5 py-1 rounded-full bg-white max-border">
-                <div className="w-4 h-4 rounded bg-white max-border" aria-hidden="true"></div>
+              <div className="flex items-center gap-2 px-2.5 py-1 rounded-full bg-cream max-border">
+                <div className="w-4 h-4 rounded bg-cream max-border" aria-hidden="true"></div>
                 <span>Available</span>
               </div>
-              <div className="flex items-center gap-2 px-2.5 py-1 rounded-full bg-white max-border">
-                <div className="w-4 h-4 rounded text-white flex items-center justify-center text-[9px] font-black max-border" style={{ backgroundColor: 'var(--color-max-blue)' }} aria-hidden="true">✓</div>
+              <div className="flex items-center gap-2 px-2.5 py-1 rounded-full bg-cream max-border">
+                <div className="w-4 h-4 rounded text-white flex items-center justify-center text-[9px] font-black max-border" style={{ backgroundColor: 'var(--color-ticket-orange)' }} aria-hidden="true">✓</div>
                 <span>Selected</span>
               </div>
-              <div className="flex items-center gap-2 px-2.5 py-1 rounded-full bg-white max-border">
+              <div className="flex items-center gap-2 px-2.5 py-1 rounded-full bg-cream max-border">
                 <div className="w-4 h-4 rounded bg-slate-200 max-border" aria-hidden="true"></div>
                 <span>Occupied</span>
               </div>
@@ -322,11 +322,11 @@ export const SeatSelectorModal: React.FC<SeatSelectorModalProps> = ({
           </div>
 
           {/* Passenger Details & Checkout Summary (Right 5 cols) */}
-          <div className="lg:col-span-5 p-6 bg-white flex flex-col justify-between space-y-6">
+          <div className="lg:col-span-5 p-6 bg-cream flex flex-col justify-between space-y-6">
             <form onSubmit={handleCompleteBooking} className="space-y-5">
               <div>
                 <h4 className="text-sm font-black text-slate-900 flex items-center gap-1.5">
-                  <User className="w-3.5 h-3.5" style={{ color: 'var(--color-max-blue)' }} aria-hidden="true" />
+                  <User className="w-3.5 h-3.5" style={{ color: 'var(--color-ticket-orange)' }} aria-hidden="true" />
                   Passenger details
                 </h4>
                 <p className="text-xs text-slate-500 mt-0.5 font-medium">Name as it appears on your passport.</p>
@@ -364,7 +364,7 @@ export const SeatSelectorModal: React.FC<SeatSelectorModalProps> = ({
                 {/* Priority add-on */}
                 <label
                   className="p-3 rounded-xl cursor-pointer transition-colors flex items-start gap-3 max-border"
-                  style={{ backgroundColor: priorityAddon ? 'var(--color-max-yellow)' : '#f8fafc' }}
+                  style={{ backgroundColor: priorityAddon ? 'var(--color-ticket-orange)' : '#f8fafc' }}
                 >
                   <input
                     type="checkbox"
@@ -374,7 +374,7 @@ export const SeatSelectorModal: React.FC<SeatSelectorModalProps> = ({
                   />
                   <div
                     aria-hidden="true"
-                    className="w-5 h-5 rounded mt-0.5 flex items-center justify-center shrink-0 max-border bg-white"
+                    className="w-5 h-5 rounded mt-0.5 flex items-center justify-center shrink-0 max-border bg-cream"
                   >
                     {priorityAddon && <Check className="w-3.5 h-3.5" style={{ color: 'var(--color-ink)' }} />}
                   </div>
@@ -413,7 +413,7 @@ export const SeatSelectorModal: React.FC<SeatSelectorModalProps> = ({
                 </div>
                 <div className="pt-2 border-t-2 flex items-center justify-between font-black text-sm text-slate-900" style={{ borderColor: 'var(--color-ink)' }}>
                   <span>Total</span>
-                  <span className="text-lg font-mono" style={{ color: 'var(--color-max-blue)' }}>{formatPrice(totalCost, currency)}</span>
+                  <span className="text-lg font-mono" style={{ color: 'var(--color-ticket-orange)' }}>{formatPrice(totalCost, currency)}</span>
                 </div>
               </div>
 
@@ -421,7 +421,7 @@ export const SeatSelectorModal: React.FC<SeatSelectorModalProps> = ({
               <button
                 type="submit"
                 className="focus-ring max-press w-full py-3 px-4 rounded-xl text-white font-black text-sm flex items-center justify-center gap-2 max-border max-shadow-sm"
-                style={{ backgroundColor: 'var(--color-max-blue)' }}
+                style={{ backgroundColor: 'var(--color-ticket-orange)' }}
               >
                 <CreditCard className="w-4 h-4" aria-hidden="true" />
                 Confirm booking

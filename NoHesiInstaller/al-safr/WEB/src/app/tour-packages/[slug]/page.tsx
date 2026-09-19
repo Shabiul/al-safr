@@ -37,13 +37,13 @@ export default async function TourPackageDetailPage({ params, searchParams }: Pa
   };
 
   return (
-    <div className="min-h-screen bg-white text-slate-900" style={{ fontFamily: 'var(--font-display)' }}>
-      <header className="sticky top-0 z-40 w-full bg-white border-b-[3px]" style={{ borderColor: 'var(--color-ink)' }}>
+    <div className="min-h-screen bg-cream text-slate-900" style={{ fontFamily: 'var(--font-display)' }}>
+      <header className="sticky top-0 z-40 w-full bg-cream border-b-[3px]" style={{ borderColor: 'var(--color-ink)' }}>
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center gap-3">
           <Link
             href="/"
             className="focus-ring max-press flex items-center gap-2 text-sm font-black px-3 py-1.5 rounded-lg max-border"
-            style={{ backgroundColor: 'var(--color-max-yellow)', color: 'var(--color-ink)' }}
+            style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'var(--color-ink)' }}
           >
             <ArrowLeft className="w-4 h-4" />
             Back to Al-Safr
@@ -67,7 +67,7 @@ export default async function TourPackageDetailPage({ params, searchParams }: Pa
           <div className="space-y-2">
             <span
               className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black uppercase tracking-wide max-border -rotate-2"
-              style={{ backgroundColor: 'var(--color-max-blue)', color: 'white' }}
+              style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'white' }}
             >
               <Calendar className="w-3.5 h-3.5" />
               {pkg.durationDays} {pkg.durationDays === 1 ? 'day' : 'days'}
@@ -78,7 +78,7 @@ export default async function TourPackageDetailPage({ params, searchParams }: Pa
               {pkg.destination}
             </p>
           </div>
-          <div className="text-right shrink-0 space-y-3 rounded-2xl p-4 max-border max-shadow-sm rotate-1" style={{ backgroundColor: 'var(--color-max-yellow)' }}>
+          <div className="text-right shrink-0 space-y-3 rounded-2xl p-4 max-border max-shadow-sm rotate-1" style={{ backgroundColor: 'var(--color-ticket-orange)' }}>
             <div>
               <div className="text-2xl font-black" style={{ color: 'var(--color-ink)' }}>{formatPrice(pkg.priceUsd, currency)}</div>
               <div className="text-xs font-bold" style={{ color: 'var(--color-ink)' }}>per person</div>
@@ -97,15 +97,15 @@ export default async function TourPackageDetailPage({ params, searchParams }: Pa
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-3">
-            <span className="inline-block text-xs font-black tracking-widest uppercase px-3 py-1 rounded-full max-border" style={{ backgroundColor: 'var(--color-max-orange)', color: 'white' }}>
+            <span className="inline-block text-xs font-black tracking-widest uppercase px-3 py-1 rounded-full max-border" style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'white' }}>
               Itinerary
             </span>
             <ol className="space-y-4 pt-2">
               {pkg.itinerary.map((day, i) => {
-                const itineraryColors = ['var(--color-max-orange)', 'var(--color-max-yellow)', 'var(--color-max-blue)', 'var(--color-max-blue)', 'var(--color-max-orange)', 'var(--color-max-blue)'];
+                const itineraryColors = ['var(--color-ticket-orange)', 'var(--color-ticket-orange)', 'var(--color-ticket-orange)', 'var(--color-ticket-orange)', 'var(--color-ticket-orange)', 'var(--color-ticket-orange)'];
                 const color = itineraryColors[i % itineraryColors.length];
                 return (
-                  <li key={day.day} className="flex gap-4 rounded-2xl p-4 max-border max-shadow-sm bg-white">
+                  <li key={day.day} className="flex gap-4 rounded-2xl p-4 max-border max-shadow-sm bg-cream">
                     <div
                       className="shrink-0 w-9 h-9 rounded-full font-black text-sm flex items-center justify-center max-border"
                       style={{ backgroundColor: color, color: 'var(--color-ink)' }}
@@ -123,14 +123,14 @@ export default async function TourPackageDetailPage({ params, searchParams }: Pa
           </div>
 
           <div className="space-y-6">
-            <div className="rounded-2xl p-4 max-border max-shadow-sm bg-white">
-              <h2 className="inline-block text-xs font-black uppercase tracking-widest px-3 py-1 rounded-full max-border mb-3" style={{ backgroundColor: 'var(--color-max-blue)', color: 'var(--color-ink)' }}>
+            <div className="rounded-2xl p-4 max-border max-shadow-sm bg-cream">
+              <h2 className="inline-block text-xs font-black uppercase tracking-widest px-3 py-1 rounded-full max-border mb-3" style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'var(--color-ink)' }}>
                 Inclusions
               </h2>
               <ul className="space-y-2">
                 {pkg.inclusions.map((item, i) => (
                   <li key={i} className="text-sm text-slate-700 flex items-start gap-2 font-medium">
-                    <span className="w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5 max-border" style={{ backgroundColor: 'var(--color-max-blue)' }}>
+                    <span className="w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5 max-border" style={{ backgroundColor: 'var(--color-ticket-orange)' }}>
                       <Check className="w-3 h-3" style={{ color: 'var(--color-ink)' }} />
                     </span>
                     {item}
@@ -138,14 +138,14 @@ export default async function TourPackageDetailPage({ params, searchParams }: Pa
                 ))}
               </ul>
             </div>
-            <div className="rounded-2xl p-4 max-border max-shadow-sm bg-white">
-              <h2 className="inline-block text-xs font-black uppercase tracking-widest px-3 py-1 rounded-full max-border mb-3" style={{ backgroundColor: 'var(--color-max-orange)', color: 'white' }}>
+            <div className="rounded-2xl p-4 max-border max-shadow-sm bg-cream">
+              <h2 className="inline-block text-xs font-black uppercase tracking-widest px-3 py-1 rounded-full max-border mb-3" style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'white' }}>
                 Exclusions
               </h2>
               <ul className="space-y-2">
                 {pkg.exclusions.map((item, i) => (
                   <li key={i} className="text-sm text-slate-700 flex items-start gap-2 font-medium">
-                    <span className="w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5 max-border" style={{ backgroundColor: 'var(--color-max-orange)' }}>
+                    <span className="w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5 max-border" style={{ backgroundColor: 'var(--color-ticket-orange)' }}>
                       <X className="w-3 h-3 text-white" />
                     </span>
                     {item}

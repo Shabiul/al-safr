@@ -32,10 +32,10 @@ type MainTab = 'home' | 'services' | 'bookings';
 type ServiceId = 'book' | 'hotels' | 'tours' | 'cabs';
 
 const SERVICE_TABS: { id: ServiceId; label: string; icon: React.ElementType; color: string }[] = [
-  { id: 'book', label: 'Flights', icon: Search, color: 'var(--color-max-orange)' },
-  { id: 'hotels', label: 'Hotels', icon: Building2, color: 'var(--color-max-blue)' },
-  { id: 'tours', label: 'Tour Packages', icon: Compass, color: 'var(--color-max-orange)' },
-  { id: 'cabs', label: 'Cabs', icon: Car, color: 'var(--color-max-blue)' },
+  { id: 'book', label: 'Flights', icon: Search, color: 'var(--color-ticket-orange)' },
+  { id: 'hotels', label: 'Hotels', icon: Building2, color: 'var(--color-ticket-orange)' },
+  { id: 'tours', label: 'Tour Packages', icon: Compass, color: 'var(--color-ticket-orange)' },
+  { id: 'cabs', label: 'Cabs', icon: Car, color: 'var(--color-ticket-orange)' },
 ];
 
 export default function Home() {
@@ -146,7 +146,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-slate-900 flex flex-col selection:bg-brand-200 selection:text-brand-900">
+    <div className="min-h-screen bg-cream text-slate-900 flex flex-col selection:bg-brand-200 selection:text-brand-900">
       <Header
         currency={currency}
         onCurrencyChange={setCurrency}
@@ -165,11 +165,11 @@ export default function Home() {
         {activeTab !== 'home' && (
           <>
             {/* Live Data Status Bar */}
-            <div className="bg-white rounded-2xl p-3.5 sm:p-4 flex flex-wrap items-center justify-between gap-3 text-sm border-b-[3px]" style={{ borderColor: 'var(--color-ink)' }}>
+            <div className="bg-cream rounded-2xl p-3.5 sm:p-4 flex flex-wrap items-center justify-between gap-3 text-sm border-b-[3px]" style={{ borderColor: 'var(--color-ink)' }}>
               <div className="flex flex-wrap items-center gap-3 text-slate-600">
                 <div
                   className="flex items-center gap-1.5 font-black text-xs uppercase tracking-wide px-3 py-1.5 rounded-full max-border"
-                  style={{ backgroundColor: 'var(--color-max-blue)', color: 'var(--color-ink)' }}
+                  style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'var(--color-ink)' }}
                 >
                   <span className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: 'var(--color-ink)' }} aria-hidden="true" />
                   Live data stream
@@ -183,7 +183,7 @@ export default function Home() {
               <button
                 onClick={() => fetchLiveFlightData(searchParams.origin, searchParams.destination, searchParams.departureDate, searchParams.supersonicOnly, searchParams.cabinClass)}
                 disabled={isFetchingLive}
-                className="focus-ring max-press flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white text-slate-900 max-border text-sm font-black transition-colors disabled:opacity-50"
+                className="focus-ring max-press flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-cream text-slate-900 max-border text-sm font-black transition-colors disabled:opacity-50"
               >
                 <RefreshCw className={`w-3.5 h-3.5 ${isFetchingLive ? 'animate-spin' : ''}`} />
                 {isFetchingLive ? 'Syncing…' : 'Refresh'}
@@ -208,7 +208,7 @@ export default function Home() {
                     onClick={() => setActiveService(service.id)}
                     aria-current={isActive ? 'page' : undefined}
                     className={`focus-ring max-press flex items-center gap-1.5 px-3.5 py-2 rounded-full text-sm font-black max-border transition-colors ${
-                      isActive ? 'max-shadow-sm' : 'bg-white text-slate-600 hover:text-slate-900'
+                      isActive ? 'max-shadow-sm' : 'bg-cream text-slate-600 hover:text-slate-900'
                     }`}
                     style={isActive ? { backgroundColor: service.color, color: 'var(--color-ink)' } : undefined}
                   >
@@ -291,9 +291,9 @@ export default function Home() {
         {/* Tab View 2: Boarding Passes */}
         {activeTab === 'bookings' && (
           <div className="space-y-6">
-            <div className="flex items-center justify-between bg-white p-5 rounded-2xl max-border max-shadow-sm">
+            <div className="flex items-center justify-between bg-cream p-5 rounded-2xl max-border max-shadow-sm">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl max-border flex items-center justify-center" style={{ backgroundColor: 'var(--color-max-orange)' }}>
+                <div className="w-10 h-10 rounded-xl max-border flex items-center justify-center" style={{ backgroundColor: 'var(--color-ticket-orange)' }}>
                   <Ticket className="w-5 h-5" style={{ color: 'var(--color-ink)' }} />
                 </div>
                 <div>
@@ -302,16 +302,16 @@ export default function Home() {
                 </div>
               </div>
 
-              <span className="px-3 py-1 rounded-full text-sm font-black max-border" style={{ backgroundColor: 'var(--color-max-yellow)', color: 'var(--color-ink)' }}>
+              <span className="px-3 py-1 rounded-full text-sm font-black max-border" style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'var(--color-ink)' }}>
                 {allBookings.length} {allBookings.length === 1 ? 'trip' : 'trips'}
               </span>
             </div>
 
             {allBookings.length === 0 ? (
-              <div className="p-12 text-center bg-white rounded-2xl max-border space-y-4">
+              <div className="p-12 text-center bg-cream rounded-2xl max-border space-y-4">
                 <div
                   className="w-16 h-16 rounded-2xl max-border flex items-center justify-center mx-auto -rotate-3"
-                  style={{ backgroundColor: 'var(--color-max-blue)' }}
+                  style={{ backgroundColor: 'var(--color-ticket-orange)' }}
                 >
                   <Plane className="w-8 h-8 -rotate-45" style={{ color: 'var(--color-ink)' }} />
                 </div>
@@ -324,7 +324,7 @@ export default function Home() {
                 <button
                   onClick={() => handleNavigate('book')}
                   className="focus-ring max-press py-2.5 px-6 rounded-xl text-sm font-black max-border max-shadow-sm"
-                  style={{ backgroundColor: 'var(--color-max-yellow)', color: 'var(--color-ink)' }}
+                  style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'var(--color-ink)' }}
                 >
                   Search flights
                 </button>
@@ -334,7 +334,7 @@ export default function Home() {
                 {allBookings.map((b) => (
                   <div
                     key={b.bookingRef}
-                    className="p-5 bg-white rounded-2xl max-border max-shadow-sm transition-colors space-y-4"
+                    className="p-5 bg-cream rounded-2xl max-border max-shadow-sm transition-colors space-y-4"
                   >
                     <div className="flex items-center justify-between border-b-[3px] pb-3" style={{ borderColor: 'var(--color-ink)' }}>
                       <div>
@@ -343,7 +343,7 @@ export default function Home() {
                         </span>
                         <div className="font-black text-sm text-slate-900">{b.passengerName}</div>
                       </div>
-                      <span className="text-xs font-black px-2.5 py-1 rounded-full max-border" style={{ backgroundColor: 'var(--color-max-blue)', color: 'var(--color-ink)' }}>
+                      <span className="text-xs font-black px-2.5 py-1 rounded-full max-border" style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'var(--color-ink)' }}>
                         Seat {b.seatNumber}
                       </span>
                     </div>
@@ -355,7 +355,7 @@ export default function Home() {
                       </div>
                       <div className="text-xs text-slate-400 font-bold flex flex-col items-center">
                         <span className="font-mono">{b.flight.flightNumber}</span>
-                        <ArrowRight className="w-4 h-4 my-0.5" style={{ color: 'var(--color-max-orange)' }} />
+                        <ArrowRight className="w-4 h-4 my-0.5" style={{ color: 'var(--color-ticket-orange)' }} />
                         <span>{b.flight.duration}</span>
                       </div>
                       <div className="text-right">

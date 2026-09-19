@@ -9,22 +9,22 @@ export const metadata = {
 };
 
 const VALUES = [
-  { icon: ShieldCheck, title: 'No invented prices', description: 'Every fare, room rate and car price shown comes straight from a live supplier — never a placeholder or estimate.', color: 'var(--color-max-yellow)' },
-  { icon: Globe2, title: 'Four services, one place', description: 'Flights, hotels, tour packages and cabs — search and compare without switching between apps.', color: 'var(--color-max-orange)' },
-  { icon: BadgeCheck, title: 'Transparent, always', description: 'When a service has limits — like car rental not covering India yet — we say so up front, before you search.', color: 'var(--color-max-blue)' },
+  { icon: ShieldCheck, title: 'No invented prices', description: 'Every fare, room rate and car price shown comes straight from a live supplier — never a placeholder or estimate.', color: 'var(--color-ticket-orange)' },
+  { icon: Globe2, title: 'Four services, one place', description: 'Flights, hotels, tour packages and cabs — search and compare without switching between apps.', color: 'var(--color-ticket-orange)' },
+  { icon: BadgeCheck, title: 'Transparent, always', description: 'When a service has limits — like car rental not covering India yet — we say so up front, before you search.', color: 'var(--color-ticket-orange)' },
 ];
 
 const STATS = [
-  { value: '16+', label: 'Years in travel', color: 'var(--color-max-yellow)' },
-  { value: '10,000+', label: 'Travellers served', color: 'var(--color-max-orange)' },
-  { value: '10', label: 'Curated tour packages', color: 'var(--color-max-blue)' },
-  { value: '500+', label: 'Cars available per search', color: 'var(--color-max-blue)' },
+  { value: '16+', label: 'Years in travel', color: 'var(--color-ticket-orange)' },
+  { value: '10,000+', label: 'Travellers served', color: 'var(--color-ticket-orange)' },
+  { value: '10', label: 'Curated tour packages', color: 'var(--color-ticket-orange)' },
+  { value: '500+', label: 'Cars available per search', color: 'var(--color-ticket-orange)' },
 ];
 
 const MILESTONES = [
-  { year: '2009', icon: Flag, title: 'Al Safar Tours N Travels founded', description: 'Started as a Bengaluru walk-in travel desk booking domestic flights, hotels and Gulf visas for the local community.', color: 'var(--color-max-yellow)' },
-  { year: '2015', icon: Plane, title: 'International packages added', description: 'Grew into full holiday packages across the Gulf, Southeast Asia and Europe, with in-house itineraries instead of reseller brochures.', color: 'var(--color-max-orange)' },
-  { year: '2026', icon: Rocket, title: 'Al-Safr goes online', description: 'Brought the same live-pricing, no-nonsense approach to the web — flights, hotels, tour packages and cabs, searched from real suppliers.', color: 'var(--color-max-blue)' },
+  { year: '2009', icon: Flag, title: 'Al Safar Tours N Travels founded', description: 'Started as a Bengaluru walk-in travel desk booking domestic flights, hotels and Gulf visas for the local community.', color: 'var(--color-ticket-orange)' },
+  { year: '2015', icon: Plane, title: 'International packages added', description: 'Grew into full holiday packages across the Gulf, Southeast Asia and Europe, with in-house itineraries instead of reseller brochures.', color: 'var(--color-ticket-orange)' },
+  { year: '2026', icon: Rocket, title: 'Al-Safr goes online', description: 'Brought the same live-pricing, no-nonsense approach to the web — flights, hotels, tour packages and cabs, searched from real suppliers.', color: 'var(--color-ticket-orange)' },
 ];
 
 export default function AboutPage() {
@@ -47,7 +47,7 @@ export default function AboutPage() {
         <div className="relative p-8 sm:p-12 space-y-4 text-white">
           <span
             className="inline-flex items-center px-4 py-1.5 rounded-full text-xs font-black tracking-wide max-border max-shadow-sm -rotate-3"
-            style={{ backgroundColor: 'var(--color-max-yellow)', color: 'var(--color-ink)' }}
+            style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'var(--color-ink)' }}
           >
             SINCE 2009
           </span>
@@ -87,7 +87,7 @@ export default function AboutPage() {
         {VALUES.map((v, i) => {
           const Icon = v.icon;
           return (
-            <div key={v.title} className={`p-5 rounded-2xl bg-white max-border max-shadow space-y-3 ${i === 1 ? 'sm:-translate-y-3' : ''}`}>
+            <div key={v.title} className={`p-5 rounded-2xl bg-cream max-border max-shadow space-y-3 ${i === 1 ? 'sm:-translate-y-3' : ''}`}>
               <div className="w-11 h-11 rounded-xl max-border flex items-center justify-center" style={{ backgroundColor: v.color }}>
                 <Icon className="w-5 h-5" style={{ color: 'var(--color-ink)' }} />
               </div>
@@ -100,7 +100,7 @@ export default function AboutPage() {
 
       {/* Milestones */}
       <div className="space-y-6">
-        <span className="inline-block text-xs font-black tracking-widest uppercase px-3 py-1 rounded-full max-border" style={{ backgroundColor: 'var(--color-max-blue)', color: 'white' }}>
+        <span className="inline-block text-xs font-black tracking-widest uppercase px-3 py-1 rounded-full max-border" style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'white' }}>
           Our story
         </span>
         <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-slate-900">Our story so far</h2>
@@ -116,7 +116,7 @@ export default function AboutPage() {
                   {i < MILESTONES.length - 1 && <div className="w-[3px] flex-1 mt-2" style={{ backgroundColor: 'var(--color-ink)' }} />}
                 </div>
                 <div className="pb-6">
-                  <div className="text-xs font-black" style={{ color: 'var(--color-max-blue)' }}>{m.year}</div>
+                  <div className="text-xs font-black" style={{ color: 'var(--color-ticket-orange)' }}>{m.year}</div>
                   <h3 className="font-black text-slate-900 mt-0.5">{m.title}</h3>
                   <p className="text-sm text-slate-500 mt-1 leading-relaxed max-w-xl">{m.description}</p>
                 </div>
@@ -127,8 +127,8 @@ export default function AboutPage() {
       </div>
 
       {/* Office */}
-      <div className="p-5 rounded-2xl bg-white max-border max-shadow-sm flex items-start gap-3 rotate-1">
-        <div className="w-10 h-10 rounded-xl max-border flex items-center justify-center shrink-0" style={{ backgroundColor: 'var(--color-max-blue)' }}>
+      <div className="p-5 rounded-2xl bg-cream max-border max-shadow-sm flex items-start gap-3 rotate-1">
+        <div className="w-10 h-10 rounded-xl max-border flex items-center justify-center shrink-0" style={{ backgroundColor: 'var(--color-ticket-orange)' }}>
           <MapPin className="w-5 h-5" style={{ color: 'var(--color-ink)' }} />
         </div>
         <div>
@@ -152,7 +152,7 @@ export default function AboutPage() {
         <Link
           href="/get-a-quote"
           className="focus-ring max-press relative inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-black text-sm shrink-0 max-border max-shadow-sm"
-          style={{ backgroundColor: 'var(--color-max-yellow)', color: 'var(--color-ink)' }}
+          style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'var(--color-ink)' }}
         >
           Get a Quote
           <ArrowRight className="w-4 h-4" />

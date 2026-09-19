@@ -33,22 +33,21 @@
   --font-display: "Cabinet Grotesk", var(--font-sans);
   --font-accent: "Cormorant Garamond", serif;
 
-  /* Neo-maximalism accent palette — exactly 3 colors (blue/yellow/orange),
-     reused deliberately everywhere across the whole WEB app instead of a
-     different hue per section. Paired with thick black outlines + hard
-     offset shadows (.max-border/.max-shadow below) rather than a wide
-     rainbow of colors — that restraint is what makes it "neo" rather than
-     just loud. --color-ink is the shared border/text neutral. */
-  --color-max-blue: #2f6fff;
-  --color-max-yellow: #ffd400;
-  --color-max-orange: #ff5c3d;
+  /* "Boarding pass" palette — one confident accent (a saturated
+     ticket-stub orange), pure black, and a warm cream/stone neutral in
+     place of stark white. Used everywhere instead of the old 3-hue
+     neo-maximalism set: orange for the one thing that must pop per
+     section, black for ink/chrome, cream for the "paper" background. */
+  --color-ticket-orange: #ff5a1f;
+  --color-cream: #f4efe6;
+  --color-stone: #e7e2d8;
   --color-ink: #0a0a0a;
 }
 
 @layer base {
   html,
   body {
-    background-color: #ffffff;
+    background-color: var(--color-cream);
     color: #0f172a;
   }
 

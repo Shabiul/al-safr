@@ -5,10 +5,10 @@ import { StaticPageShell } from '@/components/StaticPageShell';
 import { Phone, Mail, MapPin, Clock, CheckCircle2, MessageCircle } from 'lucide-react';
 
 const CONTACT_CARDS = [
-  { icon: Phone, label: 'Phone', value: '+91 99005 17604', href: 'tel:+919900517604', color: 'var(--color-max-yellow)' },
-  { icon: Mail, label: 'Email', value: 'luckysaj@gmail.com', href: 'mailto:luckysaj@gmail.com', color: 'var(--color-max-orange)' },
-  { icon: MapPin, label: 'Office', value: 'A.M. Plaza, Hospital Road, Shivaji Nagar, Bengaluru 560001', color: 'var(--color-max-blue)' },
-  { icon: Clock, label: 'Hours', value: 'Mon – Sat: 10:00 AM – 8:00 PM · Sunday: by appointment', color: 'var(--color-max-blue)' },
+  { icon: Phone, label: 'Phone', value: '+91 99005 17604', href: 'tel:+919900517604', color: 'var(--color-ticket-orange)' },
+  { icon: Mail, label: 'Email', value: 'luckysaj@gmail.com', href: 'mailto:luckysaj@gmail.com', color: 'var(--color-ticket-orange)' },
+  { icon: MapPin, label: 'Office', value: 'A.M. Plaza, Hospital Road, Shivaji Nagar, Bengaluru 560001', color: 'var(--color-ticket-orange)' },
+  { icon: Clock, label: 'Hours', value: 'Mon – Sat: 10:00 AM – 8:00 PM · Sunday: by appointment', color: 'var(--color-ticket-orange)' },
 ];
 
 export default function ContactPage() {
@@ -36,15 +36,15 @@ export default function ContactPage() {
   if (status === 'done') {
     return (
       <StaticPageShell title="Message sent">
-        <div className="p-8 rounded-2xl bg-white max-border max-shadow flex items-start gap-3">
-          <div className="w-11 h-11 rounded-xl max-border flex items-center justify-center shrink-0" style={{ backgroundColor: 'var(--color-max-blue)' }}>
+        <div className="p-8 rounded-2xl bg-cream max-border max-shadow flex items-start gap-3">
+          <div className="w-11 h-11 rounded-xl max-border flex items-center justify-center shrink-0" style={{ backgroundColor: 'var(--color-ticket-orange)' }}>
             <CheckCircle2 className="w-6 h-6" style={{ color: 'var(--color-ink)' }} />
           </div>
           <div>
             <h2 className="font-black text-slate-900">Thanks, {name.split(' ')[0]}.</h2>
             <p className="text-sm text-slate-600 mt-1">
               We&apos;ve got your message. For anything urgent, call us directly at{' '}
-              <a href="tel:+919900517604" className="font-black" style={{ color: 'var(--color-max-blue)' }}>+91 99005 17604</a>.
+              <a href="tel:+919900517604" className="font-black" style={{ color: 'var(--color-ticket-orange)' }}>+91 99005 17604</a>.
             </p>
           </div>
         </div>
@@ -70,11 +70,11 @@ export default function ContactPage() {
           );
           const rotation = i % 2 === 0 ? '-rotate-1' : 'rotate-1';
           return c.href ? (
-            <a key={c.label} href={c.href} className={`max-press p-4 rounded-2xl bg-white max-border max-shadow-sm flex items-start gap-3 ${rotation}`}>
+            <a key={c.label} href={c.href} className={`max-press p-4 rounded-2xl bg-cream max-border max-shadow-sm flex items-start gap-3 ${rotation}`}>
               {content}
             </a>
           ) : (
-            <div key={c.label} className={`p-4 rounded-2xl bg-white max-border max-shadow-sm flex items-start gap-3 ${rotation}`}>
+            <div key={c.label} className={`p-4 rounded-2xl bg-cream max-border max-shadow-sm flex items-start gap-3 ${rotation}`}>
               {content}
             </div>
           );
@@ -82,9 +82,9 @@ export default function ContactPage() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
-        <form onSubmit={handleSubmit} className="lg:col-span-3 space-y-4 rounded-2xl bg-white max-border max-shadow p-6">
+        <form onSubmit={handleSubmit} className="lg:col-span-3 space-y-4 rounded-2xl bg-cream max-border max-shadow p-6">
           <div className="flex items-center gap-2 mb-1">
-            <div className="w-9 h-9 rounded-lg max-border flex items-center justify-center" style={{ backgroundColor: 'var(--color-max-yellow)' }}>
+            <div className="w-9 h-9 rounded-lg max-border flex items-center justify-center" style={{ backgroundColor: 'var(--color-ticket-orange)' }}>
               <MessageCircle className="w-4.5 h-4.5" style={{ color: 'var(--color-ink)' }} />
             </div>
             <h2 className="font-black text-slate-900">Send us a message</h2>
@@ -130,7 +130,7 @@ export default function ContactPage() {
             />
           </label>
           {status === 'error' && (
-            <p className="text-sm font-bold px-3 py-2 rounded-lg max-border" style={{ backgroundColor: 'var(--color-max-orange)', color: 'white' }}>
+            <p className="text-sm font-bold px-3 py-2 rounded-lg max-border" style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'white' }}>
               Something went wrong — please try again.
             </p>
           )}
@@ -138,7 +138,7 @@ export default function ContactPage() {
             type="submit"
             disabled={status === 'submitting'}
             className="focus-ring max-press w-full sm:w-auto px-8 disabled:opacity-50 rounded-xl py-2.5 font-black text-sm max-border max-shadow-sm"
-            style={{ backgroundColor: 'var(--color-max-yellow)', color: 'var(--color-ink)' }}
+            style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'var(--color-ink)' }}
           >
             {status === 'submitting' ? 'Sending…' : 'Send message'}
           </button>
@@ -155,7 +155,7 @@ export default function ContactPage() {
           <div className="relative h-full flex flex-col justify-end p-5 text-white">
             <span
               className="inline-block w-fit text-[11px] font-black tracking-widest uppercase px-2.5 py-1 rounded-full max-border mb-2"
-              style={{ backgroundColor: 'var(--color-max-blue)', color: 'white' }}
+              style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'white' }}
             >
               Visit us
             </span>
