@@ -29,33 +29,49 @@ export default function LoginPage() {
 
   return (
     <main className="max-w-sm mx-auto py-16 px-4">
-      <h1 className="text-2xl font-semibold mb-6 text-slate-900">Log in</h1>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <input
-          type="email"
-          required
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="focus-ring w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm"
-        />
-        <input
-          type="password"
-          required
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="focus-ring w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm"
-        />
-        {error && <p className="text-sm text-rose-600">{error}</p>}
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className="focus-ring w-full bg-brand-600 hover:bg-brand-700 disabled:opacity-50 text-white rounded-xl py-2.5 font-semibold text-sm transition-colors"
+      <div className="rounded-3xl bg-white p-7 sm:p-8 max-border max-shadow rotate-1">
+        <span
+          className="inline-block text-xs font-black tracking-widest uppercase px-3 py-1 rounded-full max-border -rotate-3 mb-4"
+          style={{ backgroundColor: 'var(--color-max-yellow)', color: 'var(--color-ink)' }}
         >
-          {isSubmitting ? 'Logging in…' : 'Log in'}
-        </button>
-      </form>
+          Welcome back
+        </span>
+        <h1 className="text-3xl font-black tracking-tight mb-6 text-slate-900">Log in</h1>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <input
+            type="email"
+            required
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="focus-ring w-full rounded-xl px-3 py-2.5 text-sm font-medium max-border"
+          />
+          <input
+            type="password"
+            required
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="focus-ring w-full rounded-xl px-3 py-2.5 text-sm font-medium max-border"
+          />
+          {error && (
+            <p
+              className="text-sm font-bold px-3 py-2 rounded-xl max-border"
+              style={{ backgroundColor: 'var(--color-max-pink)', color: 'white' }}
+            >
+              {error}
+            </p>
+          )}
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="focus-ring max-press w-full disabled:opacity-50 rounded-xl py-3 font-black text-sm max-border max-shadow"
+            style={{ backgroundColor: 'var(--color-max-yellow)', color: 'var(--color-ink)' }}
+          >
+            {isSubmitting ? 'Logging in…' : 'Log in'}
+          </button>
+        </form>
+      </div>
     </main>
   );
 }

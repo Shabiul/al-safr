@@ -32,13 +32,13 @@ export default function GetAQuotePage() {
   if (status === 'done') {
     return (
       <StaticPageShell title="Quote request received">
-        <div className="p-8 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-start gap-3">
-          <CheckCircle2 className="w-6 h-6 text-emerald-600 shrink-0" />
+        <div className="p-8 rounded-2xl max-border max-shadow flex items-start gap-3" style={{ backgroundColor: 'var(--color-max-green)' }}>
+          <CheckCircle2 className="w-6 h-6 shrink-0" style={{ color: 'var(--color-ink)' }} />
           <div>
-            <h2 className="font-semibold text-slate-900">Thanks, {name.split(' ')[0]}.</h2>
-            <p className="text-sm text-slate-600 mt-1">
+            <h2 className="font-black text-slate-900">Thanks, {name.split(' ')[0]}.</h2>
+            <p className="text-sm text-slate-800 mt-1 font-medium">
               We&apos;ll get back to you shortly at {phone}. For anything urgent, call{' '}
-              <a href="tel:+919900517604" className="text-brand-700 font-medium">+91 99005 17604</a> directly.
+              <a href="tel:+919900517604" className="font-black underline">+91 99005 17604</a> directly.
             </p>
           </div>
         </div>
@@ -51,59 +51,75 @@ export default function GetAQuotePage() {
       title="Get a quote"
       subtitle="Tell us what you're planning — quotes are free, and we usually reply the same day."
     >
-      <form onSubmit={handleSubmit} className="space-y-4 max-w-lg">
+      <form onSubmit={handleSubmit} className="space-y-4 max-w-lg rounded-2xl max-border max-shadow bg-white p-5 sm:p-7">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <input
-            type="text"
-            required
-            placeholder="Your name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="focus-ring w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm"
-          />
-          <input
-            type="tel"
-            required
-            placeholder="Mobile number"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            className="focus-ring w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm"
-          />
+          <div>
+            <label className="block text-xs font-black uppercase tracking-wide text-slate-900 mb-1">Your name</label>
+            <input
+              type="text"
+              required
+              placeholder="Your name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="focus-ring max-border w-full rounded-xl px-3 py-2.5 text-sm"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-black uppercase tracking-wide text-slate-900 mb-1">Mobile number</label>
+            <input
+              type="tel"
+              required
+              placeholder="Mobile number"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              className="focus-ring max-border w-full rounded-xl px-3 py-2.5 text-sm"
+            />
+          </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <select
-            value={service}
-            onChange={(e) => setService(e.target.value)}
-            className="focus-ring w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm bg-white"
-          >
-            {SERVICES.map((s) => (
-              <option key={s} value={s}>{s}</option>
-            ))}
-          </select>
-          <input
-            type="text"
-            placeholder="Destination (e.g. Dubai, Bali...)"
-            value={destination}
-            onChange={(e) => setDestination(e.target.value)}
-            className="focus-ring w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm"
+          <div>
+            <label className="block text-xs font-black uppercase tracking-wide text-slate-900 mb-1">Service</label>
+            <select
+              value={service}
+              onChange={(e) => setService(e.target.value)}
+              className="focus-ring max-border w-full rounded-xl px-3 py-2.5 text-sm bg-white"
+            >
+              {SERVICES.map((s) => (
+                <option key={s} value={s}>{s}</option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="block text-xs font-black uppercase tracking-wide text-slate-900 mb-1">Destination</label>
+            <input
+              type="text"
+              placeholder="Destination (e.g. Dubai, Bali...)"
+              value={destination}
+              onChange={(e) => setDestination(e.target.value)}
+              className="focus-ring max-border w-full rounded-xl px-3 py-2.5 text-sm"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label className="block text-xs font-black uppercase tracking-wide text-slate-900 mb-1">Details</label>
+          <textarea
+            rows={4}
+            placeholder="Any details that help us quote accurately (dates, number of travellers, budget...)"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            className="focus-ring max-border w-full rounded-xl px-3 py-2.5 text-sm resize-none"
           />
         </div>
 
-        <textarea
-          rows={4}
-          placeholder="Any details that help us quote accurately (dates, number of travellers, budget...)"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          className="focus-ring w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm resize-none"
-        />
-
-        {status === 'error' && <p className="text-sm text-rose-600">Something went wrong — please try again.</p>}
+        {status === 'error' && <p className="text-sm text-rose-600 font-bold">Something went wrong — please try again.</p>}
 
         <button
           type="submit"
           disabled={status === 'submitting'}
-          className="focus-ring w-full sm:w-auto px-8 bg-brand-600 hover:bg-brand-700 disabled:opacity-50 text-white rounded-xl py-2.5 font-semibold text-sm transition-colors"
+          className="focus-ring max-press w-full sm:w-auto px-8 disabled:opacity-50 rounded-xl py-3 font-black text-sm max-border max-shadow"
+          style={{ backgroundColor: 'var(--color-max-yellow)', color: 'var(--color-ink)' }}
         >
           {status === 'submitting' ? 'Sending…' : 'Get free quote'}
         </button>

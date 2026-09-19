@@ -224,18 +224,19 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
   };
 
   return (
-    <div className="bg-white rounded-3xl border border-slate-200 p-5 sm:p-7 shadow-sm">
+    <div className="bg-white rounded-3xl p-5 sm:p-7 max-border max-shadow">
       <form onSubmit={handleExecuteSearch} className="space-y-5">
         {/* Top Segmented Controls: Trip Type & Supersonic Filter */}
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4">
-          <div className="flex items-center bg-slate-100 p-1 rounded-xl text-sm">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b-[3px] pb-4" style={{ borderColor: 'var(--color-ink)' }}>
+          <div className="flex items-center bg-slate-100 p-1 rounded-xl text-sm max-border">
             <button
               type="button"
               onClick={() => setTripType('round')}
               aria-pressed={tripType === 'round'}
-              className={`focus-ring px-3.5 py-1.5 rounded-lg font-medium transition-colors ${
-                tripType === 'round' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-900'
+              className={`focus-ring px-3.5 py-1.5 rounded-lg font-black transition-colors ${
+                tripType === 'round' ? 'bg-white text-slate-900' : 'text-slate-500 hover:text-slate-900'
               }`}
+              style={tripType === 'round' ? { backgroundColor: 'var(--color-max-pink)', color: 'white' } : undefined}
             >
               Round trip
             </button>
@@ -243,9 +244,10 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
               type="button"
               onClick={() => setTripType('oneway')}
               aria-pressed={tripType === 'oneway'}
-              className={`focus-ring px-3.5 py-1.5 rounded-lg font-medium transition-colors ${
-                tripType === 'oneway' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-900'
+              className={`focus-ring px-3.5 py-1.5 rounded-lg font-black transition-colors ${
+                tripType === 'oneway' ? 'bg-white text-slate-900' : 'text-slate-500 hover:text-slate-900'
               }`}
+              style={tripType === 'oneway' ? { backgroundColor: 'var(--color-max-pink)', color: 'white' } : undefined}
             >
               One way
             </button>
@@ -257,27 +259,27 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
               type="button"
               onClick={() => setCurSupersonic(!curSupersonic)}
               aria-pressed={curSupersonic}
-              className={`focus-ring px-3 py-1.5 rounded-xl border text-sm font-medium flex items-center gap-1.5 transition-colors ${
-                curSupersonic
-                  ? 'bg-accent-50 border-accent-300 text-accent-700'
-                  : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
+              className={`focus-ring px-3 py-1.5 rounded-xl text-sm font-black flex items-center gap-1.5 transition-colors max-border ${
+                curSupersonic ? 'text-white' : 'bg-white text-slate-600 hover:bg-slate-50'
               }`}
+              style={curSupersonic ? { backgroundColor: 'var(--color-max-yellow)', color: 'var(--color-ink)' } : undefined}
             >
-              <Zap className="w-3.5 h-3.5 fill-current text-accent-500" />
+              <Zap className="w-3.5 h-3.5 fill-current" style={{ color: curSupersonic ? 'var(--color-ink)' : 'var(--color-max-orange)' }} />
               Supersonic only
             </button>
 
             {/* Cabin Class Selection */}
-            <div className="flex items-center bg-slate-100 p-1 rounded-xl text-sm">
+            <div className="flex items-center bg-slate-100 p-1 rounded-xl text-sm max-border">
               {(['economy', 'business', 'first'] as const).map((c) => (
                 <button
                   key={c}
                   type="button"
                   onClick={() => setCurCabin(c)}
                   aria-pressed={curCabin === c}
-                  className={`focus-ring px-3 py-1 rounded-lg capitalize font-medium transition-colors ${
-                    curCabin === c ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-900'
+                  className={`focus-ring px-3 py-1 rounded-lg capitalize font-black transition-colors ${
+                    curCabin === c ? 'bg-white text-slate-900' : 'text-slate-500 hover:text-slate-900'
                   }`}
+                  style={curCabin === c ? { backgroundColor: 'var(--color-max-pink)', color: 'white' } : undefined}
                 >
                   {c}
                 </button>
@@ -299,22 +301,23 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
               }}
               aria-haspopup="listbox"
               aria-expanded={isOriginOpen}
-              className={`focus-ring w-full text-left p-4 rounded-2xl border transition-colors bg-slate-50 hover:bg-slate-100 ${
-                isOriginOpen ? 'border-brand-400 bg-white ring-2 ring-brand-100' : 'border-slate-200'
+              className={`focus-ring w-full text-left p-4 rounded-2xl transition-colors bg-slate-50 hover:bg-slate-100 max-border ${
+                isOriginOpen ? 'bg-white' : ''
               }`}
+              style={isOriginOpen ? { boxShadow: '5px 5px 0 0 var(--color-max-pink)' } : undefined}
             >
-              <div className="flex items-center justify-between text-slate-500 text-xs font-medium">
+              <div className="flex items-center justify-between text-slate-500 text-xs font-black uppercase">
                 <span className="flex items-center gap-1.5">
-                  <PlaneTakeoff className="w-3.5 h-3.5 text-brand-600" />
+                  <PlaneTakeoff className="w-3.5 h-3.5" style={{ color: 'var(--color-max-pink)' }} />
                   From
                 </span>
-                <span className="text-[11px] text-brand-700 bg-brand-50 px-1.5 py-0.5 rounded font-semibold">
+                <span className="text-[11px] text-white px-1.5 py-0.5 rounded font-black" style={{ backgroundColor: 'var(--color-max-pink)' }}>
                   {originInfo.code}
                 </span>
               </div>
 
               <div className="mt-1">
-                <div className="text-xl font-semibold text-slate-900 tracking-tight">
+                <div className="text-xl font-black text-slate-900 tracking-tight">
                   {originInfo.city}
                 </div>
                 <div className="text-xs text-slate-500 truncate mt-0.5">
@@ -328,7 +331,7 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
               <div
                 role="listbox"
                 aria-label="Departure airport"
-                className="absolute top-full left-0 right-0 sm:w-96 mt-2 bg-white rounded-2xl border border-slate-200 shadow-xl z-50 p-4 space-y-3"
+                className="absolute top-full left-0 right-0 sm:w-96 mt-2 bg-white rounded-2xl z-50 p-4 space-y-3 max-border max-shadow"
               >
                 {/* Search Input Field */}
                 <div className="relative">
@@ -343,7 +346,7 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
                     placeholder="City, airport, or code…"
                     value={originSearch}
                     onChange={(e) => setOriginSearch(e.target.value)}
-                    className="focus-ring w-full pl-9 pr-8 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 font-medium focus:border-brand-400 focus:bg-white"
+                    className="focus-ring w-full pl-9 pr-8 py-2.5 bg-slate-50 rounded-xl text-sm text-slate-900 font-bold max-border focus:bg-white"
                   />
                   {originSearch && (
                     <button
@@ -370,7 +373,7 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
                           setOriginResolved(null);
                           setIsOriginOpen(false);
                         }}
-                        className="focus-ring px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-brand-50 hover:text-brand-700 text-xs text-slate-700 transition-colors"
+                        className="focus-ring px-2.5 py-1 rounded-full bg-slate-100 hover:bg-[var(--color-max-pink)] hover:text-white text-xs font-bold text-slate-700 transition-colors max-border"
                       >
                         {city}
                       </button>
@@ -380,7 +383,7 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
 
                 {/* Filtered Airports List */}
                 {isSearchingOrigin && (
-                  <p className="text-xs text-brand-600 animate-pulse">Searching live airport data…</p>
+                  <p className="text-xs font-bold animate-pulse" style={{ color: 'var(--color-max-pink)' }}>Searching live airport data…</p>
                 )}
                 <div className="max-h-56 overflow-y-auto space-y-1 divide-y divide-slate-100 pt-1">
                   {filteredOrigins.map((a) => (
@@ -397,17 +400,17 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
                       className="focus-ring w-full px-3 py-2.5 rounded-xl text-left hover:bg-slate-50 transition-colors flex items-center justify-between group"
                     >
                       <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-lg bg-slate-100 text-slate-700 font-medium text-xs flex items-center justify-center group-hover:bg-brand-50 group-hover:text-brand-700">
+                        <div className="w-9 h-9 rounded-lg bg-slate-100 text-slate-700 font-black text-xs flex items-center justify-center group-hover:bg-[var(--color-max-pink)] group-hover:text-white transition-colors">
                           {a.code}
                         </div>
                         <div>
-                          <div className="text-sm font-medium text-slate-900">
+                          <div className="text-sm font-bold text-slate-900">
                             {a.city}, {a.country}
                           </div>
                           <div className="text-xs text-slate-500 truncate max-w-[190px]">{a.name}</div>
                         </div>
                       </div>
-                      {curOrigin === a.code && <Check className="w-4 h-4 text-brand-600 shrink-0" />}
+                      {curOrigin === a.code && <Check className="w-4 h-4 shrink-0" style={{ color: 'var(--color-max-pink)' }} />}
                     </button>
                   ))}
 
@@ -420,9 +423,10 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
                         setOriginResolved(null);
                         setIsOriginOpen(false);
                       }}
-                      className="focus-ring w-full px-3 py-2.5 rounded-xl text-left bg-brand-50 hover:bg-brand-100 transition-colors mt-2 flex items-center gap-2 text-sm text-brand-900 font-medium"
+                      className="focus-ring w-full px-3 py-2.5 rounded-xl text-left transition-colors mt-2 flex items-center gap-2 text-sm font-black max-border"
+                      style={{ backgroundColor: 'var(--color-max-yellow)', color: 'var(--color-ink)' }}
                     >
-                      <MapPin className="w-4 h-4 text-brand-600 shrink-0" />
+                      <MapPin className="w-4 h-4 shrink-0" />
                       Use &quot;{originSearch.trim()}&quot; as custom origin
                     </button>
                   )}
@@ -437,7 +441,7 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
               type="button"
               onClick={swapLocations}
               aria-label="Swap departure and destination"
-              className={`focus-ring w-10 h-10 rounded-full bg-white hover:bg-brand-50 text-slate-600 hover:text-brand-600 border border-slate-200 hover:border-brand-300 flex items-center justify-center transition-all shadow-sm active:scale-90 ${
+              className={`focus-ring w-10 h-10 rounded-full bg-white text-slate-600 flex items-center justify-center transition-all active:scale-90 max-border max-shadow-sm ${
                 isSwapping ? 'rotate-180 duration-300' : ''
               }`}
             >
@@ -456,22 +460,23 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
               }}
               aria-haspopup="listbox"
               aria-expanded={isDestOpen}
-              className={`focus-ring w-full text-left p-4 rounded-2xl border transition-colors bg-slate-50 hover:bg-slate-100 ${
-                isDestOpen ? 'border-brand-400 bg-white ring-2 ring-brand-100' : 'border-slate-200'
+              className={`focus-ring w-full text-left p-4 rounded-2xl transition-colors bg-slate-50 hover:bg-slate-100 max-border ${
+                isDestOpen ? 'bg-white' : ''
               }`}
+              style={isDestOpen ? { boxShadow: '5px 5px 0 0 var(--color-max-pink)' } : undefined}
             >
-              <div className="flex items-center justify-between text-slate-500 text-xs font-medium">
+              <div className="flex items-center justify-between text-slate-500 text-xs font-black uppercase">
                 <span className="flex items-center gap-1.5">
-                  <PlaneLanding className="w-3.5 h-3.5 text-brand-600" />
+                  <PlaneLanding className="w-3.5 h-3.5" style={{ color: 'var(--color-max-pink)' }} />
                   To
                 </span>
-                <span className="text-[11px] text-brand-700 bg-brand-50 px-1.5 py-0.5 rounded font-semibold">
+                <span className="text-[11px] text-white px-1.5 py-0.5 rounded font-black" style={{ backgroundColor: 'var(--color-max-pink)' }}>
                   {destInfo.code}
                 </span>
               </div>
 
               <div className="mt-1">
-                <div className="text-xl font-semibold text-slate-900 tracking-tight">
+                <div className="text-xl font-black text-slate-900 tracking-tight">
                   {destInfo.city}
                 </div>
                 <div className="text-xs text-slate-500 truncate mt-0.5">
@@ -485,7 +490,7 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
               <div
                 role="listbox"
                 aria-label="Arrival airport"
-                className="absolute top-full left-0 right-0 sm:w-96 mt-2 bg-white rounded-2xl border border-slate-200 shadow-xl z-50 p-4 space-y-3"
+                className="absolute top-full left-0 right-0 sm:w-96 mt-2 bg-white rounded-2xl z-50 p-4 space-y-3 max-border max-shadow"
               >
                 {/* Search Input Field */}
                 <div className="relative">
@@ -500,7 +505,7 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
                     placeholder="City, airport, or code…"
                     value={destSearch}
                     onChange={(e) => setDestSearch(e.target.value)}
-                    className="focus-ring w-full pl-9 pr-8 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 font-medium focus:border-brand-400 focus:bg-white"
+                    className="focus-ring w-full pl-9 pr-8 py-2.5 bg-slate-50 rounded-xl text-sm text-slate-900 font-bold max-border focus:bg-white"
                   />
                   {destSearch && (
                     <button
@@ -527,7 +532,7 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
                           setDestResolved(null);
                           setIsDestOpen(false);
                         }}
-                        className="focus-ring px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-brand-50 hover:text-brand-700 text-xs text-slate-700 transition-colors"
+                        className="focus-ring px-2.5 py-1 rounded-full bg-slate-100 hover:bg-[var(--color-max-pink)] hover:text-white text-xs font-bold text-slate-700 transition-colors max-border"
                       >
                         {city}
                       </button>
@@ -537,7 +542,7 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
 
                 {/* Filtered Airports List */}
                 {isSearchingDest && (
-                  <p className="text-xs text-brand-600 animate-pulse">Searching live airport data…</p>
+                  <p className="text-xs font-bold animate-pulse" style={{ color: 'var(--color-max-pink)' }}>Searching live airport data…</p>
                 )}
                 <div className="max-h-56 overflow-y-auto space-y-1 divide-y divide-slate-100 pt-1">
                   {filteredDests.map((a) => (
@@ -554,17 +559,17 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
                       className="focus-ring w-full px-3 py-2.5 rounded-xl text-left hover:bg-slate-50 transition-colors flex items-center justify-between group"
                     >
                       <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-lg bg-slate-100 text-slate-700 font-medium text-xs flex items-center justify-center group-hover:bg-brand-50 group-hover:text-brand-700">
+                        <div className="w-9 h-9 rounded-lg bg-slate-100 text-slate-700 font-black text-xs flex items-center justify-center group-hover:bg-[var(--color-max-pink)] group-hover:text-white transition-colors">
                           {a.code}
                         </div>
                         <div>
-                          <div className="text-sm font-medium text-slate-900">
+                          <div className="text-sm font-bold text-slate-900">
                             {a.city}, {a.country}
                           </div>
                           <div className="text-xs text-slate-500 truncate max-w-[190px]">{a.name}</div>
                         </div>
                       </div>
-                      {curDest === a.code && <Check className="w-4 h-4 text-brand-600 shrink-0" />}
+                      {curDest === a.code && <Check className="w-4 h-4 shrink-0" style={{ color: 'var(--color-max-pink)' }} />}
                     </button>
                   ))}
 
@@ -577,9 +582,10 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
                         setDestResolved(null);
                         setIsDestOpen(false);
                       }}
-                      className="focus-ring w-full px-3 py-2.5 rounded-xl text-left bg-brand-50 hover:bg-brand-100 transition-colors mt-2 flex items-center gap-2 text-sm text-brand-900 font-medium"
+                      className="focus-ring w-full px-3 py-2.5 rounded-xl text-left transition-colors mt-2 flex items-center gap-2 text-sm font-black max-border"
+                      style={{ backgroundColor: 'var(--color-max-yellow)', color: 'var(--color-ink)' }}
                     >
-                      <MapPin className="w-4 h-4 text-brand-600 shrink-0" />
+                      <MapPin className="w-4 h-4 shrink-0" />
                       Use &quot;{destSearch.trim()}&quot; as destination
                     </button>
                   )}
@@ -590,10 +596,10 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
 
           {/* DATES CARD */}
           <div className="md:col-span-3 space-y-1">
-            <div className="p-4 rounded-2xl border border-slate-200 bg-slate-50">
-              <div className="flex items-center justify-between text-slate-500 text-xs font-medium">
+            <div className="p-4 rounded-2xl bg-slate-50 max-border">
+              <div className="flex items-center justify-between text-slate-500 text-xs font-black uppercase">
                 <span className="flex items-center gap-1.5">
-                  <Calendar className="w-3.5 h-3.5 text-brand-600" />
+                  <Calendar className="w-3.5 h-3.5" style={{ color: 'var(--color-max-pink)' }} />
                   Departure {tripType === 'round' && '& return'}
                 </span>
               </div>
@@ -608,7 +614,7 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
                     type="date"
                     value={curDepDate}
                     onChange={(e) => setCurDepDate(e.target.value)}
-                    className="focus-ring w-full px-2 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-medium text-slate-900 cursor-pointer"
+                    className="focus-ring w-full px-2 py-1.5 bg-white rounded-lg text-xs font-bold text-slate-900 cursor-pointer max-border"
                   />
                 </div>
                 {tripType === 'round' ? (
@@ -621,11 +627,11 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
                       type="date"
                       value={curRetDate}
                       onChange={(e) => setCurRetDate(e.target.value)}
-                      className="focus-ring w-full px-2 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-medium text-slate-900 cursor-pointer"
+                      className="focus-ring w-full px-2 py-1.5 bg-white rounded-lg text-xs font-bold text-slate-900 cursor-pointer max-border"
                     />
                   </div>
                 ) : (
-                  <div className="px-2 py-1.5 bg-slate-100 border border-slate-200 rounded-lg text-[11px] text-slate-400 flex items-center justify-center font-medium">
+                  <div className="px-2 py-1.5 bg-slate-100 rounded-lg text-[11px] text-slate-400 flex items-center justify-center font-bold max-border">
                     One-way
                   </div>
                 )}
@@ -640,18 +646,18 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
               onClick={() => setIsPassengerOpen((v) => !v)}
               aria-haspopup="dialog"
               aria-expanded={isPassengerOpen}
-              className="focus-ring w-full text-left p-4 rounded-2xl border border-slate-200 bg-slate-50 hover:bg-slate-100 transition-colors"
+              className="focus-ring w-full text-left p-4 rounded-2xl bg-slate-50 hover:bg-slate-100 transition-colors max-border"
             >
-              <div className="flex items-center justify-between text-slate-500 text-xs font-medium">
+              <div className="flex items-center justify-between text-slate-500 text-xs font-black uppercase">
                 <span className="flex items-center gap-1.5">
-                  <Users className="w-3.5 h-3.5 text-brand-600" />
+                  <Users className="w-3.5 h-3.5" style={{ color: 'var(--color-max-pink)' }} />
                   Travelers
                 </span>
                 <ChevronDown className="w-3 h-3 text-slate-400" aria-hidden="true" />
               </div>
 
               <div className="mt-1">
-                <div className="text-lg font-semibold text-slate-900">
+                <div className="text-lg font-black text-slate-900">
                   {curPassengers} {curPassengers === 1 ? 'guest' : 'guests'}
                 </div>
                 <div className="text-xs text-slate-500 capitalize truncate">{curCabin}</div>
@@ -660,37 +666,38 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
 
             {/* Travellers Popover */}
             {isPassengerOpen && (
-              <div className="absolute top-full right-0 w-64 mt-2 bg-white rounded-2xl border border-slate-200 shadow-xl z-50 p-4 space-y-4">
+              <div className="absolute top-full right-0 w-64 mt-2 bg-white rounded-2xl z-50 p-4 space-y-4 max-border max-shadow">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-slate-700">Travelers</span>
+                  <span className="text-sm font-black text-slate-700">Travelers</span>
                   <div className="flex items-center gap-2">
                     <button
                       type="button"
                       onClick={() => setCurPassengers(Math.max(1, curPassengers - 1))}
                       aria-label="Decrease travelers"
-                      className="focus-ring w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-sm flex items-center justify-center"
+                      className="focus-ring w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-black text-sm flex items-center justify-center max-border"
                     >
                       −
                     </button>
-                    <span className="font-semibold text-sm w-4 text-center" aria-live="polite">
+                    <span className="font-black text-sm w-4 text-center" aria-live="polite">
                       {curPassengers}
                     </span>
                     <button
                       type="button"
                       onClick={() => setCurPassengers(Math.min(9, curPassengers + 1))}
                       aria-label="Increase travelers"
-                      className="focus-ring w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-sm flex items-center justify-center"
+                      className="focus-ring w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-black text-sm flex items-center justify-center max-border"
                     >
                       +
                     </button>
                   </div>
                 </div>
 
-                <div className="pt-2 border-t border-slate-100">
+                <div className="pt-2 border-t-2" style={{ borderColor: 'var(--color-ink)' }}>
                   <button
                     type="button"
                     onClick={() => setIsPassengerOpen(false)}
-                    className="focus-ring w-full py-1.5 bg-brand-600 hover:bg-brand-700 text-white rounded-lg text-sm font-medium transition-colors"
+                    className="focus-ring max-press w-full py-1.5 text-white rounded-lg text-sm font-black transition-colors max-border"
+                    style={{ backgroundColor: 'var(--color-max-pink)' }}
                   >
                     Done
                   </button>
@@ -701,10 +708,11 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
         </div>
 
         {/* Action Button Strip */}
-        <div className="pt-3 flex flex-col sm:flex-row sm:items-center justify-end gap-4 border-t border-slate-100">
+        <div className="pt-3 flex flex-col sm:flex-row sm:items-center justify-end gap-4 border-t-[3px]" style={{ borderColor: 'var(--color-ink)' }}>
           <button
             type="submit"
-            className="focus-ring py-3.5 px-8 rounded-2xl bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm transition-colors shadow-sm hover:shadow-md flex items-center justify-center gap-2 group"
+            className="focus-ring max-press py-3.5 px-8 rounded-2xl text-white font-black text-sm transition-colors flex items-center justify-center gap-2 group max-border max-shadow"
+            style={{ backgroundColor: 'var(--color-max-pink)' }}
           >
             <Search className="w-4 h-4 transition-transform group-hover:scale-110" />
             Search flights
