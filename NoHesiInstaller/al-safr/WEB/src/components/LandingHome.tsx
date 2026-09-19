@@ -165,132 +165,126 @@ export const LandingHome: React.FC<LandingHomeProps> = ({ currency, onNavigate }
           them as one unit — the negative margin overlap between them is
           otherwise fragile against a sibling-spacing utility fighting it. */}
       <div>
-      {/* Hero — full-bleed: breaks out of the page's centered max-w-7xl
-          container to span the entire viewport width. Pure black/white:
-          the photo sits under a near-solid black gradient, all badges and
-          buttons are white-on-black or black-on-white. */}
-      <div className="relative left-1/2 right-1/2 -mx-[50vw] w-screen h-svh flex items-center overflow-hidden border-b-8 border-black">
-        <div className="absolute inset-0" aria-hidden="true">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80"
-            alt=""
-            aria-hidden="true"
-            className="absolute inset-0 w-full h-full object-cover grayscale"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-black/75 to-black/50" />
-        </div>
-
-        {/* Scattered sticker shapes — decorative, hidden from a11y tree */}
-        <div className="absolute inset-0 pointer-events-none hidden sm:block" aria-hidden="true">
-          <Zap className="absolute top-28 right-[12%] w-10 h-10 -rotate-12 text-white" />
-          <Star className="absolute bottom-24 right-[22%] w-7 h-7 rotate-12 fill-white text-white" />
-          <div className="absolute top-1/3 right-[6%] w-16 h-16 rounded-full bg-white border-[3px] border-black" />
-        </div>
-
-        <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
-          <div className="max-w-2xl space-y-6">
+      {/* Hero — full-bleed, editorial split: big black type on white sits
+          left, a real color photo in a sticker-bordered frame sits right.
+          Letting the photo run at full color (rather than a dimmed
+          full-bleed background) is the whole point of this layout. */}
+      <div className="relative left-1/2 right-1/2 -mx-[50vw] w-screen overflow-hidden border-b-8 border-black bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div className="space-y-6 relative z-10">
             <div className="flex flex-wrap items-center gap-3">
-              <span className="inline-flex items-center px-4 py-1.5 rounded-full text-xs font-black tracking-wide max-border max-shadow-sm -rotate-3 bg-white text-black">
+              <span className="inline-flex items-center px-4 py-1.5 rounded-full text-xs font-black tracking-wide max-border max-shadow-sm -rotate-3 bg-black text-white">
                 SINCE 2009
               </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold border-2 border-white/60 text-white bg-white/10 backdrop-blur">
-                <Sparkles className="w-3.5 h-3.5 text-white" />
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold max-border text-black bg-white">
+                <Sparkles className="w-3.5 h-3.5 text-black" />
                 Trusted by 10,000+ travellers from Bengaluru
               </span>
             </div>
 
-            <h1 className="text-5xl sm:text-7xl font-black tracking-tight text-white leading-[0.95]">
+            <h1 className="text-5xl sm:text-7xl font-black tracking-tight text-black leading-[0.95]">
               One stop travel
               <br />
               solutions for{' '}
-              <span className="inline-block px-2 -rotate-2 bg-white text-black max-border max-shadow-sm">
+              <span className="inline-block px-2 -rotate-2 bg-black text-white max-border max-shadow-sm">
                 everything
               </span>
             </h1>
 
-            <p className="text-base sm:text-lg text-slate-100 leading-relaxed max-w-lg font-medium">
+            <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-lg font-medium">
               Flights, hotels, tour packages and cabs — searched from real live suppliers. No guesswork, no invented prices.
             </p>
 
             <div className="flex flex-wrap items-center gap-4 pt-2">
               <button
                 onClick={() => onNavigate('book')}
-                className="focus-ring max-press flex items-center gap-2 px-7 py-3.5 rounded-xl font-black text-sm max-border max-shadow bg-white text-black"
+                className="focus-ring max-press flex items-center gap-2 px-7 py-3.5 rounded-xl font-black text-sm max-border max-shadow bg-black text-white"
               >
                 Search flights
                 <ArrowRight className="w-4 h-4" />
               </button>
               <button
                 onClick={() => onNavigate('tours')}
-                className="focus-ring max-press flex items-center gap-2 px-7 py-3.5 rounded-xl font-black text-sm text-white bg-black max-border-invert max-shadow-invert"
+                className="focus-ring max-press flex items-center gap-2 px-7 py-3.5 rounded-xl font-black text-sm text-black bg-white max-border max-shadow"
               >
                 Browse tour packages
               </button>
+            </div>
+          </div>
+
+          <div className="relative h-72 sm:h-[26rem] lg:h-[30rem]">
+            <div className="absolute inset-0 rounded-3xl overflow-hidden max-border max-shadow rotate-2">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600&q=80"
+                alt="A traveller looking out over a scenic destination"
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+            </div>
+            {/* Scattered sticker shapes, layered over the photo's frame */}
+            <div className="absolute inset-0 pointer-events-none hidden sm:block" aria-hidden="true">
+              <Zap className="absolute -top-4 -left-4 w-12 h-12 -rotate-12 fill-white text-black" />
+              <Star className="absolute -bottom-5 -right-3 w-9 h-9 rotate-12 fill-black text-black" />
+              <div className="absolute top-1/4 -right-5 w-16 h-16 rounded-full bg-white border-[3px] border-black flex items-center justify-center text-xs font-black -rotate-6">
+                16+ yrs
+              </div>
             </div>
           </div>
         </div>
       </div>
 
       {/* Stats bar — four chunky, alternately-rotated sticker tiles,
-          alternating white and black fills (default black border/shadow
+          alternating black and accent-color fills (default black border/shadow
           reads fine here since it's the page's white background behind
           them, not a dark section). */}
       <div className="relative z-10 px-4 sm:px-10 -mt-10 sm:-mt-8">
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 max-w-5xl mx-auto">
           {[
-            { value: '16+', label: 'Years of experience', dark: false },
-            { value: '10,000+', label: 'Travellers served', dark: true },
-            { value: '10', label: 'Curated tour packages', dark: false },
-            { value: '500+', label: 'Cars available per search', dark: true },
+            { value: '16+', label: 'Years of experience', bg: 'bg-white', text: 'text-black' },
+            { value: '10,000+', label: 'Travellers served', bg: 'bg-black', text: 'text-white' },
+            { value: '10', label: 'Curated tour packages', bg: 'bg-white', text: 'text-black' },
+            { value: '500+', label: 'Cars available per search', bg: 'bg-black', text: 'text-white' },
           ].map((stat, i) => (
             <div
               key={stat.label}
-              className={`rounded-2xl p-4 sm:p-5 max-border max-shadow-sm ${i % 2 === 0 ? '-rotate-2' : 'rotate-2'} ${stat.dark ? 'bg-black' : 'bg-white'}`}
+              className={`rounded-2xl p-4 sm:p-5 max-border max-shadow-sm ${i % 2 === 0 ? '-rotate-2' : 'rotate-2'} ${stat.bg}`}
             >
-              <CountUpStat value={stat.value} className={`block text-2xl sm:text-3xl font-black ${stat.dark ? 'text-white' : 'text-black'}`} />
-              <div className={`text-xs sm:text-sm font-bold mt-0.5 ${stat.dark ? 'text-slate-300' : 'text-slate-600'}`}>{stat.label}</div>
+              <CountUpStat value={stat.value} className={`block text-2xl sm:text-3xl font-black ${stat.text}`} />
+              <div className={`text-xs sm:text-sm font-bold mt-0.5 ${stat.text} opacity-80`}>{stat.label}</div>
             </div>
           ))}
         </div>
       </div>
       </div>
 
-      {/* Why Book — full-bleed photo section, 6-point trust grid. */}
-      <div className="relative left-1/2 right-1/2 -mx-[50vw] w-screen py-16 sm:py-20 overflow-hidden border-y-8 border-black">
-        <div className="absolute inset-0" aria-hidden="true">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=1920&q=80"
-            alt=""
-            aria-hidden="true"
-            className="absolute inset-0 w-full h-full object-cover grayscale"
-          />
-          <div className="absolute inset-0 bg-black/75" />
+      {/* Why Book — light section, real color photos in sticker frames
+          instead of a dimmed full-bleed background photo. */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+        <div className="text-center space-y-2">
+          <span className="inline-block text-xs font-black tracking-widest uppercase px-3 py-1 rounded-full max-border bg-black text-white">
+            Trust
+          </span>
+          <h2 className="text-3xl sm:text-5xl font-black tracking-tight text-slate-900">
+            Why book with{' '}
+            <span className="inline-block px-2 -rotate-2 bg-black text-white max-border max-shadow-sm">Al-Safr</span>?
+          </h2>
         </div>
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
-          <h2 className="text-3xl sm:text-5xl font-black tracking-tight text-white text-center">
-            Why book with{' '}
-            <span className="inline-block px-2 -rotate-2 bg-white text-black max-border max-shadow-sm">Al-Safr</span>?
-          </h2>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {WHY_BOOK.map((point) => {
-              const Icon = point.icon;
-              return (
-                <div key={point.title} className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 bg-white max-border max-shadow-sm">
-                    <Icon className="w-6 h-6 text-black" />
-                  </div>
-                  <div>
-                    <h3 className="font-black text-white leading-snug">{point.title}</h3>
-                    <p className="text-sm text-slate-300 mt-1 font-medium">{point.description}</p>
-                  </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {WHY_BOOK.map((point) => {
+            const Icon = point.icon;
+            return (
+              <div key={point.title} className="flex items-start gap-4 rounded-2xl p-5 max-border max-shadow-sm bg-white">
+                <div className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 max-border bg-black">
+                  <Icon className="w-6 h-6 text-white" />
                 </div>
-              );
-            })}
-          </div>
+                <div>
+                  <h3 className="font-black text-slate-900 leading-snug">{point.title}</h3>
+                  <p className="text-sm text-slate-500 mt-1 font-medium">{point.description}</p>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
 
@@ -301,7 +295,7 @@ export const LandingHome: React.FC<LandingHomeProps> = ({ currency, onNavigate }
           <img
             src="https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=1200"
             alt="Travel planning"
-            className="w-full h-full object-cover grayscale"
+            className="w-full h-full object-cover"
           />
           <div className="absolute -bottom-4 -left-4 rounded-2xl px-5 py-4 text-white bg-black max-border max-shadow-sm -rotate-3">
             <div className="text-2xl font-black">16+</div>
@@ -369,7 +363,7 @@ export const LandingHome: React.FC<LandingHomeProps> = ({ currency, onNavigate }
                   src={service.image}
                   alt=""
                   aria-hidden="true"
-                  className="absolute inset-0 w-full h-full object-cover grayscale group-hover:scale-105 transition-transform duration-500"
+                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
                 <div
                   className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/85 to-black"
@@ -427,7 +421,7 @@ export const LandingHome: React.FC<LandingHomeProps> = ({ currency, onNavigate }
               >
                 {pkg.images[0] && (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img src={pkg.images[0]} alt={pkg.name} className="absolute inset-0 w-full h-full object-cover grayscale group-hover:scale-105 transition-transform" />
+                  <img src={pkg.images[0]} alt={pkg.name} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform" />
                 )}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-transparent" />
                 <span className="absolute top-3 right-3 text-[11px] font-black text-black bg-white px-2 py-1 rounded-full max-border">
@@ -463,7 +457,7 @@ export const LandingHome: React.FC<LandingHomeProps> = ({ currency, onNavigate }
                 <div className="h-44 bg-slate-100 border-b-[3px] border-black">
                   {pkg.images[0] && (
                     // eslint-disable-next-line @next/next/no-img-element
-                    <img src={pkg.images[0]} alt={pkg.name} className="w-full h-full object-cover grayscale" />
+                    <img src={pkg.images[0]} alt={pkg.name} className="w-full h-full object-cover" />
                   )}
                 </div>
                 <div className="p-5 flex-1 flex flex-col gap-2">
@@ -569,7 +563,7 @@ export const LandingHome: React.FC<LandingHomeProps> = ({ currency, onNavigate }
           (white) shadow to stay visible against it. */}
       <div className="relative left-1/2 right-1/2 -mx-[50vw] w-screen overflow-hidden py-16 sm:py-20 text-center border-y-8 border-white bg-black">
         <div
-          className="absolute inset-0 opacity-20 bg-cover bg-center grayscale"
+          className="absolute inset-0 opacity-20 bg-cover bg-center"
           style={{ backgroundImage: "url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1600')" }}
           aria-hidden="true"
         />
