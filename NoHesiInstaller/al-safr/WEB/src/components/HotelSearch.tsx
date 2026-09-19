@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { CurrencyCode, formatPrice } from '@/services/flightData';
 import { HotelOption } from '@/services/hotelData';
+import { HotelBookingFlow } from '@/components/HotelBookingFlow';
 import {
   Building2,
   Calendar,
@@ -11,7 +12,6 @@ import {
   Star,
   MapPin,
   RefreshCw,
-  ExternalLink,
   X,
   ChevronDown,
   SlidersHorizontal,
@@ -504,12 +504,9 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
             ) : (
               <div className="space-y-3">
                 {filteredSorted.map((hotel) => (
-                  <a
+                  <div
                     key={hotel.id}
-                    href={hotel.bookingUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group bg-white rounded-2xl hover:-translate-y-0.5 transition-all overflow-hidden flex flex-col sm:flex-row max-border max-shadow-sm"
+                    className="group bg-white rounded-2xl hover:-translate-y-0.5 transition-transform overflow-hidden flex flex-col sm:flex-row max-border max-shadow-sm"
                   >
                     <div className="w-full sm:w-56 h-44 sm:h-auto shrink-0 bg-slate-100 overflow-hidden border-b-[3px] sm:border-b-0 sm:border-r-[3px]" style={{ borderColor: 'var(--color-ink)' }}>
                       {hotel.photoUrl ? (
@@ -524,10 +521,7 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
 
                     <div className="p-4 sm:p-5 flex-1 flex flex-col sm:flex-row sm:items-stretch gap-3">
                       <div className="flex-1 min-w-0 space-y-1.5">
-                        <div className="flex items-start justify-between gap-2">
-                          <h3 className="font-black text-base text-slate-900 leading-snug">{hotel.name}</h3>
-                          <ExternalLink className="w-3.5 h-3.5 text-slate-300 shrink-0 mt-1" />
-                        </div>
+                        <h3 className="font-black text-base text-slate-900 leading-snug">{hotel.name}</h3>
 
                         {hotel.stars > 0 && (
                           <div className="flex items-center gap-0.5">
@@ -558,16 +552,28 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
                           </div>
                         )}
                         {hotel.priceUsd != null ? (
-                          <div className="text-right">
-                            <div className="text-lg font-black text-slate-900">{formatPrice(hotel.priceUsd, currency)}</div>
-                            <div className="text-[11px] text-slate-400">per night</div>
+                          <div className="flex sm:flex-col items-center sm:items-end gap-2 sm:gap-2">
+                            <div className="text-right">
+                              <div className="text-lg font-black text-slate-900">{formatPrice(hotel.priceUsd, currency)}</div>
+                              <div className="text-[11px] text-slate-400">per night</div>
+                            </div>
+                            <HotelBookingFlow
+                              hotelName={hotel.name}
+                              hotelAddress={hotel.address || hotel.city}
+                              checkinDate={checkinDate}
+                              checkoutDate={checkoutDate}
+                              rooms={rooms}
+                              adults={adults}
+                              priceUsd={hotel.priceUsd}
+                              currency={currency}
+                            />
                           </div>
                         ) : (
                           <span className="text-xs text-slate-400">Price unavailable</span>
                         )}
                       </div>
                     </div>
-                  </a>
+                  </div>
                 ))}
               </div>
             )}
