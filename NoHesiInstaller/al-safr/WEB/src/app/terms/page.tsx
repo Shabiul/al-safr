@@ -59,7 +59,7 @@ export default function TermsPage() {
           <h2>6. Contact us</h2>
           <p>
             Questions about these terms: <a href="mailto:luckysaj@gmail.com" className="text-brand-700 font-medium">luckysaj@gmail.com</a> or{' '}
-            <a href="tel:+919900517604" className="text-brand-700 font-medium">+91 99005 17604</a>.
+            <a href="tel:+918904563397" className="text-brand-700 font-medium">+91 89045 63397</a> (WhatsApp: +91 89045 63396).
           </p>
         </div>
       </div>

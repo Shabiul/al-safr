@@ -118,6 +118,22 @@ export default function Home() {
     setActiveTab('services');
   };
 
+  // Quick search from Hero Ticket Card or Destination cards
+  const handleQuickSearch = (origin: string, destination: string, date: string, cabin: 'economy' | 'business' | 'first') => {
+    const updated = {
+      ...searchParams,
+      origin,
+      destination,
+      departureDate: date,
+      cabinClass: cabin,
+    };
+    setSearchParams(updated);
+    setSelectedCabin(cabin);
+    fetchLiveFlightData(origin, destination, date, updated.supersonicOnly, cabin);
+    setActiveService('book');
+    setActiveTab('services');
+  };
+
   // LandingHome's cards link to a specific service (book/hotels/tours/cabs)
   // or a top-level tab (bookings) — the services all live under one
   // consolidated "Services" tab with its own sub-navigation.
@@ -146,36 +162,40 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-cream text-slate-900 flex flex-col selection:bg-brand-200 selection:text-brand-900">
+    <div className="min-h-screen bg-[#f4f3ec] text-[#1c1817] flex flex-col selection:bg-[#f36f0f]/20 selection:text-[#f36f0f]">
       <Header
         currency={currency}
         onCurrencyChange={setCurrency}
         apiStatus={apiStatus}
         activeTab={activeTab}
         onTabChange={setActiveTab}
+        onOpenBooking={() => handleNavigate('book')}
       />
 
-      {/* Header is a fixed overlay (transparent over the hero on the home
-          tab), so it no longer reserves space in normal flow — every other
-          tab needs top padding matching its solid height instead. */}
-      <main className={`flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pb-6 sm:pb-8 space-y-6 sm:space-y-8 ${activeTab === 'home' ? '' : 'pt-20 sm:pt-28'}`}>
-        {/* Tab View 0: Landing page */}
-        {activeTab === 'home' && <LandingHome currency={currency} onNavigate={handleNavigate} />}
+      {/* Full-width container on home tab for full-screen hero; padded max-w-7xl on other tabs */}
+      <main className={`flex-1 w-full ${activeTab === 'home' ? '' : 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8 pt-24 sm:pt-28 space-y-6 sm:space-y-8'}`}>
+        {/* Tab View 0: Landing page (UIXSHUVO Complete Redesign) */}
+        {activeTab === 'home' && (
+          <LandingHome
+            currency={currency}
+            onNavigate={handleNavigate}
+            onQuickSearch={handleQuickSearch}
+          />
+        )}
 
         {activeTab !== 'home' && (
           <>
             {/* Live Data Status Bar */}
-            <div className="bg-cream rounded-2xl p-3.5 sm:p-4 flex flex-wrap items-center justify-between gap-3 text-sm border-b-[3px]" style={{ borderColor: 'var(--color-ink)' }}>
+            <div className="bg-white rounded-2xl p-4 flex flex-wrap items-center justify-between gap-3 text-sm border border-slate-200/90 shadow-xs">
               <div className="flex flex-wrap items-center gap-3 text-slate-600">
                 <div
-                  className="flex items-center gap-1.5 font-black text-xs uppercase tracking-wide px-3 py-1.5 rounded-full max-border"
-                  style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'var(--color-ink)' }}
+                  className="flex items-center gap-1.5 font-bold text-xs uppercase tracking-wider px-3 py-1 rounded-full bg-[#f36f0f] text-white shadow-xs"
                 >
-                  <span className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: 'var(--color-ink)' }} aria-hidden="true" />
+                  <span className="w-2 h-2 rounded-full bg-white animate-pulse" aria-hidden="true" />
                   Live data stream
                 </div>
                 <span className="hidden sm:inline text-slate-300">•</span>
-                <span className="hidden sm:inline font-medium">
+                <span className="hidden sm:inline font-medium text-slate-500">
                   Synced {lastLiveSync || 'just now'}
                 </span>
               </div>
@@ -183,7 +203,7 @@ export default function Home() {
               <button
                 onClick={() => fetchLiveFlightData(searchParams.origin, searchParams.destination, searchParams.departureDate, searchParams.supersonicOnly, searchParams.cabinClass)}
                 disabled={isFetchingLive}
-                className="focus-ring max-press flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-cream text-slate-900 max-border text-sm font-black transition-colors disabled:opacity-50"
+                className="focus-ring flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-800 border border-slate-200 text-xs font-bold transition-colors disabled:opacity-50"
               >
                 <RefreshCw className={`w-3.5 h-3.5 ${isFetchingLive ? 'animate-spin' : ''}`} />
                 {isFetchingLive ? 'Syncing…' : 'Refresh'}
@@ -192,12 +212,10 @@ export default function Home() {
           </>
         )}
 
-        {/* Tab View 1: Services hub — Flights, Hotels, Tour Packages, Cabs
-            share one tab with its own sub-navigation, instead of four
-            separate top-level tabs. */}
+        {/* Tab View 1: Services hub — Flights, Hotels, Tour Packages, Cabs */}
         {activeTab === 'services' && (
           <div className="space-y-6">
-            <div className="flex flex-wrap items-center gap-2.5 w-fit">
+            <div className="flex flex-wrap items-center gap-2 w-fit bg-slate-100/80 p-1.5 rounded-2xl border border-slate-200/70">
               {SERVICE_TABS.map((service) => {
                 const Icon = service.icon;
                 const isActive = activeService === service.id;
@@ -207,10 +225,11 @@ export default function Home() {
                     type="button"
                     onClick={() => setActiveService(service.id)}
                     aria-current={isActive ? 'page' : undefined}
-                    className={`focus-ring max-press flex items-center gap-1.5 px-3.5 py-2 rounded-full text-sm font-black max-border transition-colors ${
-                      isActive ? 'max-shadow-sm' : 'bg-cream text-slate-600 hover:text-slate-900'
+                    className={`focus-ring flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all ${
+                      isActive
+                        ? 'bg-[#f36f0f] text-white shadow-sm shadow-orange-500/20'
+                        : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
                     }`}
-                    style={isActive ? { backgroundColor: service.color, color: 'var(--color-ink)' } : undefined}
                   >
                     <Icon className="w-4 h-4" />
                     {service.label}
@@ -388,8 +407,9 @@ export default function Home() {
         )}
       </main>
 
-      {/* Footer */}
-      <footer className="mt-16 py-14 text-sm text-slate-300" style={{ backgroundColor: '#04182c' }}>
+      {/* Footer (Only for secondary services and bookings tabs) */}
+      {activeTab !== 'home' && (
+        <footer className="mt-16 py-14 text-sm text-slate-300" style={{ backgroundColor: '#04182c' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
             <div className="space-y-3">
@@ -428,14 +448,16 @@ export default function Home() {
             <div>
               <h3 className="font-semibold text-white mb-3">Reach us</h3>
               <ul className="space-y-2 text-slate-400">
-                <li>A.M. Plaza, Hospital Road, Shivaji Nagar, Bengaluru 560001</li>
+                <li className="leading-relaxed">53/3, Abbaiah Reddy St, near Celebrity Arch, Doddathoguru, Electronic City Phase I, Electronic City, Bengaluru, Karnataka 560100</li>
                 <li>
-                  <a href="tel:+919900517604" className="hover:text-white transition-colors">+91 99005 17604</a>
+                  <a href="tel:+918904563397" className="hover:text-white transition-colors text-[#f36f0f] font-bold">Call: +91 89045 63397</a>
+                </li>
+                <li>
+                  <a href="https://wa.me/918904563396" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors text-emerald-400 font-bold">WhatsApp: +91 89045 63396</a>
                 </li>
                 <li>
                   <a href="mailto:luckysaj@gmail.com" className="hover:text-white transition-colors">luckysaj@gmail.com</a>
                 </li>
-                <li className="text-slate-500 text-xs pt-1">Registered office: No-06, Classic Complex, Opp Mahindra Apts, Near Wipro, Shikaripalya, Hulimangala Post, Bengaluru — 560105</li>
               </ul>
             </div>
           </div>
@@ -463,6 +485,7 @@ export default function Home() {
           </div>
         </div>
       </footer>
+      )}
 
       {/* Modals & Drawers */}
       <SeatSelectorModal

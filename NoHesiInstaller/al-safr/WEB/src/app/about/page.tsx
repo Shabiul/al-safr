@@ -137,7 +137,7 @@ export default function AboutPage() {
             No-06, Classic Complex, Opp Mahindra Apts, Near Wipro, Shikaripalya, Hulimangala Post, Bengaluru — 560105
           </p>
           <p className="text-sm text-slate-500 mt-2">
-            Operational office: A.M. Plaza, Hospital Road, Shivaji Nagar, Bengaluru 560001
+            Operational office: 53/3, Abbaiah Reddy St, near Celebrity Arch, Doddathoguru, Electronic City Phase I, Electronic City, Bengaluru, Karnataka 560100
           </p>
         </div>
       </div>
