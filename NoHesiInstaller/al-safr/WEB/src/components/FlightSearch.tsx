@@ -1,8 +1,10 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import {
-  AIRPORTS,
+  POPULAR_AIRPORTS,
+  searchAirports,
+  findAirport,
   CurrencyCode,
 } from '@/services/flightData';
 import {
@@ -24,6 +26,7 @@ interface AirportLite {
   name: string;
   city: string;
   country: string;
+  aliases?: string[];
 }
 
 interface FlightSearchProps {
@@ -63,10 +66,9 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
   const [curDest, setCurDest] = useState(destination);
   // Full resolved airport (name/city/country) for whichever code is
   // currently selected — keeps the display card honest instead of falling
-  // back to a generic "<code> Airport" placeholder for real, live-resolved
-  // airports that just aren't in the small static shortlist (e.g. LKO).
-  const [originResolved, setOriginResolved] = useState<AirportLite | null>(null);
-  const [destResolved, setDestResolved] = useState<AirportLite | null>(null);
+  // back to a generic "<code> Airport" placeholder.
+  const [originResolved, setOriginResolved] = useState<AirportLite | null>(() => findAirport(origin));
+  const [destResolved, setDestResolved] = useState<AirportLite | null>(() => findAirport(destination));
   const [curDepDate, setCurDepDate] = useState(departureDate);
   const [curRetDate, setCurRetDate] = useState(returnDate);
   const [curCabin, setCurCabin] = useState<'economy' | 'business' | 'first'>(cabinClass);
@@ -83,8 +85,7 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
   // Swap animation trigger
   const [isSwapping, setIsSwapping] = useState(false);
 
-  // Live airport search results (Google Flights auto-complete) — resolves
-  // any real city/airport, not just the small static shortlist.
+  // Live airport search results (Google Flights auto-complete) for supplemental places
   const [liveOrigins, setLiveOrigins] = useState<AirportLite[] | null>(null);
   const [liveDests, setLiveDests] = useState<AirportLite[] | null>(null);
   const [isSearchingOrigin, setIsSearchingOrigin] = useState(false);
@@ -111,18 +112,14 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Helper to find airport info — prefers a live-resolved match (real name/
-  // city/country) over the generic "<code> Airport" placeholder.
-  const getAirportInfo = (query: string, resolved: AirportLite | null) => {
+  // Helper to find airport info — prefers resolved airport or findAirport lookup
+  const getAirportInfo = (query: string, resolved: AirportLite | null): AirportLite => {
     if (resolved && resolved.code.toUpperCase() === query.toUpperCase()) return resolved;
-    const match = AIRPORTS.find(
-      (a) =>
-        a.code.toUpperCase() === query.toUpperCase() ||
-        a.city.toUpperCase() === query.toUpperCase()
-    );
+    const match = findAirport(query);
     if (match) return match;
+    const clean = query.trim().toUpperCase();
     return {
-      code: query.length <= 4 ? query.toUpperCase() : query.substring(0, 3).toUpperCase(),
+      code: clean.length <= 4 ? clean : clean.substring(0, 3) || 'LOC',
       name: `${query} Airport`,
       city: query,
       country: 'International Port',
@@ -132,25 +129,45 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
   const originInfo = getAirportInfo(curOrigin, originResolved);
   const destInfo = getAirportInfo(curDest, destResolved);
 
-  // Filter the static shortlist (used until live results arrive / as fallback)
-  const filterAirports = (searchTerm: string) => {
-    if (!searchTerm.trim()) return AIRPORTS;
-    const term = searchTerm.toLowerCase();
-    return AIRPORTS.filter(
-      (a) =>
-        a.city.toLowerCase().includes(term) ||
-        a.name.toLowerCase().includes(term) ||
-        a.code.toLowerCase().includes(term) ||
-        a.country.toLowerCase().includes(term)
-    );
-  };
+  // Instant ranked local search from comprehensive curated dataset (0ms latency)
+  const localOrigins = useMemo(() => searchAirports(originSearch, 15), [originSearch]);
+  const localDests = useMemo(() => searchAirports(destSearch, 15), [destSearch]);
 
-  // Live airport/city search — resolves any real place (e.g. "Bangalore",
-  // "Bombay"), not just the handful hardcoded in AIRPORTS.
+  // Combined airport lists — NEVER wipes out local results if live fails/is empty
+  const filteredOrigins: AirportLite[] = useMemo(() => {
+    const list: AirportLite[] = [...localOrigins];
+    if (liveOrigins && liveOrigins.length > 0) {
+      const seen = new Set(list.map((a) => a.code.toUpperCase()));
+      for (const a of liveOrigins) {
+        if (!seen.has(a.code.toUpperCase())) {
+          seen.add(a.code.toUpperCase());
+          list.push(a);
+        }
+      }
+    }
+    return list;
+  }, [localOrigins, liveOrigins]);
+
+  const filteredDests: AirportLite[] = useMemo(() => {
+    const list: AirportLite[] = [...localDests];
+    if (liveDests && liveDests.length > 0) {
+      const seen = new Set(list.map((a) => a.code.toUpperCase()));
+      for (const a of liveDests) {
+        if (!seen.has(a.code.toUpperCase())) {
+          seen.add(a.code.toUpperCase());
+          list.push(a);
+        }
+      }
+    }
+    return list;
+  }, [localDests, liveDests]);
+
+  // Supplemental background search to find obscure regional strips
   useEffect(() => {
     const term = originSearch.trim();
     if (term.length < 2) {
       setLiveOrigins(null);
+      setIsSearchingOrigin(false);
       return;
     }
     setIsSearchingOrigin(true);
@@ -158,13 +175,17 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
       try {
         const res = await fetch(`/api/flights/airports?query=${encodeURIComponent(term)}`);
         const data = await res.json();
-        setLiveOrigins(data.airports || []);
+        if (Array.isArray(data.airports) && data.airports.length > 0) {
+          setLiveOrigins(data.airports);
+        } else {
+          setLiveOrigins(null);
+        }
       } catch {
         setLiveOrigins(null);
       } finally {
         setIsSearchingOrigin(false);
       }
-    }, 350);
+    }, 300);
     return () => clearTimeout(handle);
   }, [originSearch]);
 
@@ -172,6 +193,7 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
     const term = destSearch.trim();
     if (term.length < 2) {
       setLiveDests(null);
+      setIsSearchingDest(false);
       return;
     }
     setIsSearchingDest(true);
@@ -179,21 +201,19 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
       try {
         const res = await fetch(`/api/flights/airports?query=${encodeURIComponent(term)}`);
         const data = await res.json();
-        setLiveDests(data.airports || []);
+        if (Array.isArray(data.airports) && data.airports.length > 0) {
+          setLiveDests(data.airports);
+        } else {
+          setLiveDests(null);
+        }
       } catch {
         setLiveDests(null);
       } finally {
         setIsSearchingDest(false);
       }
-    }, 350);
+    }, 300);
     return () => clearTimeout(handle);
   }, [destSearch]);
-
-  const filteredOrigins: AirportLite[] = liveOrigins ?? filterAirports(originSearch);
-  const filteredDests: AirportLite[] = liveDests ?? filterAirports(destSearch);
-
-  // Quick popular destinations
-  const popularCities = ['Dubai', 'London', 'Riyadh', 'Mumbai', 'Delhi', 'Tokyo', 'Singapore', 'New York', 'Paris'];
 
   const swapLocations = () => {
     setIsSwapping(true);
@@ -362,18 +382,18 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
                 <div>
                   <span className="text-[11px] text-slate-400 font-medium block mb-1.5">Popular</span>
                   <div className="flex flex-wrap gap-1.5">
-                    {popularCities.slice(0, 6).map((city) => (
+                    {POPULAR_AIRPORTS.slice(0, 6).map((airport) => (
                       <button
-                        key={city}
+                        key={airport.code}
                         type="button"
                         onClick={() => {
-                          setCurOrigin(city);
+                          setCurOrigin(airport.code);
                           setOriginResolved(null);
                           setIsOriginOpen(false);
                         }}
                         className="focus-ring px-2.5 py-1 rounded-full bg-slate-100 hover:bg-[var(--color-ticket-orange)] hover:text-white text-xs font-bold text-slate-700 transition-colors max-border"
                       >
-                        {city}
+                        {airport.city}
                       </button>
                     ))}
                   </div>
@@ -521,18 +541,18 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
                 <div>
                   <span className="text-[11px] text-slate-400 font-medium block mb-1.5">Popular</span>
                   <div className="flex flex-wrap gap-1.5">
-                    {popularCities.map((city) => (
+                    {POPULAR_AIRPORTS.map((airport) => (
                       <button
-                        key={city}
+                        key={airport.code}
                         type="button"
                         onClick={() => {
-                          setCurDest(city);
+                          setCurDest(airport.code);
                           setDestResolved(null);
                           setIsDestOpen(false);
                         }}
                         className="focus-ring px-2.5 py-1 rounded-full bg-slate-100 hover:bg-[var(--color-ticket-orange)] hover:text-white text-xs font-bold text-slate-700 transition-colors max-border"
                       >
-                        {city}
+                        {airport.city}
                       </button>
                     ))}
                   </div>

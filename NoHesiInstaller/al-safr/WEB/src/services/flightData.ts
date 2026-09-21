@@ -1,12 +1,6 @@
-export interface Airport {
-  code: string;
-  name: string;
-  city: string;
-  country: string;
-  timezone: string;
-  lat: number;
-  lng: number;
-}
+export type { Airport } from './airportsData';
+export { AIRPORTS, POPULAR_AIRPORTS, searchAirports, findAirport } from './airportsData';
+import { Airport, findAirport } from './airportsData';
 
 export interface LiveFlightTelemetry {
   flightNumber: string;
@@ -66,34 +60,13 @@ export interface FlightOption {
   amenities: string[];
 }
 
-export const AIRPORTS: Airport[] = [
-  { code: 'DXB', name: 'Dubai International Airport', city: 'Dubai', country: 'United Arab Emirates', timezone: 'UTC+4', lat: 25.2532, lng: 55.3657 },
-  { code: 'RUH', name: 'King Khalid International', city: 'Riyadh', country: 'Saudi Arabia', timezone: 'UTC+3', lat: 24.9576, lng: 46.6988 },
-  { code: 'DOH', name: 'Hamad International', city: 'Doha', country: 'Qatar', timezone: 'UTC+3', lat: 25.2731, lng: 51.6081 },
-  { code: 'LHR', name: 'London Heathrow', city: 'London', country: 'United Kingdom', timezone: 'UTC+0', lat: 51.4700, lng: -0.4543 },
-  { code: 'JFK', name: 'John F. Kennedy International', city: 'New York', country: 'United States', timezone: 'UTC-5', lat: 40.6413, lng: -73.7781 },
-  { code: 'BOM', name: 'Chhatrapati Shivaji Maharaj Int\'l', city: 'Mumbai', country: 'India', timezone: 'UTC+5:30', lat: 19.0896, lng: 72.8656 },
-  { code: 'DEL', name: 'Indira Gandhi International Airport', city: 'Delhi', country: 'India', timezone: 'UTC+5:30', lat: 28.5562, lng: 77.1000 },
-  { code: 'BLR', name: 'Kempegowda International Airport', city: 'Bengaluru', country: 'India', timezone: 'UTC+5:30', lat: 13.1986, lng: 77.7066 },
-  { code: 'HND', name: 'Tokyo Haneda Airport', city: 'Tokyo', country: 'Japan', timezone: 'UTC+9', lat: 35.5494, lng: 139.7798 },
-  { code: 'SIN', name: 'Singapore Changi Airport', city: 'Singapore', country: 'Singapore', timezone: 'UTC+8', lat: 1.3644, lng: 103.9915 },
-  { code: 'BKK', name: 'Suvarnabhumi Airport', city: 'Bangkok', country: 'Thailand', timezone: 'UTC+7', lat: 13.6900, lng: 100.7501 },
-  { code: 'IST', name: 'Istanbul Airport', city: 'Istanbul', country: 'Turkey', timezone: 'UTC+3', lat: 41.2753, lng: 28.7519 },
-  { code: 'CDG', name: 'Paris Charles de Gaulle', city: 'Paris', country: 'France', timezone: 'UTC+1', lat: 49.0097, lng: 2.5479 },
-  { code: 'FRA', name: 'Frankfurt Airport', city: 'Frankfurt', country: 'Germany', timezone: 'UTC+1', lat: 50.0379, lng: 8.5622 },
-  { code: 'ZRH', name: 'Zurich Airport', city: 'Zurich', country: 'Switzerland', timezone: 'UTC+1', lat: 47.4582, lng: 8.5555 },
-  { code: 'LAX', name: 'Los Angeles International', city: 'Los Angeles', country: 'United States', timezone: 'UTC-8', lat: 33.9416, lng: -118.4085 },
-  { code: 'SFO', name: 'San Francisco International', city: 'San Francisco', country: 'United States', timezone: 'UTC-8', lat: 37.6213, lng: -122.3790 },
-  { code: 'SYD', name: 'Sydney Kingsford Smith Airport', city: 'Sydney', country: 'Australia', timezone: 'UTC+10', lat: -33.9399, lng: 151.1753 },
-];
-
 export const LIVE_FLIGHTS: LiveFlightTelemetry[] = [
   {
     flightNumber: 'AS-701',
     callsign: 'SAFRAIR 701 HEAVY',
     aircraft: 'Airbus A350-1000 Neo Precision',
-    origin: AIRPORTS[0], // DXB
-    destination: AIRPORTS[3], // LHR
+    origin: findAirport('DXB')!,
+    destination: findAirport('LHR')!,
     altitudeFt: 38000,
     flightLevel: 'FL380',
     speedKnots: 514,
@@ -114,8 +87,8 @@ export const LIVE_FLIGHTS: LiveFlightTelemetry[] = [
     flightNumber: 'AS-902',
     callsign: 'SAFRAIR 902 SUPER',
     aircraft: 'Overture Supersonic Mach 1.7',
-    origin: AIRPORTS[1], // RUH
-    destination: AIRPORTS[4], // JFK
+    origin: findAirport('RUH')!,
+    destination: findAirport('JFK')!,
     altitudeFt: 54000,
     flightLevel: 'FL540',
     speedKnots: 1040,
@@ -136,8 +109,8 @@ export const LIVE_FLIGHTS: LiveFlightTelemetry[] = [
     flightNumber: 'AS-305',
     callsign: 'SAFRAIR 305',
     aircraft: 'Boeing 787-10 Quantum Liner',
-    origin: AIRPORTS[2], // DOH
-    destination: AIRPORTS[5], // HND
+    origin: findAirport('DOH')!,
+    destination: findAirport('HND')!,
     altitudeFt: 39000,
     flightLevel: 'FL390',
     speedKnots: 502,
@@ -158,8 +131,8 @@ export const LIVE_FLIGHTS: LiveFlightTelemetry[] = [
     flightNumber: 'AS-114',
     callsign: 'SAFRAIR 114',
     aircraft: 'Airbus A350-1000 Neo Precision',
-    origin: AIRPORTS[0], // DXB
-    destination: AIRPORTS[6], // SIN
+    origin: findAirport('DXB')!,
+    destination: findAirport('SIN')!,
     altitudeFt: 36000,
     flightLevel: 'FL360',
     speedKnots: 495,
@@ -180,8 +153,8 @@ export const LIVE_FLIGHTS: LiveFlightTelemetry[] = [
     flightNumber: 'AS-440',
     callsign: 'SAFRAIR 440',
     aircraft: 'Gulfstream G800 Apex Jet',
-    origin: AIRPORTS[7], // ZRH
-    destination: AIRPORTS[0], // DXB
+    origin: findAirport('ZRH')!,
+    destination: findAirport('DXB')!,
     altitudeFt: 18500,
     flightLevel: 'FL185',
     speedKnots: 340,

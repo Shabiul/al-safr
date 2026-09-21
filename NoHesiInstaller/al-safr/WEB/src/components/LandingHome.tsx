@@ -114,13 +114,7 @@ const TESTIMONIALS = [
     name: 'Rahul Kulkarni',
     role: 'Indiranagar, Bengaluru',
     quote:
-      'Booked our Dubai family trip through Sajid bhai. Visa came through in four days and the hotel was exactly as promised. He even rearranged our return flight when my son fell ill.',
-  },
-  {
-    name: 'Fatima Anwar',
-    role: 'Shivaji Nagar, Bengaluru',
-    quote:
-      'We did our Umrah with them last Ramadan. The hotel was a five-minute walk from the Haram, exactly as they said, and the group co-ordinator stayed with us the whole time.',
+      'Booked our Dubai family trip through Sajid bhai — flights and the hotel both came in exactly as quoted. He even rearranged our return flight when my son fell ill, no extra fuss.',
   },
   {
     name: 'Suresh Menon',
@@ -138,7 +132,7 @@ const TESTIMONIALS = [
     name: 'Mohammed Irfan',
     role: 'Frazer Town, Bengaluru',
     quote:
-      'Schengen visa approved on the first attempt. They rewrote my covering letter and caught two mistakes in my bank statements before submission.',
+      'Rented a car for our Europe road trip through them — real pricing, no surprise charges at pickup, and the itinerary suggestions actually matched our route.',
   },
   {
     name: 'Anitha Reddy',
