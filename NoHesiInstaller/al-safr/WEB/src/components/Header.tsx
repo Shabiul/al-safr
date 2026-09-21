@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
@@ -17,10 +17,16 @@ import {
   ArrowRight,
   Info,
   MessageCircle,
+  ChevronDown,
+  Search,
+  Building2,
+  Compass,
+  Car,
 } from 'lucide-react';
 import { CurrencyCode, CURRENCIES } from '@/services/flightData';
 
 type MainTab = 'home' | 'services' | 'bookings';
+type ServiceId = 'book' | 'hotels' | 'tours' | 'cabs';
 
 interface HeaderProps {
   currency: CurrencyCode;
@@ -29,12 +35,19 @@ interface HeaderProps {
   activeTab: MainTab;
   onTabChange: (tab: MainTab) => void;
   onOpenBooking?: () => void;
+  onSelectService?: (service: ServiceId) => void;
 }
 
 const TABS: { id: MainTab; label: string; icon: React.ElementType }[] = [
   { id: 'home', label: 'Home', icon: Home },
-  { id: 'services', label: 'Services', icon: LayoutGrid },
   { id: 'bookings', label: 'My Trips', icon: Ticket },
+];
+
+const SERVICE_MENU: { id: ServiceId; label: string; icon: React.ElementType }[] = [
+  { id: 'book', label: 'Flights', icon: Search },
+  { id: 'hotels', label: 'Hotels', icon: Building2 },
+  { id: 'tours', label: 'Tour Packages', icon: Compass },
+  { id: 'cabs', label: 'Cabs', icon: Car },
 ];
 
 const PAGE_LINKS: { href: string; label: string; icon: React.ElementType }[] = [
@@ -49,16 +62,39 @@ export const Header: React.FC<HeaderProps> = ({
   activeTab,
   onTabChange,
   onOpenBooking,
+  onSelectService,
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isServicesMenuOpen, setIsServicesMenuOpen] = useState(false);
+  const [isMobileServicesOpen, setIsMobileServicesOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
+  const servicesMenuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 25);
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (servicesMenuRef.current && !servicesMenuRef.current.contains(e.target as Node)) {
+        setIsServicesMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleSelectService = (service: ServiceId) => {
+    setIsServicesMenuOpen(false);
+    if (onSelectService) {
+      onSelectService(service);
+    } else {
+      onTabChange('services');
+    }
+  };
 
   const handleBookNow = () => {
     if (onOpenBooking) {
@@ -152,14 +188,13 @@ export const Header: React.FC<HeaderProps> = ({
 
           {/* Desktop Navigation Links */}
           <nav className="hidden lg:flex items-center gap-2" aria-label="Primary">
-            {TABS.map((tab) => {
-              const Icon = tab.icon;
-              const isActive = activeTab === tab.id;
+            {(() => {
+              const Icon = TABS[0].icon;
+              const isActive = activeTab === TABS[0].id;
               return (
                 <button
-                  key={tab.id}
                   type="button"
-                  onClick={() => onTabChange(tab.id)}
+                  onClick={() => onTabChange(TABS[0].id)}
                   aria-current={isActive ? 'page' : undefined}
                   className={`focus-ring px-4 py-2 rounded-full text-sm font-bold transition-all flex items-center gap-2 whitespace-nowrap cursor-pointer ${
                     isActive
@@ -168,10 +203,72 @@ export const Header: React.FC<HeaderProps> = ({
                   }`}
                 >
                   <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-[#f36f0f]' : 'text-[#1c1817]/60'}`} />
-                  {tab.label}
+                  {TABS[0].label}
                 </button>
               );
-            })}
+            })()}
+
+            {/* Services dropdown */}
+            <div ref={servicesMenuRef} className="relative">
+              <button
+                type="button"
+                onClick={() => setIsServicesMenuOpen((v) => !v)}
+                aria-haspopup="menu"
+                aria-expanded={isServicesMenuOpen}
+                className={`focus-ring px-4 py-2 rounded-full text-sm font-bold transition-all flex items-center gap-2 whitespace-nowrap cursor-pointer ${
+                  activeTab === 'services'
+                    ? 'bg-[#1c1817] text-white shadow-sm'
+                    : 'text-[#1c1817]/75 hover:text-[#1c1817] hover:bg-[#1c1817]/5'
+                }`}
+              >
+                <LayoutGrid className={`w-4 h-4 shrink-0 ${activeTab === 'services' ? 'text-[#f36f0f]' : 'text-[#1c1817]/60'}`} />
+                Services
+                <ChevronDown className={`w-3.5 h-3.5 transition-transform ${isServicesMenuOpen ? 'rotate-180' : ''}`} />
+              </button>
+
+              {isServicesMenuOpen && (
+                <div
+                  role="menu"
+                  className="absolute top-full left-0 mt-2 w-52 bg-white rounded-2xl border border-[#1c1817]/10 shadow-lg overflow-hidden py-1.5"
+                >
+                  {SERVICE_MENU.map((item) => {
+                    const ItemIcon = item.icon;
+                    return (
+                      <button
+                        key={item.id}
+                        type="button"
+                        role="menuitem"
+                        onClick={() => handleSelectService(item.id)}
+                        className="focus-ring w-full flex items-center gap-2.5 px-4 py-2.5 text-sm font-bold text-left text-[#1c1817]/80 hover:bg-[#f4f3ec] hover:text-[#1c1817] transition-colors cursor-pointer"
+                      >
+                        <ItemIcon className="w-4 h-4" style={{ color: '#f36f0f' }} />
+                        {item.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
+            {(() => {
+              const Icon = TABS[1].icon;
+              const isActive = activeTab === TABS[1].id;
+              return (
+                <button
+                  type="button"
+                  onClick={() => onTabChange(TABS[1].id)}
+                  aria-current={isActive ? 'page' : undefined}
+                  className={`focus-ring px-4 py-2 rounded-full text-sm font-bold transition-all flex items-center gap-2 whitespace-nowrap cursor-pointer ${
+                    isActive
+                      ? 'bg-[#1c1817] text-white shadow-sm'
+                      : 'text-[#1c1817]/75 hover:text-[#1c1817] hover:bg-[#1c1817]/5'
+                  }`}
+                >
+                  <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-[#f36f0f]' : 'text-[#1c1817]/60'}`} />
+                  {TABS[1].label}
+                </button>
+              );
+            })()}
 
             {PAGE_LINKS.map((link) => {
               const Icon = link.icon;
@@ -252,15 +349,14 @@ export const Header: React.FC<HeaderProps> = ({
       {isMenuOpen && (
         <div className="lg:hidden border-b border-[#1c1817]/10 bg-[#f4f3ec] px-5 py-4 space-y-3 shadow-xl">
           <div className="space-y-1">
-            {TABS.map((tab) => {
-              const Icon = tab.icon;
-              const isActive = activeTab === tab.id;
+            {(() => {
+              const Icon = TABS[0].icon;
+              const isActive = activeTab === TABS[0].id;
               return (
                 <button
-                  key={tab.id}
                   type="button"
                   onClick={() => {
-                    onTabChange(tab.id);
+                    onTabChange(TABS[0].id);
                     setIsMenuOpen(false);
                   }}
                   aria-current={isActive ? 'page' : undefined}
@@ -269,10 +365,69 @@ export const Header: React.FC<HeaderProps> = ({
                   }`}
                 >
                   <Icon className={`w-4 h-4 ${isActive ? 'text-[#f36f0f]' : ''}`} />
-                  {tab.label}
+                  {TABS[0].label}
                 </button>
               );
-            })}
+            })()}
+
+            {/* Services accordion */}
+            <button
+              type="button"
+              onClick={() => setIsMobileServicesOpen((v) => !v)}
+              aria-expanded={isMobileServicesOpen}
+              className={`w-full px-4 py-3 rounded-xl text-sm font-bold transition-colors flex items-center justify-between gap-3 ${
+                activeTab === 'services' ? 'bg-[#1c1817] text-white' : 'text-[#1c1817]/80 hover:bg-[#1c1817]/5'
+              }`}
+            >
+              <span className="flex items-center gap-3">
+                <LayoutGrid className={`w-4 h-4 ${activeTab === 'services' ? 'text-[#f36f0f]' : ''}`} />
+                Services
+              </span>
+              <ChevronDown className={`w-4 h-4 transition-transform ${isMobileServicesOpen ? 'rotate-180' : ''}`} />
+            </button>
+            {isMobileServicesOpen && (
+              <div className="pl-4 space-y-1">
+                {SERVICE_MENU.map((item) => {
+                  const ItemIcon = item.icon;
+                  return (
+                    <button
+                      key={item.id}
+                      type="button"
+                      onClick={() => {
+                        handleSelectService(item.id);
+                        setIsMenuOpen(false);
+                        setIsMobileServicesOpen(false);
+                      }}
+                      className="w-full px-4 py-2.5 rounded-xl text-sm font-bold text-[#1c1817]/70 hover:bg-[#1c1817]/5 transition-colors flex items-center gap-3"
+                    >
+                      <ItemIcon className="w-4 h-4" style={{ color: '#f36f0f' }} />
+                      {item.label}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+
+            {(() => {
+              const Icon = TABS[1].icon;
+              const isActive = activeTab === TABS[1].id;
+              return (
+                <button
+                  type="button"
+                  onClick={() => {
+                    onTabChange(TABS[1].id);
+                    setIsMenuOpen(false);
+                  }}
+                  aria-current={isActive ? 'page' : undefined}
+                  className={`w-full px-4 py-3 rounded-xl text-sm font-bold transition-colors flex items-center gap-3 ${
+                    isActive ? 'bg-[#1c1817] text-white' : 'text-[#1c1817]/80 hover:bg-[#1c1817]/5'
+                  }`}
+                >
+                  <Icon className={`w-4 h-4 ${isActive ? 'text-[#f36f0f]' : ''}`} />
+                  {TABS[1].label}
+                </button>
+              );
+            })()}
 
             {PAGE_LINKS.map((link) => {
               const Icon = link.icon;

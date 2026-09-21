@@ -167,6 +167,7 @@ export default function Home() {
         activeTab={activeTab}
         onTabChange={setActiveTab}
         onOpenBooking={() => handleNavigate('book')}
+        onSelectService={handleNavigate}
       />
 
       {/* Full-width container on home tab for full-screen hero; padded max-w-7xl on other tabs */}
