@@ -24,4 +24,12 @@ export interface TourPackage {
   featured?: boolean;
   tourType?: string | null;
   originalPriceUsd?: number | null;
+  // theme is a real editorial tag staff assign (Adventure, Beach, Cultural,
+  // ...) so the "Package Theme" filter has genuine data behind it instead
+  // of an invented category. hotelCategory is the star rating of the
+  // accommodation actually included in the package. freeCancellation is a
+  // real operational flag, not a marketing default.
+  theme?: string | null;
+  hotelCategory?: number | null;
+  freeCancellation?: boolean;
 }

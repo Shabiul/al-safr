@@ -28,6 +28,9 @@ export default async function EditTourPackagePage({ params }: PageProps) {
     featured: pkg.featured ?? false,
     tourType: pkg.tourType ?? '',
     originalPriceUsd: pkg.originalPriceUsd ?? null,
+    theme: pkg.theme ?? '',
+    hotelCategory: pkg.hotelCategory ?? null,
+    freeCancellation: pkg.freeCancellation ?? false,
   };
 
   return (

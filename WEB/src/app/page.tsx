@@ -40,7 +40,8 @@ const SERVICE_TABS: { id: ServiceId; label: string; icon: React.ElementType; col
 ];
 
 export default function Home() {
-  const [currency, setCurrency] = useState<CurrencyCode>('INR');
+  // All pricing is shown in INR — no currency switcher.
+  const currency: CurrencyCode = 'INR';
   const [activeTab, setActiveTab] = useState<MainTab>('home');
   const [activeService, setActiveService] = useState<ServiceId>('book');
   const [apiStatus, setApiStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
@@ -182,8 +183,6 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-[#f4f3ec] text-[#1c1817] flex flex-col selection:bg-[#f36f0f]/20 selection:text-[#f36f0f]">
       <Header
-        currency={currency}
-        onCurrencyChange={setCurrency}
         apiStatus={apiStatus}
         activeTab={activeTab}
         onTabChange={setActiveTab}

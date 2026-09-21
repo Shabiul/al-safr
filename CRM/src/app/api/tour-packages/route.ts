@@ -18,7 +18,7 @@ export async function POST(request: Request) {
   if (error) return error;
 
   const body = await request.json();
-  const { slug, name, destination, summary, description, durationDays, priceUsd, images, inclusions, exclusions, itinerary, published, featured, tourType, originalPriceUsd } = body;
+  const { slug, name, destination, summary, description, durationDays, priceUsd, images, inclusions, exclusions, itinerary, published, featured, tourType, originalPriceUsd, theme, hotelCategory, freeCancellation } = body;
 
   if (!slug || !name || !destination) {
     return NextResponse.json({ error: 'slug, name and destination are required' }, { status: 400 });
@@ -43,6 +43,9 @@ export async function POST(request: Request) {
       featured: featured ?? false,
       tourType: tourType || null,
       originalPriceUsd: originalPriceUsd == null ? null : Number(originalPriceUsd),
+      theme: theme || null,
+      hotelCategory: hotelCategory == null ? null : Number(hotelCategory),
+      freeCancellation: freeCancellation ?? false,
       updatedAt: new Date().toISOString(),
     })
     .select()
