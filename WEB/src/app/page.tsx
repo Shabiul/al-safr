@@ -11,6 +11,7 @@ import { CabSearch } from '@/components/CabSearch';
 import { FlightCard } from '@/components/FlightCard';
 import { SeatSelectorModal, BookingConfirmation } from '@/components/SeatSelectorModal';
 import { BoardingPassModal } from '@/components/BoardingPassModal';
+import { GalleryModal } from '@/components/GalleryModal';
 import {
   CurrencyCode,
   FlightOption,
@@ -43,6 +44,7 @@ export default function Home() {
   const [activeTab, setActiveTab] = useState<MainTab>('home');
   const [activeService, setActiveService] = useState<ServiceId>('book');
   const [apiStatus, setApiStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [isGalleryOpen, setIsGalleryOpen] = useState(false);
 
   // Search parameters
   const [searchParams, setSearchParams] = useState({
@@ -168,7 +170,10 @@ export default function Home() {
         onTabChange={setActiveTab}
         onOpenBooking={() => handleNavigate('book')}
         onSelectService={handleNavigate}
+        onOpenGallery={() => setIsGalleryOpen(true)}
       />
+
+      <GalleryModal open={isGalleryOpen} onClose={() => setIsGalleryOpen(false)} />
 
       {/* Full-width container on home tab for full-screen hero; padded max-w-7xl on other tabs */}
       <main className={`flex-1 w-full ${activeTab === 'home' ? '' : 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8 pt-24 sm:pt-28 space-y-6 sm:space-y-8'}`}>
@@ -178,6 +183,7 @@ export default function Home() {
             currency={currency}
             onNavigate={handleNavigate}
             onQuickSearch={handleQuickSearch}
+            onOpenGallery={() => setIsGalleryOpen(true)}
           />
         )}
 

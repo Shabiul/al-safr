@@ -16,7 +16,6 @@ import {
   Minus,
   Expand,
   Sparkles,
-  X,
 } from 'lucide-react';
 import { CurrencyCode, formatPrice } from '@/services/flightData';
 import { TourPackage } from '@/services/tourPackageData';
@@ -27,6 +26,7 @@ interface LandingHomeProps {
   currency: CurrencyCode;
   onNavigate: (tab: TabId) => void;
   onQuickSearch?: (origin: string, destination: string, date: string, cabin: 'economy' | 'business' | 'first') => void;
+  onOpenGallery: () => void;
 }
 
 const AIRPORT_OPTIONS = [
@@ -98,6 +98,7 @@ export const LandingHome: React.FC<LandingHomeProps> = ({
   currency,
   onNavigate,
   onQuickSearch,
+  onOpenGallery,
 }) => {
   // Flight Ticket Search Widget state
   const [tripType, setTripType] = useState<'oneway' | 'roundtrip'>('oneway');
@@ -109,7 +110,6 @@ export const LandingHome: React.FC<LandingHomeProps> = ({
 
   // Interactive states
   const [openFaq, setOpenFaq] = useState<number | null>(0);
-  const [videoModalOpen, setVideoModalOpen] = useState(false);
 
   // Real tour package catalogue — the "Discover the world" grid below used
   // to show fictional destinations that weren't actually bookable; this
@@ -175,7 +175,7 @@ export const LandingHome: React.FC<LandingHomeProps> = ({
                     visual rather than a small icon-sized badge. */}
                 <button
                   type="button"
-                  onClick={() => setVideoModalOpen(true)}
+                  onClick={() => onOpenGallery()}
                   className="relative group cursor-pointer inline-flex items-center justify-center shrink-0 w-24 sm:w-32 h-24 sm:h-32"
                   aria-label="View travel photo gallery"
                 >
@@ -719,7 +719,7 @@ export const LandingHome: React.FC<LandingHomeProps> = ({
         <div className="relative">
           <div
             className="w-full aspect-[16/7] sm:aspect-[21/8] rounded-[40px] sm:rounded-[70px] lg:rounded-[90px] overflow-hidden shadow-lg border-4 border-white relative group cursor-pointer"
-            onClick={() => setVideoModalOpen(true)}
+            onClick={() => onOpenGallery()}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
@@ -1029,53 +1029,6 @@ export const LandingHome: React.FC<LandingHomeProps> = ({
         </div>
       </footer>
 
-      {/* =========================================================================
-          INTERACTIVE MODAL: TRAVEL PHOTO GALLERY
-          (There's no actual video asset to play — this used to show a
-          static image behind a "Play" button claiming a video was running,
-          which never happened. Presenting it honestly as a photo gallery
-          instead of a fake video player.)
-         ========================================================================= */}
-      {videoModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 animate-in fade-in duration-200">
-          <div className="bg-[#1c1817] rounded-3xl p-6 max-w-3xl w-full text-white shadow-2xl relative">
-            <button
-              type="button"
-              onClick={() => setVideoModalOpen(false)}
-              className="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white cursor-pointer"
-            >
-              <X className="w-5 h-5" />
-            </button>
-
-            <div className="space-y-4">
-              <div className="flex items-center gap-2 text-[#f36f0f] text-xs font-bold uppercase tracking-wider">
-                <Sparkles className="w-4 h-4" />
-                <span>Al-Safr Travel Gallery</span>
-              </div>
-              <h3 className="text-xl sm:text-2xl font-black">
-                A glimpse of where we take our travellers
-              </h3>
-
-              <div className="grid grid-cols-2 gap-3">
-                {[
-                  { src: '/uixshuvo/panoramic_boats.jpg', label: 'Coron Archipelago, Philippines' },
-                  { src: '/uixshuvo/gallery_mountain.jpg', label: 'Alpine Chalets, Switzerland' },
-                  { src: '/uixshuvo/gallery_bungalows.jpg', label: 'Overwater Lagoon, Maldives' },
-                  { src: '/uixshuvo/dest_obsidian.jpg', label: 'Amalfi Coast, Italy' },
-                ].map((item) => (
-                  <div key={item.src} className="relative aspect-video rounded-2xl overflow-hidden bg-black">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={item.src} alt={item.label} className="w-full h-full object-cover" />
-                    <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/80 to-transparent text-[10px] font-bold">
-                      {item.label}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
