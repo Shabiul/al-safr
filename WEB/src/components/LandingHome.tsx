@@ -1,18 +1,14 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import {
   Plane,
-  Building2,
   Compass,
-  Car,
-  Ticket,
   ArrowRight,
   ArrowLeftRight,
   MapPin,
   Calendar,
-  Search,
   Check,
   ChevronDown,
   ChevronRight,
@@ -23,6 +19,7 @@ import {
   X,
 } from 'lucide-react';
 import { CurrencyCode, formatPrice } from '@/services/flightData';
+import { TourPackage } from '@/services/tourPackageData';
 
 type TabId = 'book' | 'hotels' | 'tours' | 'cabs' | 'bookings';
 
@@ -31,14 +28,6 @@ interface LandingHomeProps {
   onNavigate: (tab: TabId) => void;
   onQuickSearch?: (origin: string, destination: string, date: string, cabin: 'economy' | 'business' | 'first') => void;
 }
-
-const SERVICE_TABS: { id: TabId; label: string; icon: React.ElementType }[] = [
-  { id: 'book', label: 'Flights', icon: Search },
-  { id: 'hotels', label: 'Hotels', icon: Building2 },
-  { id: 'tours', label: 'Tour Packages', icon: Compass },
-  { id: 'cabs', label: 'Cabs', icon: Car },
-  { id: 'bookings', label: 'My Trips', icon: Ticket },
-];
 
 const AIRPORT_OPTIONS = [
   { code: 'DEL', city: 'Delhi', name: 'Indira Gandhi Intnl' },
@@ -51,63 +40,6 @@ const AIRPORT_OPTIONS = [
   { code: 'LHR', city: 'London', name: 'Heathrow' },
   { code: 'SIN', city: 'Singapore', name: 'Changi' },
   { code: 'HND', city: 'Tokyo', name: 'Haneda' },
-];
-
-const DESTINATIONS = [
-  {
-    id: 'shadowpeak',
-    title: 'Shadowpeak Canyon',
-    location: 'Tropical Haven, Thailand',
-    image: '/uixshuvo/dest_shadowpeak.jpg',
-    priceUsd: 480,
-    originCode: 'DEL',
-    destCode: 'BKK',
-  },
-  {
-    id: 'crimson',
-    title: 'Crimson Rift',
-    location: 'Phi Phi Islands, Thailand',
-    image: '/uixshuvo/dest_crimson.jpg',
-    priceUsd: 480,
-    originCode: 'LHR',
-    destCode: 'BKK',
-  },
-  {
-    id: 'dunes',
-    title: 'Whispering Dunes',
-    location: 'White Sands, Maldives',
-    image: '/uixshuvo/dest_dunes.jpg',
-    priceUsd: 300,
-    originCode: 'DEL',
-    destCode: 'MLE',
-  },
-  {
-    id: 'frostveil',
-    title: 'Frostveil Summit',
-    location: 'Palm Coast, Bora Bora',
-    image: '/uixshuvo/dest_frostveil.jpg',
-    priceUsd: 180,
-    originCode: 'SIN',
-    destCode: 'HND',
-  },
-  {
-    id: 'obsidian',
-    title: 'The Obsidian Hollow',
-    location: 'Amalfi Coast, Italy',
-    image: '/uixshuvo/dest_obsidian.jpg',
-    priceUsd: 250,
-    originCode: 'JFK',
-    destCode: 'ZRH',
-  },
-  {
-    id: 'stormbreaker',
-    title: 'Stormbreaker Isles',
-    location: 'Coron Archipelago, Philippines',
-    image: '/uixshuvo/dest_stormbreaker.jpg',
-    priceUsd: 450,
-    originCode: 'DXB',
-    destCode: 'KIN',
-  },
 ];
 
 const TESTIMONIALS = [
@@ -178,17 +110,26 @@ export const LandingHome: React.FC<LandingHomeProps> = ({
   // Interactive states
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [videoModalOpen, setVideoModalOpen] = useState(false);
-  const [isServicesOpen, setIsServicesOpen] = useState(false);
-  const servicesRef = useRef<HTMLDivElement>(null);
+
+  // Real tour package catalogue — the "Discover the world" grid below used
+  // to show fictional destinations that weren't actually bookable; this
+  // pulls the same real packages that power the Tour Packages tab.
+  const [packages, setPackages] = useState<TourPackage[]>([]);
 
   useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (servicesRef.current && !servicesRef.current.contains(e.target as Node)) {
-        setIsServicesOpen(false);
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch('/api/tour-packages', { cache: 'no-store' });
+        const data = await res.json();
+        if (!cancelled) setPackages(data.packages || []);
+      } catch {
+        // Section simply doesn't render if the catalogue can't be reached.
       }
+    })();
+    return () => {
+      cancelled = true;
     };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   const handleSwapAirports = () => {
@@ -206,70 +147,15 @@ export const LandingHome: React.FC<LandingHomeProps> = ({
     }
   };
 
-  const handleSelectDestinationCard = (dest: typeof DESTINATIONS[0]) => {
-    setOriginCode(dest.originCode);
-    setDestCode(dest.destCode);
-    if (onQuickSearch) {
-      onQuickSearch(dest.originCode, dest.destCode, departureDate, cabinClass);
-    } else {
-      onNavigate('book');
-    }
-  };
-
   return (
     <div className="w-full bg-[#f4f3ec] text-[#1c1817] selection:bg-[#f36f0f]/20 selection:text-[#f36f0f] overflow-x-hidden">
       {/* =========================================================================
           SECTION 1: HERO SECTION (With Signature Arch + Flight Ticket Search Widget)
          ========================================================================= */}
       <section id="hero" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 sm:pt-36 pb-16 lg:pb-24">
-        {/* Services dropdown — a single trigger instead of a permanent row
-            of tabs, so the hero reads less cluttered; opens a menu with
-            every service on click. */}
-        <div className="flex flex-wrap items-center justify-between gap-3 mb-8">
-          <div ref={servicesRef} className="relative">
-            <button
-              type="button"
-              onClick={() => setIsServicesOpen((v) => !v)}
-              aria-haspopup="menu"
-              aria-expanded={isServicesOpen}
-              className="focus-ring flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold bg-white/80 backdrop-blur-md border border-[#1c1817]/10 shadow-xs hover:bg-white transition-colors cursor-pointer"
-            >
-              <Search className="w-3.5 h-3.5" style={{ color: '#f36f0f' }} />
-              Services
-              <ChevronDown className={`w-3.5 h-3.5 text-[#1c1817]/50 transition-transform ${isServicesOpen ? 'rotate-180' : ''}`} />
-            </button>
-
-            {isServicesOpen && (
-              <div
-                role="menu"
-                className="absolute top-full left-0 mt-2 w-56 bg-white rounded-2xl border border-[#1c1817]/10 shadow-lg z-30 overflow-hidden py-1.5"
-              >
-                {SERVICE_TABS.map((tab) => {
-                  const Icon = tab.icon;
-                  return (
-                    <button
-                      key={tab.id}
-                      type="button"
-                      role="menuitem"
-                      onClick={() => {
-                        setIsServicesOpen(false);
-                        onNavigate(tab.id);
-                      }}
-                      className="focus-ring w-full flex items-center gap-2.5 px-4 py-2.5 text-sm font-bold text-left text-[#1c1817]/80 hover:bg-[#f4f3ec] hover:text-[#1c1817] transition-colors cursor-pointer"
-                    >
-                      <Icon className="w-4 h-4" style={{ color: '#f36f0f' }} />
-                      {tab.label}
-                    </button>
-                  );
-                })}
-              </div>
-            )}
-          </div>
-
-          <div className="hidden sm:flex items-center gap-2 text-xs font-bold text-[#1c1817]/60">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span>Direct Wholesale Airline Feeds</span>
-          </div>
+        <div className="flex items-center gap-2 text-xs font-bold text-[#1c1817]/60 mb-8">
+          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+          <span>Direct Wholesale Airline Feeds</span>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 xl:gap-14 items-center">
@@ -630,64 +516,78 @@ export const LandingHome: React.FC<LandingHomeProps> = ({
       </section>
 
       {/* =========================================================================
-          SECTION 2: DISCOVER THE WORLD (6 Destination Cards in 3x2 Grid)
+          SECTION 2: DISCOVER THE WORLD — real packages from the catalogue,
+          not the fictional stock destinations this used to show.
          ========================================================================= */}
-      <section id="discover" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
-        <div className="text-center space-y-3 mb-12 sm:mb-16">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#1c1817] tracking-tight">
-            Discover the world
-          </h2>
-          <p className="text-sm sm:text-base text-[#1c1817]/65 font-medium max-w-lg mx-auto">
-            Curated journeys and verified luxury retreats across extraordinary global landscapes.
-          </p>
-        </div>
+      {packages.length > 0 && (
+        <section id="discover" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+          <div className="text-center space-y-3 mb-12 sm:mb-16">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#1c1817] tracking-tight">
+              Discover the world
+            </h2>
+            <p className="text-sm sm:text-base text-[#1c1817]/65 font-medium max-w-lg mx-auto">
+              Real packages, real itineraries — pulled straight from our catalogue.
+            </p>
+          </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-          {DESTINATIONS.map((dest) => (
-            <div
-              key={dest.id}
-              className="bg-white rounded-3xl p-3.5 sm:p-4 shadow-sm border border-[#1c1817]/5 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl group flex flex-col justify-between"
-            >
-              <div className="w-full aspect-[4/3] rounded-2xl overflow-hidden relative bg-[#f4f3ec]">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={dest.image}
-                  alt={dest.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                />
-                <div className="absolute top-3 left-3 bg-[#1c1817]/75 backdrop-blur-md text-white text-[11px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1.5 shadow-xs">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#f36f0f]" />
-                  <span>{dest.location}</span>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            {packages.slice(0, 6).map((pkg) => (
+              <Link
+                key={pkg.id}
+                href={`/tour-packages/${pkg.slug}?currency=${currency}`}
+                className="bg-white rounded-3xl p-3.5 sm:p-4 shadow-sm border border-[#1c1817]/5 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl group flex flex-col justify-between"
+              >
+                <div className="w-full aspect-[4/3] rounded-2xl overflow-hidden relative bg-[#f4f3ec]">
+                  {pkg.images[0] ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={pkg.images[0]}
+                      alt={pkg.name}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-[#1c1817]/20">
+                      <Compass className="w-10 h-10" />
+                    </div>
+                  )}
+                  <div className="absolute top-3 left-3 bg-[#1c1817]/75 backdrop-blur-md text-white text-[11px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1.5 shadow-xs">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#f36f0f]" />
+                    <span>{pkg.destination}</span>
+                  </div>
+                  {pkg.featured && (
+                    <span className="absolute top-3 right-3 px-2 py-1 rounded-full text-[10px] font-black uppercase text-white bg-rose-600">
+                      Hot
+                    </span>
+                  )}
                 </div>
-              </div>
 
-              <div className="pt-4 pb-2 text-left">
-                <h3 className="text-lg sm:text-xl font-extrabold text-[#1c1817] tracking-tight">
-                  {dest.title}
-                </h3>
-              </div>
+                <div className="pt-4 pb-2 text-left">
+                  <h3 className="text-lg sm:text-xl font-extrabold text-[#1c1817] tracking-tight">
+                    {pkg.name}
+                  </h3>
+                  <p className="text-xs font-semibold text-[#1c1817]/50 mt-1">
+                    {pkg.durationDays} {pkg.durationDays === 1 ? 'day' : 'days'}
+                  </p>
+                </div>
 
-              <div className="flex items-center justify-between pt-2 border-t border-[#1c1817]/5">
-                <div className="text-left">
-                  <span className="text-lg font-black text-[#1c1817]">
-                    {formatPrice(dest.priceUsd, currency)}
+                <div className="flex items-center justify-between pt-2 border-t border-[#1c1817]/5">
+                  <div className="text-left">
+                    <span className="text-lg font-black text-[#1c1817]">
+                      {formatPrice(pkg.priceUsd, currency)}
+                    </span>
+                    <span className="text-xs font-semibold text-[#1c1817]/60 ml-1">/person</span>
+                  </div>
+
+                  <span className="px-5 py-2 rounded-full bg-[#f36f0f] group-hover:bg-[#dc6009] text-white text-xs font-bold transition-all shadow-xs flex items-center gap-1.5">
+                    <span>View details</span>
+                    <ChevronRight className="w-3.5 h-3.5" />
                   </span>
-                  <span className="text-xs font-semibold text-[#1c1817]/60 ml-1">/person</span>
                 </div>
-
-                <button
-                  type="button"
-                  onClick={() => handleSelectDestinationCard(dest)}
-                  className="px-5 py-2 rounded-full bg-[#f36f0f] hover:bg-[#dc6009] active:scale-95 text-white text-xs font-bold transition-all shadow-xs flex items-center gap-1.5 cursor-pointer"
-                >
-                  <span>View details</span>
-                  <ChevronRight className="w-3.5 h-3.5" />
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* =========================================================================
           SECTION: WHERE COMFORT MEETS ELEGANCE (Hospitality & Airline Providers)
@@ -769,29 +669,29 @@ export const LandingHome: React.FC<LandingHomeProps> = ({
           </h2>
         </div>
 
-        <div className="bg-white rounded-3xl sm:rounded-full p-6 sm:p-8 lg:p-10 shadow-sm border border-[#1c1817]/5 max-w-5xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-6 relative">
-            <div className="flex flex-col items-center text-center space-y-2.5 px-4">
-              <span className="text-xs font-black text-[#1c1817]/40 uppercase tracking-widest">01</span>
-              <h3 className="text-lg font-extrabold text-[#1c1817]">Tour guide</h3>
-              <p className="text-xs sm:text-sm text-[#1c1817]/70 font-medium leading-relaxed max-w-xs">
-                Every journey is accompanied by certified, deeply knowledgeable local guides dedicated to authentic cultural immersion.
+        <div className="bg-white rounded-3xl sm:rounded-[40px] p-5 sm:p-6 lg:p-7 shadow-sm border border-[#1c1817]/5 max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-4 relative">
+            <div className="flex flex-col items-center text-center gap-1 px-4">
+              <span className="text-[10px] font-black text-[#1c1817]/40 uppercase tracking-widest">01</span>
+              <h3 className="text-base font-extrabold text-[#1c1817]">Tour guide</h3>
+              <p className="text-xs text-[#1c1817]/65 font-medium leading-snug max-w-[15rem]">
+                Certified local guides on every journey.
               </p>
             </div>
 
-            <div className="flex flex-col items-center text-center space-y-2.5 px-4 md:border-x md:border-[#1c1817]/10">
-              <span className="text-xs font-black text-[#1c1817]/40 uppercase tracking-widest">02</span>
-              <h3 className="text-lg font-extrabold text-[#1c1817]">Reliable tour</h3>
-              <p className="text-xs sm:text-sm text-[#1c1817]/70 font-medium leading-relaxed max-w-xs">
-                Verified luxury accommodations, 24/7 round-the-clock ground support, and guaranteed flight and transport connections.
+            <div className="flex flex-col items-center text-center gap-1 px-4 md:border-x md:border-[#1c1817]/10">
+              <span className="text-[10px] font-black text-[#1c1817]/40 uppercase tracking-widest">02</span>
+              <h3 className="text-base font-extrabold text-[#1c1817]">Reliable tour</h3>
+              <p className="text-xs text-[#1c1817]/65 font-medium leading-snug max-w-[15rem]">
+                24/7 ground support, guaranteed connections.
               </p>
             </div>
 
-            <div className="flex flex-col items-center text-center space-y-2.5 px-4">
-              <span className="text-xs font-black text-[#1c1817]/40 uppercase tracking-widest">03</span>
-              <h3 className="text-lg font-extrabold text-[#1c1817]">Friendly price</h3>
-              <p className="text-xs sm:text-sm text-[#1c1817]/70 font-medium leading-relaxed max-w-xs">
-                Direct wholesale contracts with prime airlines and boutique villas ensure best-in-market rates with no hidden fees.
+            <div className="flex flex-col items-center text-center gap-1 px-4">
+              <span className="text-[10px] font-black text-[#1c1817]/40 uppercase tracking-widest">03</span>
+              <h3 className="text-base font-extrabold text-[#1c1817]">Friendly price</h3>
+              <p className="text-xs text-[#1c1817]/65 font-medium leading-snug max-w-[15rem]">
+                Wholesale rates, no hidden fees.
               </p>
             </div>
           </div>
