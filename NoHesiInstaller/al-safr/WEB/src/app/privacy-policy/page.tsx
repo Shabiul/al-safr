@@ -8,7 +8,7 @@ export const metadata = {
 export default function PrivacyPolicyPage() {
   return (
     <StaticPageShell title="Privacy Policy" subtitle="Last updated: September 2026">
-      <div className="prose-sm space-y-6 text-slate-600 leading-relaxed [&_h2]:text-lg [&_h2]:font-black [&_h2]:text-slate-900 [&_h2]:mt-2 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:space-y-1 [&>div+div]:pt-6 [&>div+div]:border-t-[3px] [&>div+div]:border-t-[color:var(--color-ink)]">
+      <div className="prose-sm space-y-6 text-slate-600 leading-relaxed [&_h2]:text-lg [&_h2]:font-black [&_h2]:text-slate-900 [&_h2]:mt-2 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:space-y-1 [&>div+div]:pt-6 [&>div+div]:border-t-[3px] [&>div+div]:border-t-[color:var(--color-dark-ink-muted)]">
         <p className="text-sm text-amber-700 bg-amber-50 border border-amber-200 rounded-xl p-4">
           This is a general privacy policy written for Al-Safr&apos;s current features. It has not been reviewed by a
           lawyer and should be checked against applicable law (including India&apos;s DPDP Act) before this site is

@@ -126,7 +126,7 @@ export const CabSearch: React.FC<CabSearchProps> = ({ currency }) => {
 
   return (
     <div className="space-y-6">
-      <div className="bg-cream rounded-3xl p-5 sm:p-7 space-y-3 max-border max-shadow">
+      <div className="bg-cream rounded-3xl p-5 sm:p-7 space-y-3 soft-border soft-shadow">
         <p className="text-xs font-bold text-slate-400">
           Self-drive car rental — currently available across Europe and parts of Asia (not yet India, UAE, or the US).
         </p>
@@ -141,7 +141,7 @@ export const CabSearch: React.FC<CabSearchProps> = ({ currency }) => {
               }}
               aria-haspopup="listbox"
               aria-expanded={isDestOpen}
-              className={`focus-ring w-full text-left p-4 rounded-2xl transition-colors bg-slate-50 hover:bg-slate-100 max-border ${
+              className={`focus-ring w-full text-left p-4 rounded-2xl transition-colors bg-slate-50 hover:bg-slate-100 soft-border ${
                 isDestOpen ? 'bg-cream' : ''
               }`}
               style={isDestOpen ? { boxShadow: '5px 5px 0 0 var(--color-ticket-orange)' } : undefined}
@@ -157,7 +157,7 @@ export const CabSearch: React.FC<CabSearchProps> = ({ currency }) => {
               <div
                 role="listbox"
                 aria-label="Pickup location"
-                className="absolute top-full left-0 right-0 sm:w-96 mt-2 bg-cream rounded-2xl z-50 p-4 space-y-3 max-border max-shadow"
+                className="absolute top-full left-0 right-0 sm:w-96 mt-2 bg-cream rounded-2xl z-50 p-4 space-y-3 soft-border soft-shadow"
               >
                 <div className="relative">
                   <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" aria-hidden="true" />
@@ -169,7 +169,7 @@ export const CabSearch: React.FC<CabSearchProps> = ({ currency }) => {
                     placeholder="City name…"
                     value={destSearch}
                     onChange={(e) => setDestSearch(e.target.value)}
-                    className="focus-ring w-full pl-9 pr-8 py-2.5 bg-slate-50 rounded-xl text-sm text-slate-900 font-bold max-border focus:bg-cream"
+                    className="focus-ring w-full pl-9 pr-8 py-2.5 bg-slate-50 rounded-xl text-sm text-slate-900 font-bold soft-border focus:bg-cream"
                   />
                   {destSearch && (
                     <button
@@ -192,7 +192,7 @@ export const CabSearch: React.FC<CabSearchProps> = ({ currency }) => {
                           key={city}
                           type="button"
                           onClick={() => pickLocation(city)}
-                          className="focus-ring px-2.5 py-1 rounded-full bg-slate-100 hover:bg-[var(--color-ticket-orange)] hover:text-white text-xs font-bold text-slate-700 transition-colors max-border"
+                          className="focus-ring px-2.5 py-1 rounded-full bg-slate-100 hover:bg-[var(--color-ticket-orange)] hover:text-white text-xs font-bold text-slate-700 transition-colors soft-border"
                         >
                           {city}
                         </button>
@@ -235,7 +235,7 @@ export const CabSearch: React.FC<CabSearchProps> = ({ currency }) => {
             )}
           </div>
 
-          <div className="md:col-span-3 p-4 rounded-2xl bg-slate-50 max-border">
+          <div className="md:col-span-3 p-4 rounded-2xl bg-slate-50 soft-border">
             <div className="flex items-center gap-1.5 text-slate-500 text-xs font-black uppercase">
               <Calendar className="w-3.5 h-3.5" style={{ color: 'var(--color-ticket-orange)' }} />
               Pickup
@@ -246,11 +246,11 @@ export const CabSearch: React.FC<CabSearchProps> = ({ currency }) => {
               type="datetime-local"
               value={pickupDateTime}
               onChange={(e) => setPickupDateTime(e.target.value)}
-              className="focus-ring w-full mt-1.5 px-2 py-1.5 bg-cream rounded-lg text-xs font-bold text-slate-900 cursor-pointer max-border"
+              className="focus-ring w-full mt-1.5 px-2 py-1.5 bg-cream rounded-lg text-xs font-bold text-slate-900 cursor-pointer soft-border"
             />
           </div>
 
-          <div className="md:col-span-3 p-4 rounded-2xl bg-slate-50 max-border">
+          <div className="md:col-span-3 p-4 rounded-2xl bg-slate-50 soft-border">
             <div className="flex items-center gap-1.5 text-slate-500 text-xs font-black uppercase">
               <Calendar className="w-3.5 h-3.5" style={{ color: 'var(--color-ticket-orange)' }} />
               Drop-off
@@ -261,7 +261,7 @@ export const CabSearch: React.FC<CabSearchProps> = ({ currency }) => {
               type="datetime-local"
               value={dropoffDateTime}
               onChange={(e) => setDropoffDateTime(e.target.value)}
-              className="focus-ring w-full mt-1.5 px-2 py-1.5 bg-cream rounded-lg text-xs font-bold text-slate-900 cursor-pointer max-border"
+              className="focus-ring w-full mt-1.5 px-2 py-1.5 bg-cream rounded-lg text-xs font-bold text-slate-900 cursor-pointer soft-border"
             />
           </div>
 
@@ -269,7 +269,7 @@ export const CabSearch: React.FC<CabSearchProps> = ({ currency }) => {
             <button
               onClick={runSearch}
               disabled={isLoading}
-              className="focus-ring max-press w-full flex items-center justify-center gap-2 px-4 rounded-2xl disabled:opacity-50 text-white text-sm font-black transition-colors max-border max-shadow"
+              className="focus-ring soft-press w-full flex items-center justify-center gap-2 px-4 rounded-2xl disabled:opacity-50 text-white text-sm font-black transition-colors soft-border soft-shadow"
               style={{ backgroundColor: 'var(--color-ticket-orange)' }}
             >
               {isLoading ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
@@ -290,13 +290,13 @@ export const CabSearch: React.FC<CabSearchProps> = ({ currency }) => {
           </div>
 
           {isLoading ? (
-            <div className="p-12 text-center bg-slate-50 rounded-2xl space-y-3 max-border">
+            <div className="p-12 text-center bg-slate-50 rounded-2xl space-y-3 soft-border">
               <RefreshCw className="w-7 h-7 animate-spin mx-auto" style={{ color: 'var(--color-ticket-orange)' }} />
               <div className="font-black text-sm text-slate-700">Searching cars…</div>
             </div>
           ) : cabs.length === 0 ? (
             <div className="p-12 text-center bg-slate-50 rounded-2xl border-2 border-dashed border-slate-300 space-y-2">
-              <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto max-border" style={{ backgroundColor: 'var(--color-ticket-orange)' }}>
+              <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto soft-border" style={{ backgroundColor: 'var(--color-ticket-orange)' }}>
                 <Car className="w-7 h-7 text-white" />
               </div>
               <div className="font-black text-sm text-slate-700">No cars found</div>
@@ -307,9 +307,9 @@ export const CabSearch: React.FC<CabSearchProps> = ({ currency }) => {
               {cabs.map((cab, i) => (
                 <div
                   key={cab.id}
-                  className={`bg-cream rounded-2xl transition-all hover:-translate-y-0.5 overflow-hidden flex flex-col max-border max-shadow-sm ${i % 3 === 1 ? 'sm:-translate-y-2' : ''}`}
+                  className={`bg-cream rounded-2xl transition-all hover:-translate-y-0.5 overflow-hidden flex flex-col soft-border soft-shadow-sm ${i % 3 === 1 ? 'sm:-translate-y-2' : ''}`}
                 >
-                  <div className="h-32 bg-slate-50 flex items-center justify-center p-4 border-b-[3px]" style={{ borderColor: 'var(--color-ink)' }}>
+                  <div className="h-32 bg-slate-50 flex items-center justify-center p-4 border-b-[3px]" style={{ borderColor: 'var(--color-dark-ink-muted)' }}>
                     {cab.imageUrl ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img src={cab.imageUrl} alt={cab.name} className="max-h-full object-contain" />
@@ -347,7 +347,7 @@ export const CabSearch: React.FC<CabSearchProps> = ({ currency }) => {
                       </span>
                     )}
 
-                    <div className="mt-auto pt-2 border-t-2 flex items-center justify-between" style={{ borderColor: 'var(--color-ink)' }}>
+                    <div className="mt-auto pt-2 border-t-2 flex items-center justify-between" style={{ borderColor: 'var(--color-dark-ink-muted)' }}>
                       <div>
                         <div className="text-xs text-slate-500">{cab.supplierName}</div>
                         {cab.supplierRating != null && (

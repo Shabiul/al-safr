@@ -43,9 +43,9 @@ export default function RegisterPage() {
 
   return (
     <main className="max-w-sm mx-auto py-16 px-4">
-      <div className="rounded-3xl bg-cream p-7 sm:p-8 max-border max-shadow -rotate-1">
+      <div className="rounded-3xl bg-cream p-7 sm:p-8 soft-border soft-shadow -rotate-1">
         <span
-          className="inline-block text-xs font-black tracking-widest uppercase px-3 py-1 rounded-full max-border rotate-3 mb-4"
+          className="inline-block text-xs font-black tracking-widest uppercase px-3 py-1 rounded-full soft-border rotate-3 mb-4"
           style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'white' }}
         >
           Join us
@@ -58,7 +58,7 @@ export default function RegisterPage() {
             placeholder="Full name"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="focus-ring w-full rounded-xl px-3 py-2.5 text-sm font-medium max-border"
+            className="focus-ring w-full rounded-xl px-3 py-2.5 text-sm font-medium soft-border"
           />
           <input
             type="email"
@@ -66,7 +66,7 @@ export default function RegisterPage() {
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="focus-ring w-full rounded-xl px-3 py-2.5 text-sm font-medium max-border"
+            className="focus-ring w-full rounded-xl px-3 py-2.5 text-sm font-medium soft-border"
           />
           <input
             type="password"
@@ -75,11 +75,11 @@ export default function RegisterPage() {
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="focus-ring w-full rounded-xl px-3 py-2.5 text-sm font-medium max-border"
+            className="focus-ring w-full rounded-xl px-3 py-2.5 text-sm font-medium soft-border"
           />
           {error && (
             <p
-              className="text-sm font-bold px-3 py-2 rounded-xl max-border"
+              className="text-sm font-bold px-3 py-2 rounded-xl soft-border"
               style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'white' }}
             >
               {error}
@@ -88,7 +88,7 @@ export default function RegisterPage() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="focus-ring max-press w-full disabled:opacity-50 rounded-xl py-3 font-black text-sm text-white max-border max-shadow"
+            className="focus-ring soft-press w-full disabled:opacity-50 rounded-xl py-3 font-black text-sm text-white soft-border soft-shadow"
             style={{ backgroundColor: 'var(--color-ticket-orange)' }}
           >
             {isSubmitting ? 'Creating account…' : 'Create account'}

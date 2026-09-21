@@ -38,12 +38,12 @@ export default async function TourPackageDetailPage({ params, searchParams }: Pa
 
   return (
     <div className="min-h-screen bg-cream text-slate-900" style={{ fontFamily: 'var(--font-display)' }}>
-      <header className="sticky top-0 z-40 w-full bg-cream border-b-[3px]" style={{ borderColor: 'var(--color-ink)' }}>
+      <header className="sticky top-0 z-40 w-full bg-cream border-b-[3px]" style={{ borderColor: 'var(--color-dark-ink-muted)' }}>
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center gap-3">
           <Link
             href="/"
-            className="focus-ring max-press flex items-center gap-2 text-sm font-black px-3 py-1.5 rounded-lg max-border"
-            style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'var(--color-ink)' }}
+            className="focus-ring soft-press flex items-center gap-2 text-sm font-black px-3 py-1.5 rounded-lg soft-border"
+            style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'var(--color-dark-ink-muted)' }}
           >
             <ArrowLeft className="w-4 h-4" />
             Back to Al-Safr
@@ -52,7 +52,7 @@ export default async function TourPackageDetailPage({ params, searchParams }: Pa
       </header>
 
       <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-        <div className="h-64 sm:h-96 rounded-3xl bg-slate-100 overflow-hidden max-border max-shadow">
+        <div className="h-64 sm:h-96 rounded-3xl bg-slate-100 overflow-hidden soft-border soft-shadow">
           {pkg.images[0] ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={pkg.images[0]} alt={pkg.name} className="w-full h-full object-cover" />
@@ -66,7 +66,7 @@ export default async function TourPackageDetailPage({ params, searchParams }: Pa
         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
           <div className="space-y-2">
             <span
-              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black uppercase tracking-wide max-border -rotate-2"
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black uppercase tracking-wide soft-border -rotate-2"
               style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'white' }}
             >
               <Calendar className="w-3.5 h-3.5" />
@@ -78,10 +78,10 @@ export default async function TourPackageDetailPage({ params, searchParams }: Pa
               {pkg.destination}
             </p>
           </div>
-          <div className="text-right shrink-0 space-y-3 rounded-2xl p-4 max-border max-shadow-sm rotate-1" style={{ backgroundColor: 'var(--color-ticket-orange)' }}>
+          <div className="text-right shrink-0 space-y-3 rounded-2xl p-4 soft-border soft-shadow-sm rotate-1" style={{ backgroundColor: 'var(--color-ticket-orange)' }}>
             <div>
-              <div className="text-2xl font-black" style={{ color: 'var(--color-ink)' }}>{formatPrice(pkg.priceUsd, currency)}</div>
-              <div className="text-xs font-bold" style={{ color: 'var(--color-ink)' }}>per person</div>
+              <div className="text-2xl font-black" style={{ color: 'var(--color-dark-ink-muted)' }}>{formatPrice(pkg.priceUsd, currency)}</div>
+              <div className="text-xs font-bold" style={{ color: 'var(--color-dark-ink-muted)' }}>per person</div>
             </div>
             <TourBookingFlow
               tourPackageId={pkg.id}
@@ -97,7 +97,7 @@ export default async function TourPackageDetailPage({ params, searchParams }: Pa
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-3">
-            <span className="inline-block text-xs font-black tracking-widest uppercase px-3 py-1 rounded-full max-border" style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'white' }}>
+            <span className="inline-block text-xs font-black tracking-widest uppercase px-3 py-1 rounded-full soft-border" style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'white' }}>
               Itinerary
             </span>
             <ol className="space-y-4 pt-2">
@@ -105,10 +105,10 @@ export default async function TourPackageDetailPage({ params, searchParams }: Pa
                 const itineraryColors = ['var(--color-ticket-orange)', 'var(--color-ticket-orange)', 'var(--color-ticket-orange)', 'var(--color-ticket-orange)', 'var(--color-ticket-orange)', 'var(--color-ticket-orange)'];
                 const color = itineraryColors[i % itineraryColors.length];
                 return (
-                  <li key={day.day} className="flex gap-4 rounded-2xl p-4 max-border max-shadow-sm bg-cream">
+                  <li key={day.day} className="flex gap-4 rounded-2xl p-4 soft-border soft-shadow-sm bg-cream">
                     <div
-                      className="shrink-0 w-9 h-9 rounded-full font-black text-sm flex items-center justify-center max-border"
-                      style={{ backgroundColor: color, color: 'var(--color-ink)' }}
+                      className="shrink-0 w-9 h-9 rounded-full font-black text-sm flex items-center justify-center soft-border"
+                      style={{ backgroundColor: color, color: 'var(--color-dark-ink-muted)' }}
                     >
                       {day.day}
                     </div>
@@ -123,29 +123,29 @@ export default async function TourPackageDetailPage({ params, searchParams }: Pa
           </div>
 
           <div className="space-y-6">
-            <div className="rounded-2xl p-4 max-border max-shadow-sm bg-cream">
-              <h2 className="inline-block text-xs font-black uppercase tracking-widest px-3 py-1 rounded-full max-border mb-3" style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'var(--color-ink)' }}>
+            <div className="rounded-2xl p-4 soft-border soft-shadow-sm bg-cream">
+              <h2 className="inline-block text-xs font-black uppercase tracking-widest px-3 py-1 rounded-full soft-border mb-3" style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'var(--color-dark-ink-muted)' }}>
                 Inclusions
               </h2>
               <ul className="space-y-2">
                 {pkg.inclusions.map((item, i) => (
                   <li key={i} className="text-sm text-slate-700 flex items-start gap-2 font-medium">
-                    <span className="w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5 max-border" style={{ backgroundColor: 'var(--color-ticket-orange)' }}>
-                      <Check className="w-3 h-3" style={{ color: 'var(--color-ink)' }} />
+                    <span className="w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5 soft-border" style={{ backgroundColor: 'var(--color-ticket-orange)' }}>
+                      <Check className="w-3 h-3" style={{ color: 'var(--color-dark-ink-muted)' }} />
                     </span>
                     {item}
                   </li>
                 ))}
               </ul>
             </div>
-            <div className="rounded-2xl p-4 max-border max-shadow-sm bg-cream">
-              <h2 className="inline-block text-xs font-black uppercase tracking-widest px-3 py-1 rounded-full max-border mb-3" style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'white' }}>
+            <div className="rounded-2xl p-4 soft-border soft-shadow-sm bg-cream">
+              <h2 className="inline-block text-xs font-black uppercase tracking-widest px-3 py-1 rounded-full soft-border mb-3" style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'white' }}>
                 Exclusions
               </h2>
               <ul className="space-y-2">
                 {pkg.exclusions.map((item, i) => (
                   <li key={i} className="text-sm text-slate-700 flex items-start gap-2 font-medium">
-                    <span className="w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5 max-border" style={{ backgroundColor: 'var(--color-ticket-orange)' }}>
+                    <span className="w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5 soft-border" style={{ backgroundColor: 'var(--color-ticket-orange)' }}>
                       <X className="w-3 h-3 text-white" />
                     </span>
                     {item}
