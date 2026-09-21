@@ -1,5 +1,4 @@
-import Link from 'next/link';
-import { ArrowLeft } from 'lucide-react';
+import { Header } from '@/components/Header';
 
 interface StaticPageShellProps {
   title: string;
@@ -15,23 +14,12 @@ export function StaticPageShell({ title, subtitle, wide, children }: StaticPageS
   const maxWidth = wide ? 'max-w-5xl' : 'max-w-3xl';
   return (
     <div className="min-h-screen bg-cream text-slate-900">
-      <header className="sticky top-0 z-40 w-full bg-cream border-b-[3px]" style={{ borderColor: 'var(--color-dark-ink-muted)' }}>
-        <div className={`${maxWidth} mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center gap-3`}>
-          <Link
-            href="/"
-            className="focus-ring soft-press inline-flex items-center gap-2 text-sm font-black px-3 py-1.5 rounded-lg soft-border"
-            style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'var(--color-dark-ink-muted)' }}
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Back to Al-Safr
-          </Link>
-        </div>
-      </header>
+      <Header />
 
-      <main className={`${maxWidth} mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-10`}>
+      <main className={`${maxWidth} mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 pb-12 space-y-10`}>
         <div className="space-y-3">
           <span
-            className="inline-block text-xs font-black tracking-widest uppercase px-3 py-1 rounded-full soft-border -rotate-2"
+            className="inline-block text-xs font-black tracking-widest uppercase px-3 py-1 rounded-full soft-border"
             style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'white' }}
           >
             Al-Safr

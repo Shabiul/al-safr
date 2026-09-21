@@ -1,10 +1,10 @@
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { db } from '@/lib/db';
 import { CurrencyCode, CURRENCIES, formatPrice } from '@/services/flightData';
 import { TourPackage } from '@/services/tourPackageData';
-import { ArrowLeft, MapPin, Calendar, Check, X, Compass } from 'lucide-react';
+import { MapPin, Calendar, Check, X, Compass } from 'lucide-react';
 import { TourBookingFlow } from '@/components/TourBookingFlow';
+import { Header } from '@/components/Header';
 
 export const dynamic = 'force-dynamic';
 
@@ -41,20 +41,9 @@ export default async function TourPackageDetailPage({ params, searchParams }: Pa
 
   return (
     <div className="min-h-screen bg-cream text-slate-900" style={{ fontFamily: 'var(--font-display)' }}>
-      <header className="sticky top-0 z-40 w-full bg-cream border-b-[3px]" style={{ borderColor: 'var(--color-dark-ink-muted)' }}>
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center gap-3">
-          <Link
-            href="/"
-            className="focus-ring soft-press flex items-center gap-2 text-sm font-black px-3 py-1.5 rounded-lg soft-border"
-            style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'var(--color-dark-ink-muted)' }}
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Back to Al-Safr
-          </Link>
-        </div>
-      </header>
+      <Header />
 
-      <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+      <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 pb-8 space-y-8">
         <div className="h-64 sm:h-96 rounded-3xl bg-slate-100 overflow-hidden soft-border soft-shadow">
           {pkg.images[0] ? (
             // eslint-disable-next-line @next/next/no-img-element
@@ -69,7 +58,7 @@ export default async function TourPackageDetailPage({ params, searchParams }: Pa
         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
           <div className="space-y-2">
             <span
-              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black uppercase tracking-wide soft-border -rotate-2"
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black uppercase tracking-wide soft-border"
               style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'white' }}
             >
               <Calendar className="w-3.5 h-3.5" />
@@ -81,7 +70,7 @@ export default async function TourPackageDetailPage({ params, searchParams }: Pa
               {pkg.destination}
             </p>
           </div>
-          <div className="text-right shrink-0 space-y-3 rounded-2xl p-4 soft-border soft-shadow-sm rotate-1" style={{ backgroundColor: 'var(--color-ticket-orange)' }}>
+          <div className="text-right shrink-0 space-y-3 rounded-2xl p-4 soft-border soft-shadow-sm" style={{ backgroundColor: 'var(--color-ticket-orange)' }}>
             <div>
               <div className="text-2xl font-black" style={{ color: 'var(--color-dark-ink-muted)' }}>{formatPrice(pkg.priceUsd, currency)}</div>
               <div className="text-xs font-bold" style={{ color: 'var(--color-dark-ink-muted)' }}>per person</div>

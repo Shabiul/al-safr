@@ -46,7 +46,7 @@ export default function AboutPage() {
         <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(4,24,44,0.85) 0%, rgba(4,24,44,0.7) 60%, rgba(4,24,44,0.5) 100%)' }} />
         <div className="relative p-8 sm:p-12 space-y-4 text-white">
           <span
-            className="inline-flex items-center px-4 py-1.5 rounded-full text-xs font-black tracking-wide soft-border soft-shadow-sm -rotate-3"
+            className="inline-flex items-center px-4 py-1.5 rounded-full text-xs font-black tracking-wide soft-border soft-shadow-sm"
             style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'var(--color-dark-ink-muted)' }}
           >
             SINCE 2009
@@ -61,10 +61,10 @@ export default function AboutPage() {
 
       {/* Stats */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6">
-        {STATS.map((stat, i) => (
+        {STATS.map((stat) => (
           <div
             key={stat.label}
-            className={`rounded-2xl p-4 sm:p-5 soft-border soft-shadow-sm ${i % 2 === 0 ? '-rotate-2' : 'rotate-2'}`}
+            className="rounded-2xl p-4 sm:p-5 soft-border soft-shadow-sm"
             style={{ backgroundColor: stat.color }}
           >
             <CountUpStat value={stat.value} className="block text-2xl sm:text-3xl font-black" style={{ color: 'var(--color-dark-ink-muted)' } as React.CSSProperties} />
@@ -127,7 +127,7 @@ export default function AboutPage() {
       </div>
 
       {/* Office */}
-      <div className="p-5 rounded-2xl bg-cream soft-border soft-shadow-sm flex items-start gap-3 rotate-1">
+      <div className="p-5 rounded-2xl bg-cream soft-border soft-shadow-sm flex items-start gap-3">
         <div className="w-10 h-10 rounded-xl soft-border flex items-center justify-center shrink-0" style={{ backgroundColor: 'var(--color-ticket-orange)' }}>
           <MapPin className="w-5 h-5" style={{ color: 'var(--color-dark-ink-muted)' }} />
         </div>

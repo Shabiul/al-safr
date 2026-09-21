@@ -61,7 +61,7 @@ export const FlightCard: React.FC<FlightCardProps> = ({
             </div>
             {isSupersonic && (
               <span
-                className="inline-flex items-center gap-1 mt-1 text-[11px] font-black px-2 py-0.5 rounded-full soft-border -rotate-2"
+                className="inline-flex items-center gap-1 mt-1 text-[11px] font-black px-2 py-0.5 rounded-full soft-border"
                 style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'white' }}
               >
                 <Zap className="w-3 h-3 fill-current" aria-hidden="true" />
@@ -74,7 +74,7 @@ export const FlightCard: React.FC<FlightCardProps> = ({
         {/* Price Trend Tag */}
         {flight.priceTrend.isLowest7Days ? (
           <span
-            className="px-2.5 py-1 rounded-full text-xs font-black flex items-center gap-1 soft-border rotate-1"
+            className="px-2.5 py-1 rounded-full text-xs font-black flex items-center gap-1 soft-border"
             style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'var(--color-dark-ink-muted)' }}
           >
             <TrendingDown className="w-3.5 h-3.5" aria-hidden="true" />
