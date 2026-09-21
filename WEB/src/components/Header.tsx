@@ -37,7 +37,6 @@ interface HeaderProps {
   onTabChange: (tab: MainTab) => void;
   onOpenBooking?: () => void;
   onSelectService?: (service: ServiceId) => void;
-  onOpenGallery?: () => void;
 }
 
 const TABS: { id: MainTab; label: string; icon: React.ElementType }[] = [
@@ -65,7 +64,6 @@ export const Header: React.FC<HeaderProps> = ({
   onTabChange,
   onOpenBooking,
   onSelectService,
-  onOpenGallery,
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isServicesMenuOpen, setIsServicesMenuOpen] = useState(false);
@@ -273,16 +271,18 @@ export const Header: React.FC<HeaderProps> = ({
               );
             })()}
 
-            {onOpenGallery && (
-              <button
-                type="button"
-                onClick={onOpenGallery}
-                className="focus-ring px-4 py-2 rounded-full text-sm font-bold transition-all flex items-center gap-2 whitespace-nowrap cursor-pointer text-[#1c1817]/75 hover:text-[#1c1817] hover:bg-[#1c1817]/5"
-              >
-                <Images className="w-4 h-4 shrink-0 text-[#1c1817]/60" />
-                Gallery
-              </button>
-            )}
+            <Link
+              href="/gallery"
+              aria-current={pathname === '/gallery' ? 'page' : undefined}
+              className={`focus-ring px-4 py-2 rounded-full text-sm font-bold transition-all flex items-center gap-2 whitespace-nowrap ${
+                pathname === '/gallery'
+                  ? 'bg-[#1c1817] text-white shadow-sm'
+                  : 'text-[#1c1817]/75 hover:text-[#1c1817] hover:bg-[#1c1817]/5'
+              }`}
+            >
+              <Images className={`w-4 h-4 shrink-0 ${pathname === '/gallery' ? 'text-[#f36f0f]' : 'text-[#1c1817]/60'}`} />
+              Gallery
+            </Link>
 
             {PAGE_LINKS.map((link) => {
               const Icon = link.icon;
@@ -443,19 +443,17 @@ export const Header: React.FC<HeaderProps> = ({
               );
             })()}
 
-            {onOpenGallery && (
-              <button
-                type="button"
-                onClick={() => {
-                  onOpenGallery();
-                  setIsMenuOpen(false);
-                }}
-                className="w-full px-4 py-3 rounded-xl text-sm font-bold transition-colors flex items-center gap-3 text-[#1c1817]/80 hover:bg-[#1c1817]/5"
-              >
-                <Images className="w-4 h-4" />
-                Gallery
-              </button>
-            )}
+            <Link
+              href="/gallery"
+              onClick={() => setIsMenuOpen(false)}
+              aria-current={pathname === '/gallery' ? 'page' : undefined}
+              className={`w-full px-4 py-3 rounded-xl text-sm font-bold transition-colors flex items-center gap-3 ${
+                pathname === '/gallery' ? 'bg-[#1c1817] text-white' : 'text-[#1c1817]/80 hover:bg-[#1c1817]/5'
+              }`}
+            >
+              <Images className={`w-4 h-4 ${pathname === '/gallery' ? 'text-[#f36f0f]' : ''}`} />
+              Gallery
+            </Link>
 
             {PAGE_LINKS.map((link) => {
               const Icon = link.icon;

@@ -170,7 +170,6 @@ export default function Home() {
         onTabChange={setActiveTab}
         onOpenBooking={() => handleNavigate('book')}
         onSelectService={handleNavigate}
-        onOpenGallery={() => setIsGalleryOpen(true)}
       />
 
       <GalleryModal open={isGalleryOpen} onClose={() => setIsGalleryOpen(false)} />
