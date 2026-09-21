@@ -1026,6 +1026,19 @@ export const LandingHome: React.FC<LandingHomeProps> = ({
             </div>
             <span>Live wholesale fares via Google Flights &amp; Airline Telemetry</span>
           </div>
+
+          <div className="border-t border-white/10 pt-6 text-center text-xs text-[#f4f3ec]/50">
+            Designed and developed with{' '}
+            <span aria-hidden="true">❤</span> by{' '}
+            <a
+              href="https://naazailabs.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-medium text-[#f4f3ec]/80 hover:text-white transition-colors"
+            >
+              Naaz AI Labs
+            </a>
+          </div>
         </div>
       </footer>
 
