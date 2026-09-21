@@ -2,23 +2,12 @@
 
 import React from 'react';
 import { X, Sparkles } from 'lucide-react';
+import { GALLERY_ITEMS } from '@/services/galleryData';
 
 interface GalleryModalProps {
   open: boolean;
   onClose: () => void;
 }
-
-// Decorative photo gallery — real photos, honestly captioned by what's
-// actually shown in each shot rather than tied to any specific bookable
-// package (that's what the Tour Packages catalogue is for).
-const GALLERY_ITEMS = [
-  { src: '/uixshuvo/panoramic_boats.jpg', label: 'Tropical archipelago' },
-  { src: '/uixshuvo/gallery_mountain.jpg', label: 'Alpine chalets' },
-  { src: '/uixshuvo/gallery_bungalows.jpg', label: 'Overwater lagoon' },
-  { src: '/uixshuvo/dest_obsidian.jpg', label: 'Coastal cliffside town' },
-  { src: '/uixshuvo/dest_dunes.jpg', label: 'White sand beach' },
-  { src: '/uixshuvo/gallery_lagoon.jpg', label: 'Emerald cove' },
-];
 
 export const GalleryModal: React.FC<GalleryModalProps> = ({ open, onClose }) => {
   if (!open) return null;
