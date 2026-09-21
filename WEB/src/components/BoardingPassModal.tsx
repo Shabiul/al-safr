@@ -61,11 +61,11 @@ export const BoardingPassModal: React.FC<BoardingPassModalProps> = ({
       aria-label="Boarding pass"
       className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6 overflow-y-auto"
     >
-      <div className="bg-cream w-full max-w-2xl rounded-2xl overflow-hidden flex flex-col my-8 max-border max-shadow">
+      <div className="bg-cream w-full max-w-2xl rounded-2xl overflow-hidden flex flex-col my-8 soft-border soft-shadow">
         {/* Top Confirmation Banner */}
-        <div className="text-white px-6 py-4 flex items-center justify-between gap-3 border-b-[3px]" style={{ backgroundColor: 'var(--color-ticket-orange)', borderColor: 'var(--color-ink)' }}>
+        <div className="text-white px-6 py-4 flex items-center justify-between gap-3 border-b-[3px]" style={{ backgroundColor: 'var(--color-ticket-orange)', borderColor: 'var(--color-dark-ink-muted)' }}>
           <div className="flex items-center gap-2.5 min-w-0">
-            <span className="p-1.5 rounded-full bg-cream/20 shrink-0 max-border">
+            <span className="p-1.5 rounded-full bg-cream/20 shrink-0 soft-border">
               <CheckCircle2 className="w-5 h-5" />
             </span>
             <div className="min-w-0">
@@ -80,7 +80,7 @@ export const BoardingPassModal: React.FC<BoardingPassModalProps> = ({
             type="button"
             onClick={onClose}
             aria-label="Close"
-            className="focus-ring max-press p-1.5 rounded-lg bg-cream text-slate-900 shrink-0 max-border"
+            className="focus-ring soft-press p-1.5 rounded-lg bg-cream text-slate-900 shrink-0 soft-border"
           >
             <X className="w-5 h-5" />
           </button>
@@ -88,17 +88,17 @@ export const BoardingPassModal: React.FC<BoardingPassModalProps> = ({
 
         {/* Boarding Pass Ticket Body */}
         <div className="p-6 sm:p-8 bg-slate-50 space-y-6">
-          <div className="ticket-notch bg-cream rounded-2xl p-6 sm:p-7 max-border max-shadow-sm">
+          <div className="ticket-notch bg-cream rounded-2xl p-6 sm:p-7 soft-border soft-shadow-sm">
             {/* Header Ticket Strip */}
             <div className="flex items-center justify-between gap-3 border-b-2 border-dashed border-slate-300 pb-4">
               <div className="flex items-center gap-2.5 min-w-0">
-                <div className="w-8 h-8 rounded-lg text-white flex items-center justify-center shrink-0 max-border" style={{ backgroundColor: 'var(--color-ticket-orange)' }}>
+                <div className="w-8 h-8 rounded-lg text-white flex items-center justify-center shrink-0 soft-border" style={{ backgroundColor: 'var(--color-ticket-orange)' }}>
                   <Plane className="w-4 h-4 -rotate-45" />
                 </div>
                 <div className="min-w-0">
                   <div className="flex items-center gap-1.5">
                     <span className="font-black text-slate-900 text-sm">Al-Safr</span>
-                    <span className="text-[10px] font-black px-1.5 py-0.5 rounded max-border" style={{ backgroundColor: 'var(--color-ticket-orange)' }}>
+                    <span className="text-[10px] font-black px-1.5 py-0.5 rounded soft-border" style={{ backgroundColor: 'var(--color-ticket-orange)' }}>
                       السفر
                     </span>
                   </div>
@@ -108,7 +108,7 @@ export const BoardingPassModal: React.FC<BoardingPassModalProps> = ({
 
               <div className="text-right shrink-0">
                 <span className="text-[11px] text-slate-400 block font-medium">Cabin</span>
-                <span className="text-xs font-black text-white px-2 py-0.5 rounded-full max-border" style={{ backgroundColor: 'var(--color-ticket-orange)' }}>
+                <span className="text-xs font-black text-white px-2 py-0.5 rounded-full soft-border" style={{ backgroundColor: 'var(--color-ticket-orange)' }}>
                   {CABIN_LABEL[booking.cabin]}
                 </span>
               </div>
@@ -125,11 +125,11 @@ export const BoardingPassModal: React.FC<BoardingPassModalProps> = ({
               <div className="flex-1 px-6 flex flex-col items-center">
                 <span className="text-[11px] text-slate-400 font-medium">{booking.flight.duration}</span>
                 <div className="w-full flex items-center gap-1 my-1">
-                  <div className="w-2.5 h-2.5 rounded-full max-border bg-cream" aria-hidden="true"></div>
+                  <div className="w-2.5 h-2.5 rounded-full soft-border bg-cream" aria-hidden="true"></div>
                   <div className="flex-1 border-t-2 border-slate-300 relative">
                     <Plane className="w-3.5 h-3.5 absolute left-1/2 -top-2 -translate-x-1/2 rotate-90" style={{ color: 'var(--color-ticket-orange)' }} aria-hidden="true" />
                   </div>
-                  <div className="w-2.5 h-2.5 rounded-full max-border bg-cream" aria-hidden="true"></div>
+                  <div className="w-2.5 h-2.5 rounded-full soft-border bg-cream" aria-hidden="true"></div>
                 </div>
                 <span className="text-[11px] font-black font-mono" style={{ color: 'var(--color-ticket-orange)' }}>{booking.flight.flightNumber}</span>
               </div>
@@ -151,7 +151,7 @@ export const BoardingPassModal: React.FC<BoardingPassModalProps> = ({
               <div>
                 <span className="text-[11px] text-slate-400 block font-medium">Seat</span>
                 <span
-                  className="text-base font-black inline-block mt-0.5 font-mono px-2 py-0.5 rounded max-border"
+                  className="text-base font-black inline-block mt-0.5 font-mono px-2 py-0.5 rounded soft-border"
                   style={{ backgroundColor: 'var(--color-ticket-orange)' }}
                 >
                   {booking.seatNumber}
@@ -172,7 +172,7 @@ export const BoardingPassModal: React.FC<BoardingPassModalProps> = ({
             {/* Barcode / QR Code Strip */}
             <div className="pt-5 flex flex-col sm:flex-row items-center justify-between gap-4">
               <div className="flex items-center gap-4">
-                <div className="w-16 h-16 bg-slate-900 p-1.5 rounded-lg flex items-center justify-center text-white shrink-0 max-border" aria-hidden="true">
+                <div className="w-16 h-16 bg-slate-900 p-1.5 rounded-lg flex items-center justify-center text-white shrink-0 soft-border" aria-hidden="true">
                   <QrCode className="w-full h-full" />
                 </div>
                 <div className="text-left">
@@ -201,8 +201,8 @@ export const BoardingPassModal: React.FC<BoardingPassModalProps> = ({
             <button
               type="button"
               onClick={handlePrint}
-              className="focus-ring max-press py-2.5 px-5 rounded-xl text-white text-sm font-black flex items-center gap-2 max-border max-shadow-sm"
-              style={{ backgroundColor: 'var(--color-ink)' }}
+              className="focus-ring soft-press py-2.5 px-5 rounded-xl text-white text-sm font-black flex items-center gap-2 soft-border soft-shadow-sm"
+              style={{ backgroundColor: 'var(--color-dark-ink-muted)' }}
             >
               <Printer className="w-4 h-4" aria-hidden="true" />
               Print / Save PDF
@@ -212,7 +212,7 @@ export const BoardingPassModal: React.FC<BoardingPassModalProps> = ({
               <button
                 type="button"
                 onClick={() => alert('Boarding pass sent via email.')}
-                className="focus-ring max-press py-2.5 px-4 rounded-xl bg-cream text-slate-700 text-sm font-bold flex items-center gap-1.5 max-border"
+                className="focus-ring soft-press py-2.5 px-4 rounded-xl bg-cream text-slate-700 text-sm font-bold flex items-center gap-1.5 soft-border"
               >
                 <Share2 className="w-4 h-4 text-slate-500" aria-hidden="true" />
                 Share
@@ -221,8 +221,8 @@ export const BoardingPassModal: React.FC<BoardingPassModalProps> = ({
               <button
                 type="button"
                 onClick={onClose}
-                className="focus-ring max-press py-2.5 px-4 rounded-xl text-sm font-black max-border"
-                style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'var(--color-ink)' }}
+                className="focus-ring soft-press py-2.5 px-4 rounded-xl text-sm font-black soft-border"
+                style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'var(--color-dark-ink-muted)' }}
               >
                 Done
               </button>

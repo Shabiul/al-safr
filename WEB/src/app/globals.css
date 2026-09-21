@@ -176,6 +176,26 @@
   .max-shadow-invert-sm {
     box-shadow: 5px 5px 0 0 #fff;
   }
+
+  /* Softer outline/shadow for every page except the landing hero — same
+     paper-ticket language, thinner border and a muted warm-gray instead of
+     flat black, so search panels, cards and modals read less heavy. */
+  .soft-border {
+    border: 1.5px solid var(--color-dark-ink-muted);
+  }
+  .soft-shadow {
+    box-shadow: 5px 5px 0 0 color-mix(in srgb, var(--color-dark-ink-muted) 55%, transparent);
+  }
+  .soft-shadow-sm {
+    box-shadow: 3px 3px 0 0 color-mix(in srgb, var(--color-dark-ink-muted) 55%, transparent);
+  }
+  .soft-press {
+    transition: transform 150ms ease, box-shadow 150ms ease;
+  }
+  .soft-press:hover {
+    transform: translate(3px, 3px);
+    box-shadow: 1px 1px 0 0 color-mix(in srgb, var(--color-dark-ink-muted) 55%, transparent);
+  }
 }
 
 ::-webkit-scrollbar {

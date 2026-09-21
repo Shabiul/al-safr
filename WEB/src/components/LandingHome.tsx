@@ -18,6 +18,7 @@ import {
   ChevronRight,
   Plus,
   Minus,
+  Expand,
   Sparkles,
   X,
 } from 'lucide-react';
@@ -271,13 +272,37 @@ export const LandingHome: React.FC<LandingHomeProps> = ({
                       </text>
                     </svg>
                   </div>
-                  <div className="w-10 sm:w-12 h-10 sm:h-12 rounded-full overflow-hidden border-2 border-white shadow-md relative flex items-center justify-center">
+                  <div
+                    className="w-10 sm:w-12 h-10 sm:h-12 rounded-full overflow-hidden border-2 border-white relative flex items-center justify-center"
+                    style={{ boxShadow: '0 6px 14px rgba(28,24,23,0.35), 0 2px 4px rgba(28,24,23,0.25)' }}
+                  >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src="/uixshuvo/hero_video_thumb.jpg" alt="Travel gallery preview" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-                    <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
+                    {/* Two radial gradients (a soft highlight top-left, a
+                        shadow bottom-right) painted over the flat photo to
+                        read as a lit sphere rather than a flat disc. */}
+                    <div
+                      className="absolute inset-0 pointer-events-none"
+                      style={{
+                        background:
+                          'radial-gradient(circle at 30% 25%, rgba(255,255,255,0.65), rgba(255,255,255,0) 45%), radial-gradient(circle at 72% 78%, rgba(0,0,0,0.45), rgba(0,0,0,0) 55%)',
+                      }}
+                    />
+                    <div className="absolute inset-0 bg-black/15 flex items-center justify-center">
                       <Sparkles className="w-3.5 h-3.5 text-white" />
                     </div>
                   </div>
+                  {/* Persistent "click to open" indicator — the rotating
+                      text already says VIEW GALLERY, but a lot of people
+                      skim past ring text, so this badge makes the
+                      click-to-expand affordance unmissable at a glance. */}
+                  <span
+                    className="absolute -bottom-0.5 -right-0.5 w-5 h-5 rounded-full flex items-center justify-center border-2 border-white z-10"
+                    style={{ backgroundColor: 'var(--color-ticket-orange)' }}
+                    aria-hidden="true"
+                  >
+                    <Expand className="w-2.5 h-2.5 text-white" />
+                  </span>
                 </button>
               </div>
 

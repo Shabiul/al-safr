@@ -307,10 +307,10 @@ export default function Home() {
         {/* Tab View 2: Boarding Passes */}
         {activeTab === 'bookings' && (
           <div className="space-y-6">
-            <div className="flex items-center justify-between bg-cream p-5 rounded-2xl max-border max-shadow-sm">
+            <div className="flex items-center justify-between bg-cream p-5 rounded-2xl soft-border soft-shadow-sm">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl max-border flex items-center justify-center" style={{ backgroundColor: 'var(--color-ticket-orange)' }}>
-                  <Ticket className="w-5 h-5" style={{ color: 'var(--color-ink)' }} />
+                <div className="w-10 h-10 rounded-xl soft-border flex items-center justify-center" style={{ backgroundColor: 'var(--color-ticket-orange)' }}>
+                  <Ticket className="w-5 h-5" style={{ color: 'var(--color-dark-ink-muted)' }} />
                 </div>
                 <div>
                   <h2 className="text-lg font-black text-slate-900">My Trips</h2>
@@ -318,18 +318,18 @@ export default function Home() {
                 </div>
               </div>
 
-              <span className="px-3 py-1 rounded-full text-sm font-black max-border" style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'var(--color-ink)' }}>
+              <span className="px-3 py-1 rounded-full text-sm font-black soft-border" style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'var(--color-dark-ink-muted)' }}>
                 {allBookings.length} {allBookings.length === 1 ? 'trip' : 'trips'}
               </span>
             </div>
 
             {allBookings.length === 0 ? (
-              <div className="p-12 text-center bg-cream rounded-2xl max-border space-y-4">
+              <div className="p-12 text-center bg-cream rounded-2xl soft-border space-y-4">
                 <div
-                  className="w-16 h-16 rounded-2xl max-border flex items-center justify-center mx-auto -rotate-3"
+                  className="w-16 h-16 rounded-2xl soft-border flex items-center justify-center mx-auto -rotate-3"
                   style={{ backgroundColor: 'var(--color-ticket-orange)' }}
                 >
-                  <Plane className="w-8 h-8 -rotate-45" style={{ color: 'var(--color-ink)' }} />
+                  <Plane className="w-8 h-8 -rotate-45" style={{ color: 'var(--color-dark-ink-muted)' }} />
                 </div>
                 <div>
                   <h3 className="text-lg font-black text-slate-900">No trips booked yet</h3>
@@ -339,8 +339,8 @@ export default function Home() {
                 </div>
                 <button
                   onClick={() => handleNavigate('book')}
-                  className="focus-ring max-press py-2.5 px-6 rounded-xl text-sm font-black max-border max-shadow-sm"
-                  style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'var(--color-ink)' }}
+                  className="focus-ring soft-press py-2.5 px-6 rounded-xl text-sm font-black soft-border soft-shadow-sm"
+                  style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'var(--color-dark-ink-muted)' }}
                 >
                   Search flights
                 </button>
@@ -350,16 +350,16 @@ export default function Home() {
                 {allBookings.map((b) => (
                   <div
                     key={b.bookingRef}
-                    className="p-5 bg-cream rounded-2xl max-border max-shadow-sm transition-colors space-y-4"
+                    className="p-5 bg-cream rounded-2xl soft-border soft-shadow-sm transition-colors space-y-4"
                   >
-                    <div className="flex items-center justify-between border-b-[3px] pb-3" style={{ borderColor: 'var(--color-ink)' }}>
+                    <div className="flex items-center justify-between border-b-[3px] pb-3" style={{ borderColor: 'var(--color-dark-ink-muted)' }}>
                       <div>
                         <span className="text-xs text-slate-400 font-medium">
                           Ref: <strong className="text-slate-900 font-mono">{b.bookingRef}</strong>
                         </span>
                         <div className="font-black text-sm text-slate-900">{b.passengerName}</div>
                       </div>
-                      <span className="text-xs font-black px-2.5 py-1 rounded-full max-border" style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'var(--color-ink)' }}>
+                      <span className="text-xs font-black px-2.5 py-1 rounded-full soft-border" style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'var(--color-dark-ink-muted)' }}>
                         Seat {b.seatNumber}
                       </span>
                     </div>
@@ -380,7 +380,7 @@ export default function Home() {
                       </div>
                     </div>
 
-                    <div className="pt-2 border-t-[3px] flex items-center justify-between" style={{ borderColor: 'var(--color-ink)' }}>
+                    <div className="pt-2 border-t-[3px] flex items-center justify-between" style={{ borderColor: 'var(--color-dark-ink-muted)' }}>
                       <span className="text-sm font-black text-slate-700">
                         {formatPrice(b.totalPriceUsd, currency)}
                       </span>
@@ -389,7 +389,7 @@ export default function Home() {
                           setActiveBooking(b);
                           setIsBoardingPassOpen(true);
                         }}
-                        className="focus-ring max-press py-1.5 px-3 rounded-lg text-white text-xs font-black transition-colors flex items-center gap-1.5 max-border"
+                        className="focus-ring soft-press py-1.5 px-3 rounded-lg text-white text-xs font-black transition-colors flex items-center gap-1.5 soft-border"
                         style={{ backgroundColor: 'var(--color-navy-900)' }}
                       >
                         <Printer className="w-3.5 h-3.5" />

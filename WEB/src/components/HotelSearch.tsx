@@ -183,7 +183,7 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
   return (
     <div className="space-y-6">
       {/* MakeMyTrip-style search bar */}
-      <div className="bg-cream rounded-3xl p-5 sm:p-7 max-border max-shadow">
+      <div className="bg-cream rounded-3xl p-5 sm:p-7 soft-border soft-shadow">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
           {/* DESTINATION CARD */}
           <div ref={destRef} className="md:col-span-4 relative">
@@ -196,7 +196,7 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
               }}
               aria-haspopup="listbox"
               aria-expanded={isDestOpen}
-              className={`focus-ring w-full text-left p-4 rounded-2xl transition-colors bg-slate-50 hover:bg-slate-100 max-border ${
+              className={`focus-ring w-full text-left p-4 rounded-2xl transition-colors bg-slate-50 hover:bg-slate-100 soft-border ${
                 isDestOpen ? 'bg-cream' : ''
               }`}
               style={isDestOpen ? { boxShadow: '5px 5px 0 0 var(--color-ticket-orange)' } : undefined}
@@ -212,7 +212,7 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
               <div
                 role="listbox"
                 aria-label="Destination"
-                className="absolute top-full left-0 right-0 sm:w-96 mt-2 bg-cream rounded-2xl z-50 p-4 space-y-3 max-border max-shadow"
+                className="absolute top-full left-0 right-0 sm:w-96 mt-2 bg-cream rounded-2xl z-50 p-4 space-y-3 soft-border soft-shadow"
               >
                 <div className="relative">
                   <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" aria-hidden="true" />
@@ -226,7 +226,7 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
                     placeholder="City, area, or hotel name…"
                     value={destSearch}
                     onChange={(e) => setDestSearch(e.target.value)}
-                    className="focus-ring w-full pl-9 pr-8 py-2.5 bg-slate-50 rounded-xl text-sm text-slate-900 font-bold max-border focus:bg-cream"
+                    className="focus-ring w-full pl-9 pr-8 py-2.5 bg-slate-50 rounded-xl text-sm text-slate-900 font-bold soft-border focus:bg-cream"
                   />
                   {destSearch && (
                     <button
@@ -253,7 +253,7 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
                             setSelectedDest(null);
                             setIsDestOpen(false);
                           }}
-                          className="focus-ring px-2.5 py-1 rounded-full bg-slate-100 hover:bg-[var(--color-ticket-orange)] hover:text-white text-xs font-bold text-slate-700 transition-colors max-border"
+                          className="focus-ring px-2.5 py-1 rounded-full bg-slate-100 hover:bg-[var(--color-ticket-orange)] hover:text-white text-xs font-bold text-slate-700 transition-colors soft-border"
                         >
                           {city}
                         </button>
@@ -306,8 +306,8 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
                       setSelectedDest(null);
                       setIsDestOpen(false);
                     }}
-                    className="focus-ring w-full px-3 py-2.5 rounded-xl text-left transition-colors flex items-center gap-2 text-sm font-black max-border"
-                    style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'var(--color-ink)' }}
+                    className="focus-ring w-full px-3 py-2.5 rounded-xl text-left transition-colors flex items-center gap-2 text-sm font-black soft-border"
+                    style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'var(--color-dark-ink-muted)' }}
                   >
                     <MapPin className="w-4 h-4 shrink-0" />
                     Use &quot;{destSearch.trim()}&quot; as destination
@@ -318,7 +318,7 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
           </div>
 
           {/* DATES CARD */}
-          <div className="md:col-span-4 p-4 rounded-2xl bg-slate-50 max-border">
+          <div className="md:col-span-4 p-4 rounded-2xl bg-slate-50 soft-border">
             <div className="flex items-center gap-1.5 text-slate-500 text-xs font-black uppercase">
               <Calendar className="w-3.5 h-3.5" style={{ color: 'var(--color-ticket-orange)' }} />
               Check-in &amp; check-out
@@ -331,7 +331,7 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
                   type="date"
                   value={checkinDate}
                   onChange={(e) => setCheckinDate(e.target.value)}
-                  className="focus-ring w-full px-2 py-1.5 bg-cream rounded-lg text-xs font-bold text-slate-900 cursor-pointer max-border"
+                  className="focus-ring w-full px-2 py-1.5 bg-cream rounded-lg text-xs font-bold text-slate-900 cursor-pointer soft-border"
                 />
               </div>
               <div>
@@ -341,7 +341,7 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
                   type="date"
                   value={checkoutDate}
                   onChange={(e) => setCheckoutDate(e.target.value)}
-                  className="focus-ring w-full px-2 py-1.5 bg-cream rounded-lg text-xs font-bold text-slate-900 cursor-pointer max-border"
+                  className="focus-ring w-full px-2 py-1.5 bg-cream rounded-lg text-xs font-bold text-slate-900 cursor-pointer soft-border"
                 />
               </div>
             </div>
@@ -357,7 +357,7 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
               }}
               aria-haspopup="dialog"
               aria-expanded={isGuestsOpen}
-              className="focus-ring w-full text-left p-4 rounded-2xl bg-slate-50 hover:bg-slate-100 transition-colors max-border"
+              className="focus-ring w-full text-left p-4 rounded-2xl bg-slate-50 hover:bg-slate-100 transition-colors soft-border"
             >
               <div className="flex items-center justify-between text-slate-500 text-xs font-black uppercase">
                 <span className="flex items-center gap-1.5">
@@ -371,25 +371,25 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
             </button>
 
             {isGuestsOpen && (
-              <div className="absolute top-full right-0 w-64 mt-2 bg-cream rounded-2xl z-50 p-4 space-y-4 max-border max-shadow">
+              <div className="absolute top-full right-0 w-64 mt-2 bg-cream rounded-2xl z-50 p-4 space-y-4 soft-border soft-shadow">
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-black text-slate-700">Adults</span>
                   <div className="flex items-center gap-2">
-                    <button type="button" onClick={() => setAdults(Math.max(1, adults - 1))} aria-label="Decrease adults" className="focus-ring w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-black text-sm flex items-center justify-center max-border">−</button>
+                    <button type="button" onClick={() => setAdults(Math.max(1, adults - 1))} aria-label="Decrease adults" className="focus-ring w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-black text-sm flex items-center justify-center soft-border">−</button>
                     <span className="font-black text-sm w-4 text-center" aria-live="polite">{adults}</span>
-                    <button type="button" onClick={() => setAdults(Math.min(16, adults + 1))} aria-label="Increase adults" className="focus-ring w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-black text-sm flex items-center justify-center max-border">+</button>
+                    <button type="button" onClick={() => setAdults(Math.min(16, adults + 1))} aria-label="Increase adults" className="focus-ring w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-black text-sm flex items-center justify-center soft-border">+</button>
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-black text-slate-700">Rooms</span>
                   <div className="flex items-center gap-2">
-                    <button type="button" onClick={() => setRooms(Math.max(1, rooms - 1))} aria-label="Decrease rooms" className="focus-ring w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-black text-sm flex items-center justify-center max-border">−</button>
+                    <button type="button" onClick={() => setRooms(Math.max(1, rooms - 1))} aria-label="Decrease rooms" className="focus-ring w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-black text-sm flex items-center justify-center soft-border">−</button>
                     <span className="font-black text-sm w-4 text-center" aria-live="polite">{rooms}</span>
-                    <button type="button" onClick={() => setRooms(Math.min(8, rooms + 1))} aria-label="Increase rooms" className="focus-ring w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-black text-sm flex items-center justify-center max-border">+</button>
+                    <button type="button" onClick={() => setRooms(Math.min(8, rooms + 1))} aria-label="Increase rooms" className="focus-ring w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-black text-sm flex items-center justify-center soft-border">+</button>
                   </div>
                 </div>
-                <div className="pt-2 border-t-2" style={{ borderColor: 'var(--color-ink)' }}>
-                  <button type="button" onClick={() => setIsGuestsOpen(false)} className="focus-ring max-press w-full py-1.5 text-white rounded-lg text-sm font-black transition-colors max-border" style={{ backgroundColor: 'var(--color-ticket-orange)' }}>Done</button>
+                <div className="pt-2 border-t-2" style={{ borderColor: 'var(--color-dark-ink-muted)' }}>
+                  <button type="button" onClick={() => setIsGuestsOpen(false)} className="focus-ring soft-press w-full py-1.5 text-white rounded-lg text-sm font-black transition-colors soft-border" style={{ backgroundColor: 'var(--color-ticket-orange)' }}>Done</button>
                 </div>
               </div>
             )}
@@ -400,7 +400,7 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
             <button
               onClick={runSearch}
               disabled={isLoading || !destination.trim()}
-              className="focus-ring max-press w-full flex items-center justify-center gap-2 px-4 rounded-2xl disabled:opacity-50 text-white text-sm font-black transition-colors max-border max-shadow"
+              className="focus-ring soft-press w-full flex items-center justify-center gap-2 px-4 rounded-2xl disabled:opacity-50 text-white text-sm font-black transition-colors soft-border soft-shadow"
               style={{ backgroundColor: 'var(--color-ticket-orange)' }}
             >
               {isLoading ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
@@ -413,7 +413,7 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
       {hasSearched && (
         <div className="grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-5">
           {/* FILTERS SIDEBAR */}
-          <aside className="bg-cream rounded-2xl p-5 space-y-6 h-fit lg:sticky lg:top-20 max-border max-shadow-sm">
+          <aside className="bg-cream rounded-2xl p-5 space-y-6 h-fit lg:sticky lg:top-20 soft-border soft-shadow-sm">
             <div className="flex items-center gap-1.5 text-sm font-black text-slate-900 uppercase">
               <SlidersHorizontal className="w-4 h-4" style={{ color: 'var(--color-ticket-orange)' }} />
               Filters
@@ -447,7 +447,7 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
                           setMinPrice(lo);
                           setMaxPrice(hi === Infinity ? 2000 : hi - 1);
                         }}
-                        className={`focus-ring px-2 py-1 rounded-full text-[11px] font-bold transition-colors max-border disabled:opacity-40 disabled:cursor-not-allowed ${
+                        className={`focus-ring px-2 py-1 rounded-full text-[11px] font-bold transition-colors soft-border disabled:opacity-40 disabled:cursor-not-allowed ${
                           active ? 'text-white' : 'bg-cream text-slate-600 hover:bg-slate-50'
                         }`}
                         style={active ? { backgroundColor: 'var(--color-ticket-orange)' } : undefined}
@@ -490,7 +490,7 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
                     key={r}
                     type="button"
                     onClick={() => setMinRating(r)}
-                    className={`focus-ring px-2.5 py-1 rounded-full text-xs font-black transition-colors max-border ${
+                    className={`focus-ring px-2.5 py-1 rounded-full text-xs font-black transition-colors soft-border ${
                       minRating === r ? 'text-white' : 'bg-cream text-slate-600 hover:bg-slate-50'
                     }`}
                     style={minRating === r ? { backgroundColor: 'var(--color-ticket-orange)' } : undefined}
@@ -513,7 +513,7 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
                 {notice && <p className="text-xs text-slate-400">{notice}</p>}
               </div>
 
-              <div className="flex items-center bg-slate-100 p-1 rounded-xl text-xs sm:text-sm max-border">
+              <div className="flex items-center bg-slate-100 p-1 rounded-xl text-xs sm:text-sm soft-border">
                 {([
                   ['popularity', 'Popularity'],
                   ['price_low', 'Price: Low to High'],
@@ -537,13 +537,13 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
             </div>
 
             {isLoading ? (
-              <div className="p-12 text-center bg-slate-50 rounded-2xl space-y-3 max-border">
+              <div className="p-12 text-center bg-slate-50 rounded-2xl space-y-3 soft-border">
                 <RefreshCw className="w-7 h-7 animate-spin mx-auto" style={{ color: 'var(--color-ticket-orange)' }} />
                 <div className="font-black text-sm text-slate-700">Searching hotels…</div>
               </div>
             ) : filteredSorted.length === 0 ? (
               <div className="p-12 text-center bg-slate-50 rounded-2xl border-2 border-dashed border-slate-300 space-y-2">
-                <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto max-border" style={{ backgroundColor: 'var(--color-ticket-orange)' }}>
+                <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto soft-border" style={{ backgroundColor: 'var(--color-ticket-orange)' }}>
                   <Building2 className="w-7 h-7 text-white" />
                 </div>
                 <div className="font-black text-sm text-slate-700">No hotels match your filters</div>
@@ -554,9 +554,9 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
                 {filteredSorted.map((hotel) => (
                   <div
                     key={hotel.id}
-                    className="group bg-cream rounded-2xl hover:-translate-y-0.5 transition-transform overflow-hidden flex flex-col sm:flex-row max-border max-shadow-sm"
+                    className="group bg-cream rounded-2xl hover:-translate-y-0.5 transition-transform overflow-hidden flex flex-col sm:flex-row soft-border soft-shadow-sm"
                   >
-                    <div className="w-full sm:w-56 h-44 sm:h-auto shrink-0 bg-slate-100 overflow-hidden border-b-[3px] sm:border-b-0 sm:border-r-[3px]" style={{ borderColor: 'var(--color-ink)' }}>
+                    <div className="w-full sm:w-56 h-44 sm:h-auto shrink-0 bg-slate-100 overflow-hidden border-b-[3px] sm:border-b-0 sm:border-r-[3px]" style={{ borderColor: 'var(--color-dark-ink-muted)' }}>
                       {hotel.photoUrl ? (
                         // eslint-disable-next-line @next/next/no-img-element
                         <img src={hotel.photoUrl} alt={hotel.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
@@ -588,7 +588,7 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
                         </p>
                       </div>
 
-                      <div className="flex sm:flex-col items-center sm:items-end justify-between sm:justify-center gap-2 sm:min-w-[120px] sm:border-l-2 sm:pl-4" style={{ borderColor: 'var(--color-ink)' }}>
+                      <div className="flex sm:flex-col items-center sm:items-end justify-between sm:justify-center gap-2 sm:min-w-[120px] sm:border-l-2 sm:pl-4" style={{ borderColor: 'var(--color-dark-ink-muted)' }}>
                         {hotel.reviewScore != null && (
                           <div className="flex items-center gap-1.5">
                             <span className="text-xs font-black text-white px-2 py-1 rounded-full" style={{ backgroundColor: 'var(--color-ticket-orange)' }}>
