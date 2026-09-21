@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { AIRPORTS, Airport, FlightOption } from '@/services/flightData';
+import { Airport, FlightOption, findAirport } from '@/services/flightData';
 import { hasRapidApiKey, rapidApiFetch } from '@/lib/rapidapi';
 import { getMarkupMultiplier } from '@/lib/markup';
 
@@ -271,13 +271,8 @@ export async function GET(request: Request) {
   // real city — "Bangalore", "Bombay", anything — resolves to its real IATA
   // code instead of a fabricated one that would break the live fare search.
   const resolveAirport = async (query: string): Promise<Airport> => {
-    const clean = query.trim().toUpperCase();
-    const staticMatch = AIRPORTS.find(
-      (a) =>
-        a.code.toUpperCase() === clean ||
-        a.city.toUpperCase() === clean ||
-        a.name.toUpperCase().includes(clean)
-    );
+    const clean = query.trim();
+    const staticMatch = findAirport(clean);
     if (staticMatch) return staticMatch;
 
     if (hasRapidApiKey()) {
@@ -285,7 +280,7 @@ export async function GET(request: Request) {
         const res = await rapidApiFetch(
           `https://google-flights4.p.rapidapi.com/auto-complete?query=${encodeURIComponent(query)}`,
           'google-flights4.p.rapidapi.com',
-          { cache: 'no-store', signal: AbortSignal.timeout(6000) }
+          { cache: 'no-store', signal: AbortSignal.timeout(4000) }
         );
         const json = await res.json();
         const entry = json?.data?.[0];
@@ -294,10 +289,10 @@ export async function GET(request: Request) {
         const firstAirport = entry?.nearbyAirports?.[0]?.airport ||
           (entry?.info?.code ? entry.info : null);
         if (res.ok && json?.status !== false && firstAirport?.code) {
-          const staticByCode = AIRPORTS.find((a) => a.code === firstAirport.code);
+          const staticByCode = findAirport(firstAirport.code);
           if (staticByCode) return staticByCode;
           return {
-            code: firstAirport.code,
+            code: firstAirport.code.toUpperCase(),
             name: firstAirport.name || firstAirport.shortName || `${firstAirport.cityName} Airport`,
             city: firstAirport.cityName || entry?.info?.cityName || query,
             country: entry?.info?.shortName?.split(',').pop()?.trim() || '',
@@ -311,8 +306,9 @@ export async function GET(request: Request) {
       }
     }
 
+    const upper = clean.toUpperCase();
     return {
-      code: clean.substring(0, 3) || 'LOC',
+      code: upper.length <= 4 ? upper : upper.substring(0, 3) || 'LOC',
       name: `${query} International Airport`,
       city: query,
       country: 'Destination Port',

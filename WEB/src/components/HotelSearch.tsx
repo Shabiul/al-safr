@@ -66,8 +66,30 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
   // Filters & sort (client-side, applied over the fetched result set)
   const [sortKey, setSortKey] = useState<SortKey>('popularity');
   const [maxPrice, setMaxPrice] = useState(500);
+  const [minPrice, setMinPrice] = useState(0);
   const [starFilters, setStarFilters] = useState<Set<number>>(new Set());
   const [minRating, setMinRating] = useState(0);
+
+  // Live facet counts computed from the actual fetched results — never
+  // fabricated categories, just real counts over real data.
+  const starCounts = useMemo(() => {
+    const counts = new Map<number, number>();
+    for (const h of hotels) counts.set(h.stars, (counts.get(h.stars) ?? 0) + 1);
+    return counts;
+  }, [hotels]);
+
+  const budgetBuckets = useMemo(() => {
+    const prices = hotels.map((h) => h.priceUsd).filter((p): p is number => p != null);
+    if (prices.length === 0) return [];
+    const max = Math.max(...prices);
+    const step = Math.max(1, Math.ceil(max / 4));
+    return [0, 1, 2, 3].map((i) => {
+      const lo = i * step;
+      const hi = i === 3 ? Infinity : (i + 1) * step;
+      const count = prices.filter((p) => p >= lo && p < hi).length;
+      return { lo, hi, count };
+    });
+  }, [hotels]);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -138,7 +160,7 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
   };
 
   const filteredSorted = useMemo(() => {
-    let list = hotels.filter((h) => (h.priceUsd == null ? true : h.priceUsd <= maxPrice));
+    let list = hotels.filter((h) => (h.priceUsd == null ? true : h.priceUsd >= minPrice && h.priceUsd <= maxPrice));
     if (starFilters.size > 0) list = list.filter((h) => starFilters.has(h.stars));
     if (minRating > 0) list = list.filter((h) => (h.reviewScore ?? 0) >= minRating);
 
@@ -147,7 +169,7 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
     else if (sortKey === 'price_high') sorted.sort((a, b) => (b.priceUsd ?? -1) - (a.priceUsd ?? -1));
     else if (sortKey === 'rating') sorted.sort((a, b) => (b.reviewScore ?? 0) - (a.reviewScore ?? 0));
     return sorted;
-  }, [hotels, maxPrice, starFilters, minRating, sortKey]);
+  }, [hotels, minPrice, maxPrice, starFilters, minRating, sortKey]);
 
   const toggleStar = (star: number) => {
     setStarFilters((prev) => {
@@ -399,8 +421,8 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
 
             <div className="space-y-2">
               <div className="flex items-center justify-between text-xs font-bold text-slate-600">
-                <span>Max price / night</span>
-                <span className="text-slate-900 font-black">{formatPrice(maxPrice, currency)}</span>
+                <span>Price / night</span>
+                <span className="text-slate-900 font-black">{formatPrice(minPrice, currency)} – {formatPrice(maxPrice, currency)}</span>
               </div>
               <input
                 type="range"
@@ -411,6 +433,31 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
                 onChange={(e) => setMaxPrice(Number(e.target.value))}
                 className="w-full accent-[var(--color-ticket-orange)]"
               />
+
+              {budgetBuckets.length > 0 && (
+                <div className="flex flex-wrap gap-1.5 pt-1">
+                  {budgetBuckets.map(({ lo, hi, count }) => {
+                    const active = minPrice === lo && maxPrice === (hi === Infinity ? 2000 : hi - 1);
+                    return (
+                      <button
+                        key={lo}
+                        type="button"
+                        disabled={count === 0}
+                        onClick={() => {
+                          setMinPrice(lo);
+                          setMaxPrice(hi === Infinity ? 2000 : hi - 1);
+                        }}
+                        className={`focus-ring px-2 py-1 rounded-full text-[11px] font-bold transition-colors max-border disabled:opacity-40 disabled:cursor-not-allowed ${
+                          active ? 'text-white' : 'bg-cream text-slate-600 hover:bg-slate-50'
+                        }`}
+                        style={active ? { backgroundColor: 'var(--color-ticket-orange)' } : undefined}
+                      >
+                        {hi === Infinity ? `> ${formatPrice(lo, currency)}` : `${formatPrice(lo, currency)}–${formatPrice(hi, currency)}`} ({count})
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
             </div>
 
             <div className="space-y-2">
@@ -429,6 +476,7 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
                         <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
                       ))}
                     </span>
+                    <span className="text-xs text-slate-400 font-bold">({starCounts.get(star) ?? 0})</span>
                   </label>
                 ))}
               </div>
