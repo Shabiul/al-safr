@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Plus, Trash2 } from 'lucide-react';
+import { Plus, Trash2, Upload } from 'lucide-react';
 
 interface ItineraryDay {
   day: number;
@@ -27,6 +27,9 @@ export interface TourPackageFormData {
   featured: boolean;
   tourType: string;
   originalPriceUsd: number | null;
+  theme: string;
+  hotelCategory: number | null;
+  freeCancellation: boolean;
 }
 
 const EMPTY: TourPackageFormData = {
@@ -45,6 +48,9 @@ const EMPTY: TourPackageFormData = {
   featured: false,
   tourType: '',
   originalPriceUsd: null,
+  theme: '',
+  hotelCategory: null,
+  freeCancellation: false,
 };
 
 function listToLines(items: string[]): string {
@@ -65,6 +71,31 @@ export function TourPackageForm({ initial }: { initial?: TourPackageFormData }) 
   const [itinerary, setItinerary] = useState<ItineraryDay[]>(initial?.itinerary ?? EMPTY.itinerary);
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = '';
+    if (!file) return;
+
+    setIsUploadingImage(true);
+    setError('');
+    try {
+      const form = new FormData();
+      form.append('file', file);
+      const res = await fetch('/api/tour-packages/images', { method: 'POST', body: form });
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error || 'Failed to upload image');
+        return;
+      }
+      setImagesText((prev) => (prev ? `${prev}\n${data.url}` : data.url));
+    } catch {
+      setError('Network error while uploading the image — please try again.');
+    } finally {
+      setIsUploadingImage(false);
+    }
+  };
 
   const updateItineraryDay = (index: number, patch: Partial<ItineraryDay>) => {
     setItinerary((prev) => prev.map((d, i) => (i === index ? { ...d, ...patch } : d)));
@@ -202,6 +233,40 @@ export function TourPackageForm({ initial }: { initial?: TourPackageFormData }) 
         </label>
       </div>
 
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <label className="space-y-1">
+          <span className="text-xs font-medium text-slate-500">Package theme (optional — used for the theme filter)</span>
+          <input
+            value={form.theme}
+            onChange={(e) => setForm({ ...form, theme: e.target.value })}
+            placeholder="e.g. Adventure, Beach, Cultural"
+            className="focus-ring w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm"
+          />
+        </label>
+        <label className="space-y-1">
+          <span className="text-xs font-medium text-slate-500">Included hotel category (optional)</span>
+          <select
+            value={form.hotelCategory ?? ''}
+            onChange={(e) => setForm({ ...form, hotelCategory: e.target.value === '' ? null : Number(e.target.value) })}
+            className="focus-ring w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm"
+          >
+            <option value="">Not set</option>
+            {[3, 4, 5].map((n) => (
+              <option key={n} value={n}>{n} star</option>
+            ))}
+          </select>
+        </label>
+        <label className="flex items-center gap-2 pt-6">
+          <input
+            type="checkbox"
+            checked={form.freeCancellation}
+            onChange={(e) => setForm({ ...form, freeCancellation: e.target.checked })}
+            className="rounded accent-brand-600"
+          />
+          <span className="text-sm text-slate-700">Free cancellation offered</span>
+        </label>
+      </div>
+
       <label className="space-y-1 block">
         <span className="text-xs font-medium text-slate-500">Summary (one line, shown on cards)</span>
         <input
@@ -223,16 +288,23 @@ export function TourPackageForm({ initial }: { initial?: TourPackageFormData }) 
         />
       </label>
 
-      <label className="space-y-1 block">
-        <span className="text-xs font-medium text-slate-500">Image URLs (one per line, first is the cover)</span>
+      <div className="space-y-1">
+        <div className="flex items-center justify-between">
+          <span className="text-xs font-medium text-slate-500">Image URLs (one per line, first is the cover)</span>
+          <label className="focus-ring flex items-center gap-1.5 text-xs font-semibold text-brand-700 hover:underline cursor-pointer">
+            <Upload className="w-3.5 h-3.5" />
+            {isUploadingImage ? 'Uploading…' : 'Upload image'}
+            <input type="file" accept="image/*" onChange={handleImageUpload} disabled={isUploadingImage} className="hidden" />
+          </label>
+        </div>
         <textarea
           rows={2}
           value={imagesText}
           onChange={(e) => setImagesText(e.target.value)}
-          placeholder="https://images.unsplash.com/..."
+          placeholder="https://images.unsplash.com/... — or upload a file above"
           className="focus-ring w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-mono resize-none"
         />
-      </label>
+      </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <label className="space-y-1">

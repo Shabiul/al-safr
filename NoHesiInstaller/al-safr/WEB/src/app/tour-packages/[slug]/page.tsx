@@ -37,6 +37,9 @@ export default async function TourPackageDetailPage({ params, searchParams }: Pa
     featured: row.featured ?? false,
     tourType: row.tourType ?? null,
     originalPriceUsd: row.originalPriceUsd ?? null,
+    theme: row.theme ?? null,
+    hotelCategory: row.hotelCategory ?? null,
+    freeCancellation: row.freeCancellation ?? false,
   };
 
   return (

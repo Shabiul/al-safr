@@ -31,6 +31,9 @@ export async function GET() {
     featured: p.featured ?? false,
     tourType: p.tourType ?? null,
     originalPriceUsd: p.originalPriceUsd ?? null,
+    theme: p.theme ?? null,
+    hotelCategory: p.hotelCategory ?? null,
+    freeCancellation: p.freeCancellation ?? false,
   }));
 
   return NextResponse.json({ packages });

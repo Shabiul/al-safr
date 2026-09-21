@@ -24,8 +24,6 @@ import {
   Car,
   Images,
 } from 'lucide-react';
-import { CurrencyCode, CURRENCIES } from '@/services/flightData';
-
 type MainTab = 'home' | 'services' | 'bookings';
 type ServiceId = 'book' | 'hotels' | 'tours' | 'cabs';
 
@@ -35,8 +33,6 @@ interface HeaderProps {
   // when a callback isn't provided, navigation falls back to a real route
   // change into the home page instead of calling into shared SPA state
   // that doesn't exist on that page.
-  currency?: CurrencyCode;
-  onCurrencyChange?: (curr: CurrencyCode) => void;
   apiStatus?: 'idle' | 'loading' | 'success' | 'error';
   activeTab?: MainTab;
   onTabChange?: (tab: MainTab) => void;
@@ -62,8 +58,6 @@ const PAGE_LINKS: { href: string; label: string; icon: React.ElementType }[] = [
 ];
 
 export const Header: React.FC<HeaderProps> = ({
-  currency,
-  onCurrencyChange,
   apiStatus = 'idle',
   activeTab,
   onTabChange,
@@ -74,17 +68,9 @@ export const Header: React.FC<HeaderProps> = ({
   const [isServicesMenuOpen, setIsServicesMenuOpen] = useState(false);
   const [isMobileServicesOpen, setIsMobileServicesOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [localCurrency, setLocalCurrency] = useState<CurrencyCode>('INR');
   const pathname = usePathname();
   const router = useRouter();
   const servicesMenuRef = useRef<HTMLDivElement>(null);
-
-  const resolvedCurrency = currency ?? localCurrency;
-
-  const handleCurrencyChange = (c: CurrencyCode) => {
-    if (onCurrencyChange) onCurrencyChange(c);
-    else setLocalCurrency(c);
-  };
 
   // On the home SPA, tabs are switched in-place via the provided callback.
   // On any other page, there's no shared SPA state to call into, so this
@@ -332,24 +318,10 @@ export const Header: React.FC<HeaderProps> = ({
 
           {/* Right Action Items */}
           <div className="flex items-center gap-3">
-            {/* Currency Selector */}
+            {/* All pricing is shown in INR — no currency switcher */}
             <div className="hidden sm:flex items-center gap-1.5 rounded-full border border-[#1c1817]/15 bg-white/60 px-3 py-1.5 text-xs font-bold text-[#1c1817] shadow-2xs">
               <Globe className="w-3.5 h-3.5 text-[#f36f0f]" aria-hidden="true" />
-              <label htmlFor="currency-select" className="sr-only">
-                Currency
-              </label>
-              <select
-                id="currency-select"
-                value={resolvedCurrency}
-                onChange={(e) => handleCurrencyChange(e.target.value as CurrencyCode)}
-                className="focus-ring bg-transparent text-xs font-bold text-[#1c1817] cursor-pointer"
-              >
-                {Object.keys(CURRENCIES).map((c) => (
-                  <option key={c} value={c}>
-                    {CURRENCIES[c as CurrencyCode].label} ({c})
-                  </option>
-                ))}
-              </select>
+              <span>INR (₹)</span>
             </div>
 
             {/* Get a Quote Button */}
@@ -503,17 +475,7 @@ export const Header: React.FC<HeaderProps> = ({
           <div className="pt-3 border-t border-[#1c1817]/10 flex flex-col gap-3">
             <div className="flex items-center justify-between px-2 text-xs font-bold text-[#1c1817]/75">
               <span>Currency:</span>
-              <select
-                value={resolvedCurrency}
-                onChange={(e) => handleCurrencyChange(e.target.value as CurrencyCode)}
-                className="bg-transparent font-bold text-[#1c1817] cursor-pointer"
-              >
-                {Object.keys(CURRENCIES).map((c) => (
-                  <option key={c} value={c}>
-                    {CURRENCIES[c as CurrencyCode].label} ({c})
-                  </option>
-                ))}
-              </select>
+              <span>INR (₹)</span>
             </div>
 
             <Link
