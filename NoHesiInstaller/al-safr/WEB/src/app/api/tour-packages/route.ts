@@ -28,6 +28,9 @@ export async function GET() {
     inclusions: p.inclusions,
     exclusions: p.exclusions,
     itinerary: p.itinerary as unknown as TourPackage['itinerary'],
+    featured: p.featured ?? false,
+    tourType: p.tourType ?? null,
+    originalPriceUsd: p.originalPriceUsd ?? null,
   }));
 
   return NextResponse.json({ packages });
