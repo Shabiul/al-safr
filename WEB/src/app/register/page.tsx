@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
+import { Header } from '@/components/Header';
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -42,10 +43,12 @@ export default function RegisterPage() {
   };
 
   return (
-    <main className="max-w-sm mx-auto py-16 px-4">
-      <div className="rounded-3xl bg-cream p-7 sm:p-8 soft-border soft-shadow -rotate-1">
+    <>
+      <Header />
+      <main className="max-w-sm mx-auto pt-28 sm:pt-32 pb-16 px-4">
+      <div className="rounded-3xl bg-cream p-7 sm:p-8 soft-border soft-shadow">
         <span
-          className="inline-block text-xs font-black tracking-widest uppercase px-3 py-1 rounded-full soft-border rotate-3 mb-4"
+          className="inline-block text-xs font-black tracking-widest uppercase px-3 py-1 rounded-full soft-border mb-4"
           style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'white' }}
         >
           Join us
@@ -95,6 +98,7 @@ export default function RegisterPage() {
           </button>
         </form>
       </div>
-    </main>
+      </main>
+    </>
   );
 }

@@ -56,7 +56,7 @@ export default function ContactPage() {
   return (
     <StaticPageShell title="Contact us" subtitle="Questions about a booking, or anything else — we read every message." wide>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-        {CONTACT_CARDS.map((c, i) => {
+        {CONTACT_CARDS.map((c) => {
           const Icon = c.icon;
           const content = (
             <>
@@ -69,13 +69,12 @@ export default function ContactPage() {
               </div>
             </>
           );
-          const rotation = i % 2 === 0 ? '-rotate-1' : 'rotate-1';
           return c.href ? (
-            <a key={c.label} href={c.href} className={`soft-press p-4 rounded-2xl bg-cream soft-border soft-shadow-sm flex items-start gap-3 ${rotation}`}>
+            <a key={c.label} href={c.href} className="soft-press p-4 rounded-2xl bg-cream soft-border soft-shadow-sm flex items-start gap-3">
               {content}
             </a>
           ) : (
-            <div key={c.label} className={`p-4 rounded-2xl bg-cream soft-border soft-shadow-sm flex items-start gap-3 ${rotation}`}>
+            <div key={c.label} className="p-4 rounded-2xl bg-cream soft-border soft-shadow-sm flex items-start gap-3">
               {content}
             </div>
           );
@@ -145,7 +144,7 @@ export default function ContactPage() {
           </button>
         </form>
 
-        <div className="lg:col-span-2 rounded-2xl overflow-hidden soft-border soft-shadow relative min-h-[16rem] rotate-1">
+        <div className="lg:col-span-2 rounded-2xl overflow-hidden soft-border soft-shadow relative min-h-[16rem]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="https://images.unsplash.com/photo-1524661135-423995f22d0b?w=900&q=80"

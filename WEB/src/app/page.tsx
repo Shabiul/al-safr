@@ -46,6 +46,25 @@ export default function Home() {
   const [apiStatus, setApiStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
 
+  // Other pages' navbar (About, Contact, login, ...) can't call into this
+  // component's state directly, so Header falls back to a real navigation
+  // like /?tab=services&service=hotels. Pick that up once on mount, then
+  // strip the query string so later in-app tab switches don't reuse it.
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const tab = params.get('tab');
+    const service = params.get('service');
+    if (tab === 'services' || tab === 'bookings') {
+      setActiveTab(tab);
+    }
+    if (service === 'book' || service === 'hotels' || service === 'tours' || service === 'cabs') {
+      setActiveService(service);
+    }
+    if (tab || service) {
+      window.history.replaceState(null, '', '/');
+    }
+  }, []);
+
   // Search parameters
   const [searchParams, setSearchParams] = useState({
     origin: 'DEL',
@@ -332,7 +351,7 @@ export default function Home() {
             {allBookings.length === 0 ? (
               <div className="p-12 text-center bg-cream rounded-2xl soft-border space-y-4">
                 <div
-                  className="w-16 h-16 rounded-2xl soft-border flex items-center justify-center mx-auto -rotate-3"
+                  className="w-16 h-16 rounded-2xl soft-border flex items-center justify-center mx-auto"
                   style={{ backgroundColor: 'var(--color-ticket-orange)' }}
                 >
                   <Plane className="w-8 h-8 -rotate-45" style={{ color: 'var(--color-dark-ink-muted)' }} />

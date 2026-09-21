@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import {
   Plane,
   Globe,
@@ -30,11 +30,16 @@ type MainTab = 'home' | 'services' | 'bookings';
 type ServiceId = 'book' | 'hotels' | 'tours' | 'cabs';
 
 interface HeaderProps {
-  currency: CurrencyCode;
-  onCurrencyChange: (curr: CurrencyCode) => void;
-  apiStatus: 'idle' | 'loading' | 'success' | 'error';
-  activeTab: MainTab;
-  onTabChange: (tab: MainTab) => void;
+  // All optional so <Header /> also works standalone on pages outside the
+  // tab-based home SPA (About, Contact, login, tour package detail, ...):
+  // when a callback isn't provided, navigation falls back to a real route
+  // change into the home page instead of calling into shared SPA state
+  // that doesn't exist on that page.
+  currency?: CurrencyCode;
+  onCurrencyChange?: (curr: CurrencyCode) => void;
+  apiStatus?: 'idle' | 'loading' | 'success' | 'error';
+  activeTab?: MainTab;
+  onTabChange?: (tab: MainTab) => void;
   onOpenBooking?: () => void;
   onSelectService?: (service: ServiceId) => void;
 }
@@ -59,7 +64,7 @@ const PAGE_LINKS: { href: string; label: string; icon: React.ElementType }[] = [
 export const Header: React.FC<HeaderProps> = ({
   currency,
   onCurrencyChange,
-  apiStatus,
+  apiStatus = 'idle',
   activeTab,
   onTabChange,
   onOpenBooking,
@@ -69,8 +74,37 @@ export const Header: React.FC<HeaderProps> = ({
   const [isServicesMenuOpen, setIsServicesMenuOpen] = useState(false);
   const [isMobileServicesOpen, setIsMobileServicesOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [localCurrency, setLocalCurrency] = useState<CurrencyCode>('INR');
   const pathname = usePathname();
+  const router = useRouter();
   const servicesMenuRef = useRef<HTMLDivElement>(null);
+
+  const resolvedCurrency = currency ?? localCurrency;
+
+  const handleCurrencyChange = (c: CurrencyCode) => {
+    if (onCurrencyChange) onCurrencyChange(c);
+    else setLocalCurrency(c);
+  };
+
+  // On the home SPA, tabs are switched in-place via the provided callback.
+  // On any other page, there's no shared SPA state to call into, so this
+  // does a real navigation back to the home page with the tab pre-selected.
+  const goTab = (tab: MainTab) => {
+    if (onTabChange) {
+      onTabChange(tab);
+    } else {
+      router.push(tab === 'home' ? '/' : `/?tab=${tab}`);
+    }
+  };
+
+  const goService = (service: ServiceId) => {
+    setIsServicesMenuOpen(false);
+    if (onSelectService) {
+      onSelectService(service);
+    } else {
+      router.push(`/?tab=services&service=${service}`);
+    }
+  };
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 25);
@@ -88,20 +122,11 @@ export const Header: React.FC<HeaderProps> = ({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const handleSelectService = (service: ServiceId) => {
-    setIsServicesMenuOpen(false);
-    if (onSelectService) {
-      onSelectService(service);
-    } else {
-      onTabChange('services');
-    }
-  };
-
   const handleBookNow = () => {
     if (onOpenBooking) {
       onOpenBooking();
     } else {
-      onTabChange('services');
+      goService('book');
     }
   };
 
@@ -154,7 +179,7 @@ export const Header: React.FC<HeaderProps> = ({
           <button
             type="button"
             onClick={() => {
-              onTabChange('home');
+              goTab('home');
               setIsMenuOpen(false);
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
@@ -195,7 +220,7 @@ export const Header: React.FC<HeaderProps> = ({
               return (
                 <button
                   type="button"
-                  onClick={() => onTabChange(TABS[0].id)}
+                  onClick={() => goTab(TABS[0].id)}
                   aria-current={isActive ? 'page' : undefined}
                   className={`focus-ring px-4 py-2 rounded-full text-sm font-bold transition-all flex items-center gap-2 whitespace-nowrap cursor-pointer ${
                     isActive
@@ -239,7 +264,7 @@ export const Header: React.FC<HeaderProps> = ({
                         key={item.id}
                         type="button"
                         role="menuitem"
-                        onClick={() => handleSelectService(item.id)}
+                        onClick={() => goService(item.id)}
                         className="focus-ring w-full flex items-center gap-2.5 px-4 py-2.5 text-sm font-bold text-left text-[#1c1817]/80 hover:bg-[#f4f3ec] hover:text-[#1c1817] transition-colors cursor-pointer"
                       >
                         <ItemIcon className="w-4 h-4" style={{ color: '#f36f0f' }} />
@@ -257,7 +282,7 @@ export const Header: React.FC<HeaderProps> = ({
               return (
                 <button
                   type="button"
-                  onClick={() => onTabChange(TABS[1].id)}
+                  onClick={() => goTab(TABS[1].id)}
                   aria-current={isActive ? 'page' : undefined}
                   className={`focus-ring px-4 py-2 rounded-full text-sm font-bold transition-all flex items-center gap-2 whitespace-nowrap cursor-pointer ${
                     isActive
@@ -315,8 +340,8 @@ export const Header: React.FC<HeaderProps> = ({
               </label>
               <select
                 id="currency-select"
-                value={currency}
-                onChange={(e) => onCurrencyChange(e.target.value as CurrencyCode)}
+                value={resolvedCurrency}
+                onChange={(e) => handleCurrencyChange(e.target.value as CurrencyCode)}
                 className="focus-ring bg-transparent text-xs font-bold text-[#1c1817] cursor-pointer"
               >
                 {Object.keys(CURRENCIES).map((c) => (
@@ -370,7 +395,7 @@ export const Header: React.FC<HeaderProps> = ({
                 <button
                   type="button"
                   onClick={() => {
-                    onTabChange(TABS[0].id);
+                    goTab(TABS[0].id);
                     setIsMenuOpen(false);
                   }}
                   aria-current={isActive ? 'page' : undefined}
@@ -408,7 +433,7 @@ export const Header: React.FC<HeaderProps> = ({
                       key={item.id}
                       type="button"
                       onClick={() => {
-                        handleSelectService(item.id);
+                        goService(item.id);
                         setIsMenuOpen(false);
                         setIsMobileServicesOpen(false);
                       }}
@@ -429,7 +454,7 @@ export const Header: React.FC<HeaderProps> = ({
                 <button
                   type="button"
                   onClick={() => {
-                    onTabChange(TABS[1].id);
+                    goTab(TABS[1].id);
                     setIsMenuOpen(false);
                   }}
                   aria-current={isActive ? 'page' : undefined}
@@ -479,8 +504,8 @@ export const Header: React.FC<HeaderProps> = ({
             <div className="flex items-center justify-between px-2 text-xs font-bold text-[#1c1817]/75">
               <span>Currency:</span>
               <select
-                value={currency}
-                onChange={(e) => onCurrencyChange(e.target.value as CurrencyCode)}
+                value={resolvedCurrency}
+                onChange={(e) => handleCurrencyChange(e.target.value as CurrencyCode)}
                 className="bg-transparent font-bold text-[#1c1817] cursor-pointer"
               >
                 {Object.keys(CURRENCIES).map((c) => (
