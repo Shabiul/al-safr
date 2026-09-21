@@ -152,7 +152,7 @@ export const LandingHome: React.FC<LandingHomeProps> = ({
       {/* =========================================================================
           SECTION 1: HERO SECTION (With Signature Arch + Flight Ticket Search Widget)
          ========================================================================= */}
-      <section id="hero" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 sm:pt-36 pb-16 lg:pb-24">
+      <section id="hero" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 sm:pt-36 pb-10 lg:pb-14">
         <div className="flex items-center gap-2 text-xs font-bold text-[#1c1817]/60 mb-8">
           <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
           <span>Direct Wholesale Airline Feeds</span>
@@ -520,8 +520,8 @@ export const LandingHome: React.FC<LandingHomeProps> = ({
           not the fictional stock destinations this used to show.
          ========================================================================= */}
       {packages.length > 0 && (
-        <section id="discover" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
-          <div className="text-center space-y-3 mb-12 sm:mb-16">
+        <section id="discover" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
+          <div className="text-center space-y-3 mb-8 sm:mb-10">
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#1c1817] tracking-tight">
               Discover the world
             </h2>
@@ -592,7 +592,7 @@ export const LandingHome: React.FC<LandingHomeProps> = ({
       {/* =========================================================================
           SECTION: WHERE COMFORT MEETS ELEGANCE (Hospitality & Airline Providers)
          ========================================================================= */}
-      <section id="comfort-elegance" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+      <section id="comfort-elegance" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         <div className="bg-white rounded-[32px] sm:rounded-[40px] p-8 sm:p-12 lg:p-14 border border-[#1c1817]/10 shadow-xs relative overflow-hidden">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
             {/* Left Content */}
@@ -661,8 +661,8 @@ export const LandingHome: React.FC<LandingHomeProps> = ({
       {/* =========================================================================
           SECTION 3: OUR BEST FEATURE (Connected 3-Node Cloud Capsule)
          ========================================================================= */}
-      <section id="features" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 text-center">
-        <div className="space-y-3 mb-12 sm:mb-16">
+      <section id="features" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 text-center">
+        <div className="space-y-3 mb-8 sm:mb-10">
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#1c1817] tracking-tight leading-tight max-w-xl mx-auto">
             Our best feature <br />
             <span className="text-[#1c1817]/85 font-extrabold">for the customer who believe in us</span>
@@ -701,7 +701,7 @@ export const LandingHome: React.FC<LandingHomeProps> = ({
       {/* =========================================================================
           SECTION 4: ADVENTURES CAN FILL YOUR SOUL (Panoramic Stadium Feature)
          ========================================================================= */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end mb-10 sm:mb-12">
           <div className="lg:col-span-7">
             <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-[#1c1817] tracking-tight leading-[1.02] uppercase">
@@ -743,7 +743,7 @@ export const LandingHome: React.FC<LandingHomeProps> = ({
       {/* =========================================================================
           SECTION 5: WHO WE ARE / STORYTELLING ARCH (Al-Safr Legacy & Promise)
          ========================================================================= */}
-      <section id="who-we-are" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+      <section id="who-we-are" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
           {/* Left Arch Frame */}
           <div className="lg:col-span-6 flex items-center justify-center order-2 lg:order-1">
@@ -823,8 +823,8 @@ export const LandingHome: React.FC<LandingHomeProps> = ({
       {/* =========================================================================
           SECTION 6: OUR BEST CLIENTS WORDS (Testimonials)
          ========================================================================= */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 text-center">
-        <div className="space-y-3 mb-12 sm:mb-16">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 text-center">
+        <div className="space-y-3 mb-8 sm:mb-10">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#1c1817] tracking-tight">
             Our best clients words
           </h2>
@@ -863,8 +863,8 @@ export const LandingHome: React.FC<LandingHomeProps> = ({
       {/* =========================================================================
           SECTION 7: STAY STYLES (4 Circular Gallery Cutouts)
          ========================================================================= */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 text-center">
-        <div className="space-y-3 mb-12 sm:mb-16">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 text-center">
+        <div className="space-y-3 mb-8 sm:mb-10">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#1c1817] tracking-tight">
             Pick your kind of getaway
           </h2>
@@ -902,7 +902,7 @@ export const LandingHome: React.FC<LandingHomeProps> = ({
       {/* =========================================================================
           SECTION 8: FREQUENTLY ASKED QUESTIONS (Accordion)
          ========================================================================= */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="space-y-3 text-left">
             <span className="inline-block text-xs font-black tracking-widest uppercase px-3 py-1 rounded-full bg-[#f36f0f] text-white">
