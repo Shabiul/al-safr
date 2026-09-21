@@ -22,6 +22,7 @@ import {
   Building2,
   Compass,
   Car,
+  Images,
 } from 'lucide-react';
 import { CurrencyCode, CURRENCIES } from '@/services/flightData';
 
@@ -36,6 +37,7 @@ interface HeaderProps {
   onTabChange: (tab: MainTab) => void;
   onOpenBooking?: () => void;
   onSelectService?: (service: ServiceId) => void;
+  onOpenGallery?: () => void;
 }
 
 const TABS: { id: MainTab; label: string; icon: React.ElementType }[] = [
@@ -63,6 +65,7 @@ export const Header: React.FC<HeaderProps> = ({
   onTabChange,
   onOpenBooking,
   onSelectService,
+  onOpenGallery,
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isServicesMenuOpen, setIsServicesMenuOpen] = useState(false);
@@ -270,6 +273,17 @@ export const Header: React.FC<HeaderProps> = ({
               );
             })()}
 
+            {onOpenGallery && (
+              <button
+                type="button"
+                onClick={onOpenGallery}
+                className="focus-ring px-4 py-2 rounded-full text-sm font-bold transition-all flex items-center gap-2 whitespace-nowrap cursor-pointer text-[#1c1817]/75 hover:text-[#1c1817] hover:bg-[#1c1817]/5"
+              >
+                <Images className="w-4 h-4 shrink-0 text-[#1c1817]/60" />
+                Gallery
+              </button>
+            )}
+
             {PAGE_LINKS.map((link) => {
               const Icon = link.icon;
               const isActive = pathname === link.href;
@@ -428,6 +442,20 @@ export const Header: React.FC<HeaderProps> = ({
                 </button>
               );
             })()}
+
+            {onOpenGallery && (
+              <button
+                type="button"
+                onClick={() => {
+                  onOpenGallery();
+                  setIsMenuOpen(false);
+                }}
+                className="w-full px-4 py-3 rounded-xl text-sm font-bold transition-colors flex items-center gap-3 text-[#1c1817]/80 hover:bg-[#1c1817]/5"
+              >
+                <Images className="w-4 h-4" />
+                Gallery
+              </button>
+            )}
 
             {PAGE_LINKS.map((link) => {
               const Icon = link.icon;
