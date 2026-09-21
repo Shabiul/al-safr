@@ -7,7 +7,7 @@ import { Phone, Mail, MapPin, Clock, CheckCircle2, MessageCircle } from 'lucide-
 const CONTACT_CARDS = [
   { icon: Phone, label: 'Phone', value: '+91 89045 63397', href: 'tel:+918904563397', color: 'var(--color-ticket-orange)' },
   { icon: MessageCircle, label: 'WhatsApp', value: '+91 89045 63396', href: 'https://wa.me/918904563396', color: '#10b981' },
-  { icon: Mail, label: 'Email', value: 'luckysaj@gmail.com', href: 'mailto:luckysaj@gmail.com', color: 'var(--color-ticket-orange)' },
+  { icon: Mail, label: 'Email', value: 'alsafartoursntravels@gmail.com', href: 'mailto:alsafartoursntravels@gmail.com', color: 'var(--color-ticket-orange)' },
   { icon: MapPin, label: 'Office', value: '53/3, Abbaiah Reddy St, near Celebrity Arch, Doddathoguru, Electronic City Phase I, Electronic City, Bengaluru, Karnataka 560100', color: 'var(--color-ticket-orange)' },
   { icon: Clock, label: 'Hours', value: 'Mon – Sat: 10:00 AM – 8:00 PM · Sunday: by appointment', color: 'var(--color-ticket-orange)' },
 ];

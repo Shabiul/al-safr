@@ -1006,8 +1006,8 @@ export const LandingHome: React.FC<LandingHomeProps> = ({
                   </a>
                 </li>
                 <li>
-                  <a href="mailto:luckysaj@gmail.com" className="hover:text-white transition-colors">
-                    luckysaj@gmail.com
+                  <a href="mailto:alsafartoursntravels@gmail.com" className="hover:text-white transition-colors">
+                    alsafartoursntravels@gmail.com
                   </a>
                 </li>
                 <li className="text-[11px] text-[#f4f3ec]/50 pt-1">
