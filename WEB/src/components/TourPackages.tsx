@@ -4,10 +4,21 @@ import React, { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { CurrencyCode, formatPrice } from '@/services/flightData';
 import { TourPackage } from '@/services/tourPackageData';
-import { MapPin, Calendar, ArrowRight, RefreshCw, Compass, Search, CheckCircle2, UtensilsCrossed } from 'lucide-react';
+import { MapPin, ArrowRight, RefreshCw, Compass, Search, CheckCircle2, UtensilsCrossed, Heart, Flame } from 'lucide-react';
 
 interface TourPackagesProps {
   currency: CurrencyCode;
+}
+
+const WISHLIST_KEY = 'al-safr-wishlist';
+
+function loadWishlist(): Set<string> {
+  try {
+    const raw = localStorage.getItem(WISHLIST_KEY);
+    return new Set(raw ? JSON.parse(raw) : []);
+  } catch {
+    return new Set();
+  }
 }
 
 type SortKey = 'relevance' | 'price_low' | 'price_high' | 'duration_short' | 'duration_long';
@@ -28,6 +39,35 @@ export const TourPackages: React.FC<TourPackagesProps> = ({ currency }) => {
   const [notice, setNotice] = useState('');
   const [query, setQuery] = useState('');
   const [sortKey, setSortKey] = useState<SortKey>('relevance');
+  const [wishlist, setWishlist] = useState<Set<string>>(new Set());
+
+  // Per-browser saved list — genuinely persists (localStorage), not a
+  // decorative heart that resets on refresh. Deliberately an effect rather
+  // than a lazy useState initializer: this component renders on the server
+  // first (no localStorage there), so reading it during render would make
+  // the client's hydrated output diverge from the server-rendered HTML for
+  // any package already saved from a past visit — a real hydration
+  // mismatch, not just a lint nag. Loading it post-mount avoids that.
+  useEffect(() => {
+    setWishlist(loadWishlist());
+  }, []);
+
+  const toggleWishlist = (e: React.MouseEvent, id: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setWishlist((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      try {
+        localStorage.setItem(WISHLIST_KEY, JSON.stringify([...next]));
+      } catch {
+        // Private browsing / storage disabled — the toggle still works for
+        // this render, it just won't survive a refresh.
+      }
+      return next;
+    });
+  };
 
   useEffect(() => {
     let cancelled = false;
@@ -135,7 +175,12 @@ export const TourPackages: React.FC<TourPackagesProps> = ({ currency }) => {
             const hasMeals = pkg.inclusions.some((item) =>
               MEAL_KEYWORDS.some((kw) => item.toLowerCase().includes(kw))
             );
-            const highlights = pkg.itinerary.slice(0, 5);
+            const highlights = pkg.itinerary.slice(0, 6);
+            const isSaved = wishlist.has(pkg.id);
+            const hasDiscount = pkg.originalPriceUsd != null && pkg.originalPriceUsd > pkg.priceUsd;
+            const discountPct = hasDiscount
+              ? Math.round((1 - pkg.priceUsd / pkg.originalPriceUsd!) * 100)
+              : 0;
 
             return (
               <Link
@@ -143,7 +188,7 @@ export const TourPackages: React.FC<TourPackagesProps> = ({ currency }) => {
                 href={`/tour-packages/${pkg.slug}?currency=${currency}`}
                 className={`group bg-cream rounded-2xl hover:-translate-y-0.5 transition-all overflow-hidden flex flex-col soft-border soft-shadow-sm ${i % 3 === 1 ? 'sm:-translate-y-2' : ''}`}
               >
-                <div className="h-44 bg-slate-100 overflow-hidden border-b-[1.5px]" style={{ borderColor: 'var(--color-dark-ink-muted)' }}>
+                <div className="h-44 bg-slate-100 overflow-hidden relative border-b-[1.5px]" style={{ borderColor: 'var(--color-dark-ink-muted)' }}>
                   {pkg.images[0] ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img src={pkg.images[0]} alt={pkg.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
@@ -152,21 +197,44 @@ export const TourPackages: React.FC<TourPackagesProps> = ({ currency }) => {
                       <Compass className="w-10 h-10" />
                     </div>
                   )}
+
+                  {pkg.featured && (
+                    <span className="absolute top-2 left-2 flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-black uppercase text-white bg-rose-600">
+                      <Flame className="w-3 h-3" />
+                      Hot
+                    </span>
+                  )}
+
+                  <button
+                    type="button"
+                    onClick={(e) => toggleWishlist(e, pkg.id)}
+                    aria-label={isSaved ? 'Remove from saved' : 'Save package'}
+                    aria-pressed={isSaved}
+                    className="focus-ring absolute top-2 right-2 w-7 h-7 rounded-full bg-white/90 flex items-center justify-center hover:bg-white transition-colors"
+                  >
+                    <Heart className={`w-3.5 h-3.5 ${isSaved ? 'fill-rose-600 text-rose-600' : 'text-slate-500'}`} />
+                  </button>
                 </div>
 
                 <div className="p-4 flex-1 flex flex-col gap-2">
-                  <h3 className="font-black text-base text-slate-900 leading-snug">{pkg.name}</h3>
+                  <div className="flex items-start justify-between gap-2">
+                    <h3 className="font-black text-base text-slate-900 leading-snug">{pkg.name}</h3>
+                    <span className="shrink-0 text-[11px] font-black text-slate-600 px-2 py-1 rounded-full soft-border whitespace-nowrap">
+                      {nights}N / {pkg.durationDays}D
+                    </span>
+                  </div>
 
                   <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-slate-500">
                     <span className="flex items-center gap-1">
                       <MapPin className="w-3 h-3 shrink-0" style={{ color: 'var(--color-ticket-orange)' }} />
                       {pkg.destination}
                     </span>
-                    <span className="text-slate-300">·</span>
-                    <span className="flex items-center gap-1">
-                      <Calendar className="w-3 h-3 shrink-0" />
-                      {nights}N / {pkg.durationDays}D
-                    </span>
+                    {pkg.tourType && (
+                      <>
+                        <span className="text-slate-300">·</span>
+                        <span className="font-bold text-violet-600">{pkg.tourType}</span>
+                      </>
+                    )}
                     {hasMeals && (
                       <>
                         <span className="text-slate-300">·</span>
@@ -179,23 +247,31 @@ export const TourPackages: React.FC<TourPackagesProps> = ({ currency }) => {
                   </div>
 
                   {highlights.length > 0 && (
-                    <ul className="space-y-1 pt-1">
-                      {highlights.map((day) => (
-                        <li key={day.day} className="flex items-start gap-1.5 text-xs text-slate-600 leading-snug">
-                          <CheckCircle2 className="w-3.5 h-3.5 shrink-0 mt-0.5" style={{ color: 'var(--color-ticket-orange)' }} />
-                          {day.title}
-                        </li>
-                      ))}
+                    <div>
+                      <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-3 gap-y-1 pt-1">
+                        {highlights.map((day) => (
+                          <li key={day.day} className="flex items-start gap-1.5 text-xs text-slate-600 leading-snug">
+                            <CheckCircle2 className="w-3.5 h-3.5 shrink-0 mt-0.5" style={{ color: 'var(--color-ticket-orange)' }} />
+                            {day.title}
+                          </li>
+                        ))}
+                      </ul>
                       {pkg.itinerary.length > highlights.length && (
-                        <li className="text-xs text-slate-400 font-bold pl-5">
+                        <div className="text-xs text-slate-400 font-bold pt-1">
                           +{pkg.itinerary.length - highlights.length} more days
-                        </li>
+                        </div>
                       )}
-                    </ul>
+                    </div>
                   )}
 
                   <div className="mt-auto pt-2 flex items-center justify-between">
                     <div>
+                      {hasDiscount && (
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-xs text-slate-400 line-through">{formatPrice(pkg.originalPriceUsd!, currency)}</span>
+                          <span className="text-[11px] font-black text-emerald-600">{discountPct}% off</span>
+                        </div>
+                      )}
                       <div className="text-lg font-black text-slate-900">{formatPrice(pkg.priceUsd, currency)}</div>
                       <div className="text-[11px] text-slate-400">per person</div>
                     </div>

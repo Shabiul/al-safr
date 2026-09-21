@@ -25,6 +25,9 @@ export default async function EditTourPackagePage({ params }: PageProps) {
     exclusions: pkg.exclusions,
     itinerary: pkg.itinerary as unknown as TourPackageFormData['itinerary'],
     published: pkg.published,
+    featured: pkg.featured ?? false,
+    tourType: pkg.tourType ?? '',
+    originalPriceUsd: pkg.originalPriceUsd ?? null,
   };
 
   return (

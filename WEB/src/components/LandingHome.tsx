@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import {
   Plane,
@@ -178,6 +178,18 @@ export const LandingHome: React.FC<LandingHomeProps> = ({
   // Interactive states
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [videoModalOpen, setVideoModalOpen] = useState(false);
+  const [isServicesOpen, setIsServicesOpen] = useState(false);
+  const servicesRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (servicesRef.current && !servicesRef.current.contains(e.target as Node)) {
+        setIsServicesOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const handleSwapAirports = () => {
     const temp = originCode;
@@ -210,30 +222,51 @@ export const LandingHome: React.FC<LandingHomeProps> = ({
           SECTION 1: HERO SECTION (With Signature Arch + Flight Ticket Search Widget)
          ========================================================================= */}
       <section id="hero" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 sm:pt-36 pb-16 lg:pb-24">
-        {/* Top Service Tabs Pill Selector */}
-        <div className="flex flex-wrap items-center justify-between gap-3 mb-8 bg-white/80 backdrop-blur-md p-2 rounded-2xl border border-[#1c1817]/10 shadow-xs">
-          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
-            {SERVICE_TABS.map((tab) => {
-              const Icon = tab.icon;
-              return (
-                <button
-                  key={tab.id}
-                  type="button"
-                  onClick={() => onNavigate(tab.id)}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
-                    tab.id === 'book'
-                      ? 'bg-[#1c1817] text-white shadow-xs'
-                      : 'text-[#1c1817]/70 hover:text-[#1c1817] hover:bg-[#1c1817]/5'
-                  }`}
-                >
-                  <Icon className={`w-3.5 h-3.5 ${tab.id === 'book' ? 'text-[#f36f0f]' : ''}`} />
-                  <span>{tab.label}</span>
-                </button>
-              );
-            })}
+        {/* Services dropdown — a single trigger instead of a permanent row
+            of tabs, so the hero reads less cluttered; opens a menu with
+            every service on click. */}
+        <div className="flex flex-wrap items-center justify-between gap-3 mb-8">
+          <div ref={servicesRef} className="relative">
+            <button
+              type="button"
+              onClick={() => setIsServicesOpen((v) => !v)}
+              aria-haspopup="menu"
+              aria-expanded={isServicesOpen}
+              className="focus-ring flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold bg-white/80 backdrop-blur-md border border-[#1c1817]/10 shadow-xs hover:bg-white transition-colors cursor-pointer"
+            >
+              <Search className="w-3.5 h-3.5" style={{ color: '#f36f0f' }} />
+              Services
+              <ChevronDown className={`w-3.5 h-3.5 text-[#1c1817]/50 transition-transform ${isServicesOpen ? 'rotate-180' : ''}`} />
+            </button>
+
+            {isServicesOpen && (
+              <div
+                role="menu"
+                className="absolute top-full left-0 mt-2 w-56 bg-white rounded-2xl border border-[#1c1817]/10 shadow-lg z-30 overflow-hidden py-1.5"
+              >
+                {SERVICE_TABS.map((tab) => {
+                  const Icon = tab.icon;
+                  return (
+                    <button
+                      key={tab.id}
+                      type="button"
+                      role="menuitem"
+                      onClick={() => {
+                        setIsServicesOpen(false);
+                        onNavigate(tab.id);
+                      }}
+                      className="focus-ring w-full flex items-center gap-2.5 px-4 py-2.5 text-sm font-bold text-left text-[#1c1817]/80 hover:bg-[#f4f3ec] hover:text-[#1c1817] transition-colors cursor-pointer"
+                    >
+                      <Icon className="w-4 h-4" style={{ color: '#f36f0f' }} />
+                      {tab.label}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
-          <div className="hidden sm:flex items-center gap-2 text-xs font-bold text-[#1c1817]/60 pr-2">
+          <div className="hidden sm:flex items-center gap-2 text-xs font-bold text-[#1c1817]/60">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
             <span>Direct Wholesale Airline Feeds</span>
           </div>
@@ -252,11 +285,12 @@ export const LandingHome: React.FC<LandingHomeProps> = ({
                   EXPLORE
                 </h1>
 
-                {/* Rotating Gallery Badge Trigger */}
+                {/* Rotating Gallery Sphere Trigger — sized as a real focal
+                    visual rather than a small icon-sized badge. */}
                 <button
                   type="button"
                   onClick={() => setVideoModalOpen(true)}
-                  className="relative group cursor-pointer inline-flex items-center justify-center shrink-0 w-16 sm:w-20 h-16 sm:h-20"
+                  className="relative group cursor-pointer inline-flex items-center justify-center shrink-0 w-24 sm:w-32 h-24 sm:h-32"
                   aria-label="View travel photo gallery"
                 >
                   <div className="absolute inset-0 animate-spin-slow group-hover:scale-105 transition-transform">
@@ -273,8 +307,8 @@ export const LandingHome: React.FC<LandingHomeProps> = ({
                     </svg>
                   </div>
                   <div
-                    className="w-10 sm:w-12 h-10 sm:h-12 rounded-full overflow-hidden border-2 border-white relative flex items-center justify-center"
-                    style={{ boxShadow: '0 6px 14px rgba(28,24,23,0.35), 0 2px 4px rgba(28,24,23,0.25)' }}
+                    className="w-16 sm:w-20 h-16 sm:h-20 rounded-full overflow-hidden border-2 border-white relative flex items-center justify-center"
+                    style={{ boxShadow: '0 10px 22px rgba(28,24,23,0.4), 0 3px 6px rgba(28,24,23,0.28)' }}
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src="/uixshuvo/hero_video_thumb.jpg" alt="Travel gallery preview" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
@@ -289,7 +323,7 @@ export const LandingHome: React.FC<LandingHomeProps> = ({
                       }}
                     />
                     <div className="absolute inset-0 bg-black/15 flex items-center justify-center">
-                      <Sparkles className="w-3.5 h-3.5 text-white" />
+                      <Sparkles className="w-6 h-6 text-white" />
                     </div>
                   </div>
                   {/* Persistent "click to open" indicator — the rotating
@@ -297,11 +331,11 @@ export const LandingHome: React.FC<LandingHomeProps> = ({
                       skim past ring text, so this badge makes the
                       click-to-expand affordance unmissable at a glance. */}
                   <span
-                    className="absolute -bottom-0.5 -right-0.5 w-5 h-5 rounded-full flex items-center justify-center border-2 border-white z-10"
+                    className="absolute bottom-1 right-1 w-7 h-7 rounded-full flex items-center justify-center border-2 border-white z-10"
                     style={{ backgroundColor: 'var(--color-ticket-orange)' }}
                     aria-hidden="true"
                   >
-                    <Expand className="w-2.5 h-2.5 text-white" />
+                    <Expand className="w-3.5 h-3.5 text-white" />
                   </span>
                 </button>
               </div>

@@ -24,6 +24,9 @@ export interface TourPackageFormData {
   exclusions: string[];
   itinerary: ItineraryDay[];
   published: boolean;
+  featured: boolean;
+  tourType: string;
+  originalPriceUsd: number | null;
 }
 
 const EMPTY: TourPackageFormData = {
@@ -39,6 +42,9 @@ const EMPTY: TourPackageFormData = {
   exclusions: [''],
   itinerary: [{ day: 1, title: '', description: '' }],
   published: true,
+  featured: false,
+  tourType: '',
+  originalPriceUsd: null,
 };
 
 function listToLines(items: string[]): string {
@@ -161,6 +167,38 @@ export function TourPackageForm({ initial }: { initial?: TourPackageFormData }) 
             onChange={(e) => setForm({ ...form, priceUsd: Number(e.target.value) })}
             className="focus-ring w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm"
           />
+        </label>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <label className="space-y-1">
+          <span className="text-xs font-medium text-slate-500">Tour type (optional — shown as a tag on the card)</span>
+          <input
+            value={form.tourType}
+            onChange={(e) => setForm({ ...form, tourType: e.target.value })}
+            placeholder="e.g. Group trip, Private Tour, Self-Drive"
+            className="focus-ring w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm"
+          />
+        </label>
+        <label className="space-y-1">
+          <span className="text-xs font-medium text-slate-500">Original price (USD) — only set if this is a real discount</span>
+          <input
+            type="number"
+            min={0}
+            value={form.originalPriceUsd ?? ''}
+            onChange={(e) => setForm({ ...form, originalPriceUsd: e.target.value === '' ? null : Number(e.target.value) })}
+            placeholder="Leave blank if not discounted"
+            className="focus-ring w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm"
+          />
+        </label>
+        <label className="flex items-center gap-2 pt-6">
+          <input
+            type="checkbox"
+            checked={form.featured}
+            onChange={(e) => setForm({ ...form, featured: e.target.checked })}
+            className="rounded accent-brand-600"
+          />
+          <span className="text-sm text-slate-700">Featured (shows a &quot;Hot&quot; badge)</span>
         </label>
       </div>
 

@@ -34,6 +34,9 @@ export default async function TourPackageDetailPage({ params, searchParams }: Pa
     inclusions: row.inclusions,
     exclusions: row.exclusions,
     itinerary: row.itinerary as unknown as TourPackage['itinerary'],
+    featured: row.featured ?? false,
+    tourType: row.tourType ?? null,
+    originalPriceUsd: row.originalPriceUsd ?? null,
   };
 
   return (

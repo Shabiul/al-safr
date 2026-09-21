@@ -14,7 +14,7 @@ export async function PATCH(request: Request, { params }: RouteParams) {
 
   const { id } = await params;
   const body = await request.json();
-  const { slug, name, destination, summary, description, durationDays, priceUsd, images, inclusions, exclusions, itinerary, published } = body;
+  const { slug, name, destination, summary, description, durationDays, priceUsd, images, inclusions, exclusions, itinerary, published, featured, tourType, originalPriceUsd } = body;
 
   const { data: pkg, error: dbError } = await db
     .from('TourPackage')
@@ -31,6 +31,9 @@ export async function PATCH(request: Request, { params }: RouteParams) {
       ...(exclusions !== undefined && { exclusions }),
       ...(itinerary !== undefined && { itinerary }),
       ...(published !== undefined && { published }),
+      ...(featured !== undefined && { featured }),
+      ...(tourType !== undefined && { tourType: tourType || null }),
+      ...(originalPriceUsd !== undefined && { originalPriceUsd: originalPriceUsd == null ? null : Number(originalPriceUsd) }),
       updatedAt: new Date().toISOString(),
     })
     .eq('id', id)
