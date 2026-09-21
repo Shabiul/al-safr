@@ -460,7 +460,7 @@ export default function Home() {
                   <a href="https://wa.me/918904563396" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors text-emerald-400 font-bold">WhatsApp: +91 89045 63396</a>
                 </li>
                 <li>
-                  <a href="mailto:luckysaj@gmail.com" className="hover:text-white transition-colors">luckysaj@gmail.com</a>
+                  <a href="mailto:alsafartoursntravels@gmail.com" className="hover:text-white transition-colors">alsafartoursntravels@gmail.com</a>
                 </li>
               </ul>
             </div>

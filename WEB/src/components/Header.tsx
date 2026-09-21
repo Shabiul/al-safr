@@ -131,9 +131,9 @@ export const Header: React.FC<HeaderProps> = ({
               <MessageCircle className="w-3 h-3 text-emerald-400" />
               <span>WhatsApp: +91 89045 63396</span>
             </a>
-            <a href="mailto:luckysaj@gmail.com" className="flex items-center gap-1.5 hover:text-[#f36f0f] transition-colors hidden md:flex">
+            <a href="mailto:alsafartoursntravels@gmail.com" className="flex items-center gap-1.5 hover:text-[#f36f0f] transition-colors hidden md:flex">
               <Mail className="w-3 h-3 text-[#f36f0f]" />
-              <span>luckysaj@gmail.com</span>
+              <span>alsafartoursntravels@gmail.com</span>
             </a>
           </div>
           <div className="flex items-center gap-1.5 text-[#f4f3ec]/75 truncate">
