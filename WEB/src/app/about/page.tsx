@@ -47,7 +47,7 @@ export default function AboutPage() {
         <div className="relative p-8 sm:p-12 space-y-4 text-white">
           <span
             className="inline-flex items-center px-4 py-1.5 rounded-full text-xs font-black tracking-wide soft-border soft-shadow-sm"
-            style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'var(--color-dark-ink-muted)' }}
+            style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'white' }}
           >
             SINCE 2009
           </span>
@@ -67,8 +67,8 @@ export default function AboutPage() {
             className="rounded-2xl p-4 sm:p-5 soft-border soft-shadow-sm"
             style={{ backgroundColor: stat.color }}
           >
-            <CountUpStat value={stat.value} className="block text-2xl sm:text-3xl font-black" style={{ color: 'var(--color-dark-ink-muted)' } as React.CSSProperties} />
-            <div className="text-xs sm:text-sm font-bold mt-0.5" style={{ color: 'var(--color-dark-ink-muted)' }}>{stat.label}</div>
+            <CountUpStat value={stat.value} className="block text-2xl sm:text-3xl font-black" style={{ color: 'white' } as React.CSSProperties} />
+            <div className="text-xs sm:text-sm font-bold mt-0.5" style={{ color: 'white' }}>{stat.label}</div>
           </div>
         ))}
       </div>
@@ -89,7 +89,7 @@ export default function AboutPage() {
           return (
             <div key={v.title} className={`p-5 rounded-2xl bg-cream soft-border soft-shadow space-y-3 ${i === 1 ? 'sm:-translate-y-3' : ''}`}>
               <div className="w-11 h-11 rounded-xl soft-border flex items-center justify-center" style={{ backgroundColor: v.color }}>
-                <Icon className="w-5 h-5" style={{ color: 'var(--color-dark-ink-muted)' }} />
+                <Icon className="w-5 h-5" style={{ color: 'white' }} />
               </div>
               <h3 className="font-black text-slate-900">{v.title}</h3>
               <p className="text-sm text-slate-600 leading-relaxed">{v.description}</p>
@@ -111,7 +111,7 @@ export default function AboutPage() {
               <div key={m.year} className="flex gap-4">
                 <div className="flex flex-col items-center shrink-0">
                   <div className="w-11 h-11 rounded-full soft-border flex items-center justify-center" style={{ backgroundColor: m.color }}>
-                    <Icon className="w-5 h-5" style={{ color: 'var(--color-dark-ink-muted)' }} />
+                    <Icon className="w-5 h-5" style={{ color: 'white' }} />
                   </div>
                   {i < MILESTONES.length - 1 && <div className="w-[3px] flex-1 mt-2" style={{ backgroundColor: 'var(--color-dark-ink-muted)' }} />}
                 </div>
@@ -129,7 +129,7 @@ export default function AboutPage() {
       {/* Office */}
       <div className="p-5 rounded-2xl bg-cream soft-border soft-shadow-sm flex items-start gap-3">
         <div className="w-10 h-10 rounded-xl soft-border flex items-center justify-center shrink-0" style={{ backgroundColor: 'var(--color-ticket-orange)' }}>
-          <MapPin className="w-5 h-5" style={{ color: 'var(--color-dark-ink-muted)' }} />
+          <MapPin className="w-5 h-5" style={{ color: 'white' }} />
         </div>
         <div>
           <h3 className="font-black text-slate-900 mb-1">Registered office</h3>
@@ -152,7 +152,7 @@ export default function AboutPage() {
         <Link
           href="/get-a-quote"
           className="focus-ring soft-press relative inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-black text-sm shrink-0 soft-border soft-shadow-sm"
-          style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'var(--color-dark-ink-muted)' }}
+          style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'white' }}
         >
           Get a Quote
           <ArrowRight className="w-4 h-4" />

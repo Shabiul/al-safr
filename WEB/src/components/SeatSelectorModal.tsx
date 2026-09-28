@@ -379,10 +379,10 @@ export const SeatSelectorModal: React.FC<SeatSelectorModalProps> = ({
                     {priorityAddon && <Check className="w-3.5 h-3.5" style={{ color: 'var(--color-dark-ink-muted)' }} />}
                   </div>
                   <div className="text-sm">
-                    <span className="font-black text-slate-900 block">
+                    <span className={`font-black block ${priorityAddon ? 'text-white' : 'text-slate-900'}`}>
                       Priority boarding & lounge (+{formatPrice(35, currency)})
                     </span>
-                    <span className="text-slate-600 block text-xs mt-0.5 font-medium">
+                    <span className={`block text-xs mt-0.5 font-medium ${priorityAddon ? 'text-white/70' : 'text-slate-600'}`}>
                       Priority bag tag, expedited security lane, and Wi-Fi priority.
                     </span>
                   </div>

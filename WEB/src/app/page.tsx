@@ -181,7 +181,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f4f3ec] text-[#1c1817] flex flex-col selection:bg-[#f36f0f]/20 selection:text-[#f36f0f]">
+    <div className="min-h-screen bg-[#f4f3ec] text-[#1c1817] flex flex-col selection:bg-[#1c1817]/20 selection:text-[#1c1817]">
       <Header
         apiStatus={apiStatus}
         activeTab={activeTab}
@@ -210,7 +210,7 @@ export default function Home() {
             <div className="bg-white rounded-2xl p-4 flex flex-wrap items-center justify-between gap-3 text-sm border border-slate-200/90 shadow-xs">
               <div className="flex flex-wrap items-center gap-3 text-slate-600">
                 <div
-                  className="flex items-center gap-1.5 font-bold text-xs uppercase tracking-wider px-3 py-1 rounded-full bg-[#f36f0f] text-white shadow-xs"
+                  className="flex items-center gap-1.5 font-bold text-xs uppercase tracking-wider px-3 py-1 rounded-full bg-[#1c1817] text-white shadow-xs"
                 >
                   <span className="w-2 h-2 rounded-full bg-white animate-pulse" aria-hidden="true" />
                   Live data stream
@@ -248,7 +248,7 @@ export default function Home() {
                     aria-current={isActive ? 'page' : undefined}
                     className={`focus-ring flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all ${
                       isActive
-                        ? 'bg-[#f36f0f] text-white shadow-sm shadow-orange-500/20'
+                        ? 'bg-[#1c1817] text-white shadow-sm shadow-[#1c1817]/20'
                         : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
                     }`}
                   >
@@ -334,7 +334,7 @@ export default function Home() {
             <div className="flex items-center justify-between bg-cream p-5 rounded-2xl soft-border soft-shadow-sm">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl soft-border flex items-center justify-center" style={{ backgroundColor: 'var(--color-ticket-orange)' }}>
-                  <Ticket className="w-5 h-5" style={{ color: 'var(--color-dark-ink-muted)' }} />
+                  <Ticket className="w-5 h-5" style={{ color: 'white' }} />
                 </div>
                 <div>
                   <h2 className="text-lg font-black text-slate-900">My Trips</h2>
@@ -342,7 +342,7 @@ export default function Home() {
                 </div>
               </div>
 
-              <span className="px-3 py-1 rounded-full text-sm font-black soft-border" style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'var(--color-dark-ink-muted)' }}>
+              <span className="px-3 py-1 rounded-full text-sm font-black soft-border" style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'white' }}>
                 {allBookings.length} {allBookings.length === 1 ? 'trip' : 'trips'}
               </span>
             </div>
@@ -353,7 +353,7 @@ export default function Home() {
                   className="w-16 h-16 rounded-2xl soft-border flex items-center justify-center mx-auto"
                   style={{ backgroundColor: 'var(--color-ticket-orange)' }}
                 >
-                  <Plane className="w-8 h-8 -rotate-45" style={{ color: 'var(--color-dark-ink-muted)' }} />
+                  <Plane className="w-8 h-8 -rotate-45" style={{ color: 'white' }} />
                 </div>
                 <div>
                   <h3 className="text-lg font-black text-slate-900">No trips booked yet</h3>
@@ -364,7 +364,7 @@ export default function Home() {
                 <button
                   onClick={() => handleNavigate('book')}
                   className="focus-ring soft-press py-2.5 px-6 rounded-xl text-sm font-black soft-border soft-shadow-sm"
-                  style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'var(--color-dark-ink-muted)' }}
+                  style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'white' }}
                 >
                   Search flights
                 </button>
@@ -383,7 +383,7 @@ export default function Home() {
                         </span>
                         <div className="font-black text-sm text-slate-900">{b.passengerName}</div>
                       </div>
-                      <span className="text-xs font-black px-2.5 py-1 rounded-full soft-border" style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'var(--color-dark-ink-muted)' }}>
+                      <span className="text-xs font-black px-2.5 py-1 rounded-full soft-border" style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'white' }}>
                         Seat {b.seatNumber}
                       </span>
                     </div>
@@ -471,7 +471,7 @@ export default function Home() {
               <ul className="space-y-2 text-slate-400">
                 <li className="leading-relaxed">53/3, Abbaiah Reddy St, near Celebrity Arch, Doddathoguru, Electronic City Phase I, Electronic City, Bengaluru, Karnataka 560100</li>
                 <li>
-                  <a href="tel:+918904563397" className="hover:text-white transition-colors text-[#f36f0f] font-bold">Call: +91 89045 63397</a>
+                  <a href="tel:+918904563397" className="hover:text-slate-300 transition-colors text-white font-bold">Call: +91 89045 63397</a>
                 </li>
                 <li>
                   <a href="https://wa.me/918904563396" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors text-emerald-400 font-bold">WhatsApp: +91 89045 63396</a>

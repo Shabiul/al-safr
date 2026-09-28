@@ -75,8 +75,8 @@ export default async function TourPackageDetailPage({ params, searchParams }: Pa
           </div>
           <div className="text-right shrink-0 space-y-3 rounded-2xl p-4 soft-border soft-shadow-sm" style={{ backgroundColor: 'var(--color-ticket-orange)' }}>
             <div>
-              <div className="text-2xl font-black" style={{ color: 'var(--color-dark-ink-muted)' }}>{formatPrice(pkg.priceUsd, currency)}</div>
-              <div className="text-xs font-bold" style={{ color: 'var(--color-dark-ink-muted)' }}>per person</div>
+              <div className="text-2xl font-black" style={{ color: 'white' }}>{formatPrice(pkg.priceUsd, currency)}</div>
+              <div className="text-xs font-bold" style={{ color: 'white' }}>per person</div>
             </div>
             <TourBookingFlow
               tourPackageId={pkg.id}
@@ -103,7 +103,7 @@ export default async function TourPackageDetailPage({ params, searchParams }: Pa
                   <li key={day.day} className="flex gap-4 rounded-2xl p-4 soft-border soft-shadow-sm bg-cream">
                     <div
                       className="shrink-0 w-9 h-9 rounded-full font-black text-sm flex items-center justify-center soft-border"
-                      style={{ backgroundColor: color, color: 'var(--color-dark-ink-muted)' }}
+                      style={{ backgroundColor: color, color: 'white' }}
                     >
                       {day.day}
                     </div>
@@ -119,14 +119,14 @@ export default async function TourPackageDetailPage({ params, searchParams }: Pa
 
           <div className="space-y-6">
             <div className="rounded-2xl p-4 soft-border soft-shadow-sm bg-cream">
-              <h2 className="inline-block text-xs font-black uppercase tracking-widest px-3 py-1 rounded-full soft-border mb-3" style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'var(--color-dark-ink-muted)' }}>
+              <h2 className="inline-block text-xs font-black uppercase tracking-widest px-3 py-1 rounded-full soft-border mb-3" style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'white' }}>
                 Inclusions
               </h2>
               <ul className="space-y-2">
                 {pkg.inclusions.map((item, i) => (
                   <li key={i} className="text-sm text-slate-700 flex items-start gap-2 font-medium">
                     <span className="w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5 soft-border" style={{ backgroundColor: 'var(--color-ticket-orange)' }}>
-                      <Check className="w-3 h-3" style={{ color: 'var(--color-dark-ink-muted)' }} />
+                      <Check className="w-3 h-3" style={{ color: 'white' }} />
                     </span>
                     {item}
                   </li>

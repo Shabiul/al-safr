@@ -30,7 +30,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
       </head>
-      <body className="min-h-full flex flex-col bg-[#f4f3ec] text-[#1c1817] font-sans antialiased selection:bg-[#f36f0f]/20 selection:text-[#f36f0f]">
+      <body className="min-h-full flex flex-col bg-[#f4f3ec] text-[#1c1817] font-sans antialiased selection:bg-[#1c1817]/20 selection:text-[#1c1817]">
         <Providers>{children}</Providers>
       </body>
     </html>

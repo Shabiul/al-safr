@@ -148,7 +148,7 @@ export const LandingHome: React.FC<LandingHomeProps> = ({
   };
 
   return (
-    <div className="w-full bg-[#f4f3ec] text-[#1c1817] selection:bg-[#f36f0f]/20 selection:text-[#f36f0f] overflow-x-hidden">
+    <div className="w-full bg-[#f4f3ec] text-[#1c1817] selection:bg-[#1c1817]/20 selection:text-[#1c1817] overflow-x-hidden">
       {/* =========================================================================
           SECTION 1: HERO SECTION (With Signature Arch + Flight Ticket Search Widget)
          ========================================================================= */}
@@ -234,7 +234,7 @@ export const LandingHome: React.FC<LandingHomeProps> = ({
                     const el = document.getElementById('ticket-search');
                     if (el) el.scrollIntoView({ behavior: 'smooth' });
                   }}
-                  className="w-24 sm:w-32 h-12 sm:h-16 rounded-[24px] sm:rounded-[32px] bg-[#f36f0f] hover:bg-[#dc6009] active:scale-98 text-white flex items-center justify-center orange-pill-glow transition-all duration-300 cursor-pointer group"
+                  className="w-24 sm:w-32 h-12 sm:h-16 rounded-[24px] sm:rounded-[32px] bg-[#1c1817] hover:bg-[#322c2a] active:scale-98 text-white flex items-center justify-center orange-pill-glow transition-all duration-300 cursor-pointer group"
                   aria-label="Find flights"
                 >
                   <ArrowRight className="w-6 sm:w-7 h-6 sm:h-7 group-hover:translate-x-1.5 transition-transform" />
@@ -329,7 +329,7 @@ export const LandingHome: React.FC<LandingHomeProps> = ({
                   {/* From Field */}
                   <div className="sm:col-span-4 bg-[#f4f3ec] hover:bg-[#edeade] border border-[#1c1817]/10 rounded-2xl p-2.5 transition-colors">
                     <div className="flex items-center gap-1.5 text-[10px] text-[#1c1817]/50 font-bold uppercase tracking-wider mb-0.5">
-                      <MapPin className="w-3 h-3 text-[#f36f0f]" />
+                      <MapPin className="w-3 h-3 text-[#1c1817]" />
                       <span>From</span>
                     </div>
                     <select
@@ -351,7 +351,7 @@ export const LandingHome: React.FC<LandingHomeProps> = ({
                       type="button"
                       onClick={handleSwapAirports}
                       title="Swap Origin and Destination"
-                      className="w-8 h-8 rounded-full bg-white border border-[#1c1817]/15 shadow-2xs hover:border-[#f36f0f] hover:text-[#f36f0f] text-[#1c1817] flex items-center justify-center transition-transform active:rotate-180 cursor-pointer"
+                      className="w-8 h-8 rounded-full bg-white border border-[#1c1817]/15 shadow-2xs hover:border-[#1c1817] hover:text-[#1c1817] text-[#1c1817] flex items-center justify-center transition-transform active:rotate-180 cursor-pointer"
                     >
                       <ArrowLeftRight className="w-3.5 h-3.5" />
                     </button>
@@ -379,7 +379,7 @@ export const LandingHome: React.FC<LandingHomeProps> = ({
                   {/* Date Field */}
                   <div className="sm:col-span-3 bg-[#f4f3ec] hover:bg-[#edeade] border border-[#1c1817]/10 rounded-2xl p-2.5 transition-colors">
                     <div className="flex items-center gap-1.5 text-[10px] text-[#1c1817]/50 font-bold uppercase tracking-wider mb-0.5">
-                      <Calendar className="w-3 h-3 text-[#f36f0f]" />
+                      <Calendar className="w-3 h-3 text-[#1c1817]" />
                       <span>Date</span>
                     </div>
                     <input
@@ -394,7 +394,7 @@ export const LandingHome: React.FC<LandingHomeProps> = ({
                 {/* Find ticket action button */}
                 <button
                   type="submit"
-                  className="w-full py-3.5 rounded-2xl bg-[#f36f0f] hover:bg-[#dc6009] active:scale-98 text-white font-black text-sm tracking-wide orange-pill-glow transition-all flex items-center justify-center gap-2 cursor-pointer"
+                  className="w-full py-3.5 rounded-2xl bg-[#1c1817] hover:bg-[#322c2a] active:scale-98 text-white font-black text-sm tracking-wide orange-pill-glow transition-all flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <span>Find ticket</span>
                   <ArrowRight className="w-4 h-4" />
@@ -411,11 +411,11 @@ export const LandingHome: React.FC<LandingHomeProps> = ({
                     setDestCode('KIN');
                     if (onQuickSearch) onQuickSearch('JFK', 'KIN', departureDate, cabinClass);
                   }}
-                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#f4f3ec] border border-[#1c1817]/10 hover:border-[#f36f0f] text-[#1c1817] font-bold text-xs transition-colors cursor-pointer"
+                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#f4f3ec] border border-[#1c1817]/10 hover:border-[#1c1817] text-[#1c1817] font-bold text-xs transition-colors cursor-pointer"
                 >
-                  <Plane className="w-3 h-3 text-[#f36f0f] -rotate-45" />
+                  <Plane className="w-3 h-3 text-[#1c1817] -rotate-45" />
                   <span>NEW YORK (JFK) ➔ JAMAICA (KIN)</span>
-                  <span className="text-[#f36f0f] font-extrabold">• Direct</span>
+                  <span className="text-[#1c1817] font-extrabold">• Direct</span>
                 </button>
               </div>
             </div>
@@ -504,7 +504,7 @@ export const LandingHome: React.FC<LandingHomeProps> = ({
                     const el = document.getElementById('who-we-are');
                     if (el) el.scrollIntoView({ behavior: 'smooth' });
                   }}
-                  className="w-12 h-14 rounded-t-full rounded-br-full bg-[#f36f0f] hover:bg-[#dc6009] text-white flex items-center justify-center shrink-0 orange-pill-glow transition-all active:scale-95 cursor-pointer shadow-md"
+                  className="w-12 h-14 rounded-t-full rounded-br-full bg-[#1c1817] hover:bg-[#322c2a] text-white flex items-center justify-center shrink-0 orange-pill-glow transition-all active:scale-95 cursor-pointer shadow-md"
                   aria-label="Read our story"
                 >
                   <ArrowRight className="w-5 h-5 text-white" />
@@ -551,7 +551,7 @@ export const LandingHome: React.FC<LandingHomeProps> = ({
                     </div>
                   )}
                   <div className="absolute top-3 left-3 bg-[#1c1817]/75 backdrop-blur-md text-white text-[11px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1.5 shadow-xs">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#f36f0f]" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#1c1817]" />
                     <span>{pkg.destination}</span>
                   </div>
                   {pkg.featured && (
@@ -578,7 +578,7 @@ export const LandingHome: React.FC<LandingHomeProps> = ({
                     <span className="text-xs font-semibold text-[#1c1817]/60 ml-1">/person</span>
                   </div>
 
-                  <span className="px-5 py-2 rounded-full bg-[#f36f0f] group-hover:bg-[#dc6009] text-white text-xs font-bold transition-all shadow-xs flex items-center gap-1.5">
+                  <span className="px-5 py-2 rounded-full bg-[#1c1817] group-hover:bg-[#322c2a] text-white text-xs font-bold transition-all shadow-xs flex items-center gap-1.5">
                     <span>View details</span>
                     <ChevronRight className="w-3.5 h-3.5" />
                   </span>
@@ -597,13 +597,13 @@ export const LandingHome: React.FC<LandingHomeProps> = ({
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
             {/* Left Content */}
             <div className="lg:col-span-7 space-y-6 text-left">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#f4f3ec] text-[#f36f0f] text-xs font-black tracking-wider uppercase">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#f4f3ec] text-[#1c1817] text-xs font-black tracking-wider uppercase">
                 <Plane className="w-3.5 h-3.5 -rotate-45" />
                 <span>Hospitality & Comfort</span>
               </div>
 
               <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#1c1817] tracking-tight leading-[1.2]">
-                <span className="relative inline-block border-b-4 border-[#f36f0f] pb-1 mr-2">Where comfort</span>
+                <span className="relative inline-block border-b-4 border-[#1c1817] pb-1 mr-2">Where comfort</span>
                 <span>meets elegance and every guest is treated like family.</span>
               </h2>
 
@@ -623,7 +623,7 @@ export const LandingHome: React.FC<LandingHomeProps> = ({
                 </div>
                 <div className="w-px h-10 bg-[#1c1817]/10 hidden sm:block" />
                 <div className="hidden sm:block">
-                  <div className="text-3xl sm:text-4xl font-black text-[#f36f0f] tracking-tight">16+</div>
+                  <div className="text-3xl sm:text-4xl font-black text-[#1c1817] tracking-tight">16+</div>
                   <div className="text-xs sm:text-sm font-semibold text-[#1c1817]/60 mt-1">Years in Electronic City, Bengaluru</div>
                 </div>
               </div>
@@ -635,7 +635,7 @@ export const LandingHome: React.FC<LandingHomeProps> = ({
                     const el = document.getElementById('ticket-search');
                     if (el) el.scrollIntoView({ behavior: 'smooth' });
                   }}
-                  className="px-6 py-3 rounded-full bg-[#1c1817] hover:bg-[#f36f0f] text-white text-xs sm:text-sm font-bold transition-all cursor-pointer shadow-sm active:scale-95 flex items-center gap-2"
+                  className="px-6 py-3 rounded-full bg-[#1c1817] hover:bg-[#322c2a] text-white text-xs sm:text-sm font-bold transition-all cursor-pointer shadow-sm active:scale-95 flex items-center gap-2"
                 >
                   <span>Book Your Journey</span>
                   <ArrowRight className="w-4 h-4" />
@@ -728,7 +728,7 @@ export const LandingHome: React.FC<LandingHomeProps> = ({
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000"
             />
             <div className="absolute inset-0 bg-black/15 group-hover:bg-black/25 transition-colors flex items-center justify-center">
-              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-white/90 backdrop-blur-md flex items-center justify-center text-[#f36f0f] shadow-xl group-hover:scale-110 transition-transform">
+              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-white/90 backdrop-blur-md flex items-center justify-center text-[#1c1817] shadow-xl group-hover:scale-110 transition-transform">
                 <Sparkles className="w-7 h-7" />
               </div>
             </div>
@@ -798,7 +798,7 @@ export const LandingHome: React.FC<LandingHomeProps> = ({
                 'Honest about coverage — we say when a service has limits and provide 24/7 human support',
               ].map((item) => (
                 <li key={item} className="flex items-start gap-3 text-sm text-[#1c1817] font-semibold">
-                  <div className="w-5 h-5 rounded-full bg-[#f36f0f]/15 text-[#f36f0f] flex items-center justify-center shrink-0 mt-0.5">
+                  <div className="w-5 h-5 rounded-full bg-[#1c1817]/15 text-[#1c1817] flex items-center justify-center shrink-0 mt-0.5">
                     <Check className="w-3.5 h-3.5 stroke-[3]" />
                   </div>
                   <span>{item}</span>
@@ -810,7 +810,7 @@ export const LandingHome: React.FC<LandingHomeProps> = ({
               <button
                 type="button"
                 onClick={() => onNavigate('book')}
-                className="w-36 sm:w-44 h-12 sm:h-14 rounded-full bg-[#f36f0f] hover:bg-[#dc6009] active:scale-98 text-white flex items-center justify-center orange-pill-glow transition-all duration-300 cursor-pointer group"
+                className="w-36 sm:w-44 h-12 sm:h-14 rounded-full bg-[#1c1817] hover:bg-[#322c2a] active:scale-98 text-white flex items-center justify-center orange-pill-glow transition-all duration-300 cursor-pointer group"
                 aria-label="Book a Flight"
               >
                 <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
@@ -838,7 +838,7 @@ export const LandingHome: React.FC<LandingHomeProps> = ({
               className="bg-white rounded-3xl p-8 shadow-sm border border-[#1c1817]/5 flex flex-col justify-between text-left"
             >
               <div className="space-y-4">
-                <div className="text-[#f36f0f] font-serif text-4xl leading-none select-none">
+                <div className="text-[#1c1817] font-serif text-4xl leading-none select-none">
                   ““
                 </div>
                 <p className="text-xs sm:text-sm text-[#1c1817]/75 font-medium leading-relaxed">
@@ -905,7 +905,7 @@ export const LandingHome: React.FC<LandingHomeProps> = ({
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="space-y-3 text-left">
-            <span className="inline-block text-xs font-black tracking-widest uppercase px-3 py-1 rounded-full bg-[#f36f0f] text-white">
+            <span className="inline-block text-xs font-black tracking-widest uppercase px-3 py-1 rounded-full bg-[#1c1817] text-white">
               Good to know
             </span>
             <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-[#1c1817]">
@@ -928,7 +928,7 @@ export const LandingHome: React.FC<LandingHomeProps> = ({
                     aria-expanded={isOpen}
                   >
                     <span className="font-extrabold text-[#1c1817] text-sm sm:text-base">{faq.q}</span>
-                    <span className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 border border-[#1c1817]/15 ${isOpen ? 'bg-[#f36f0f] text-white' : 'bg-[#f4f3ec] text-[#1c1817]'}`}>
+                    <span className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 border border-[#1c1817]/15 ${isOpen ? 'bg-[#1c1817] text-white' : 'bg-[#f4f3ec] text-[#1c1817]'}`}>
                       {isOpen ? <Minus className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
                     </span>
                   </button>
@@ -953,7 +953,7 @@ export const LandingHome: React.FC<LandingHomeProps> = ({
             {/* Column 1: Brand & Bio */}
             <div className="space-y-4">
               <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-xl bg-[#f36f0f] text-white flex items-center justify-center shadow-sm">
+                <div className="w-9 h-9 rounded-xl bg-[#1c1817] text-white flex items-center justify-center shadow-sm">
                   <Plane className="w-4.5 h-4.5 -rotate-45" />
                 </div>
                 <span className="text-xl font-black text-white">Al-Safr (السفر)</span>
@@ -995,7 +995,7 @@ export const LandingHome: React.FC<LandingHomeProps> = ({
                 </li>
                 <li className="flex items-center gap-2 pt-1">
                   <span className="text-[#f4f3ec]/50 text-xs">Call:</span>
-                  <a href="tel:+918904563397" className="hover:text-white transition-colors font-bold text-[#f36f0f]">
+                  <a href="tel:+918904563397" className="hover:text-slate-300 transition-colors font-bold text-white">
                     +91 89045 63397
                   </a>
                 </li>

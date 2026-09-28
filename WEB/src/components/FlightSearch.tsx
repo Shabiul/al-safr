@@ -280,9 +280,9 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
               className={`focus-ring px-3 py-1.5 rounded-xl text-sm font-black flex items-center gap-1.5 transition-colors soft-border ${
                 curSupersonic ? 'text-white' : 'bg-cream text-slate-600 hover:bg-slate-50'
               }`}
-              style={curSupersonic ? { backgroundColor: 'var(--color-ticket-orange)', color: 'var(--color-dark-ink-muted)' } : undefined}
+              style={curSupersonic ? { backgroundColor: 'var(--color-ticket-orange)', color: 'white' } : undefined}
             >
-              <Zap className="w-3.5 h-3.5 fill-current" style={{ color: curSupersonic ? 'var(--color-dark-ink-muted)' : 'var(--color-ticket-orange)' }} />
+              <Zap className="w-3.5 h-3.5 fill-current" style={{ color: curSupersonic ? 'white' : 'var(--color-ticket-orange)' }} />
               Supersonic only
             </button>
 
@@ -442,7 +442,7 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
                         setIsOriginOpen(false);
                       }}
                       className="focus-ring w-full px-3 py-2.5 rounded-xl text-left transition-colors mt-2 flex items-center gap-2 text-sm font-black soft-border"
-                      style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'var(--color-dark-ink-muted)' }}
+                      style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'white' }}
                     >
                       <MapPin className="w-4 h-4 shrink-0" />
                       Use &quot;{originSearch.trim()}&quot; as custom origin
@@ -601,7 +601,7 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
                         setIsDestOpen(false);
                       }}
                       className="focus-ring w-full px-3 py-2.5 rounded-xl text-left transition-colors mt-2 flex items-center gap-2 text-sm font-black soft-border"
-                      style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'var(--color-dark-ink-muted)' }}
+                      style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'white' }}
                     >
                       <MapPin className="w-4 h-4 shrink-0" />
                       Use &quot;{destSearch.trim()}&quot; as destination

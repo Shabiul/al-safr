@@ -33,12 +33,12 @@ export default function GetAQuotePage() {
     return (
       <StaticPageShell title="Quote request received">
         <div className="p-8 rounded-2xl soft-border soft-shadow flex items-start gap-3" style={{ backgroundColor: 'var(--color-ticket-orange)' }}>
-          <CheckCircle2 className="w-6 h-6 shrink-0" style={{ color: 'var(--color-dark-ink-muted)' }} />
+          <CheckCircle2 className="w-6 h-6 shrink-0" style={{ color: 'white' }} />
           <div>
-            <h2 className="font-black text-slate-900">Thanks, {name.split(' ')[0]}.</h2>
-            <p className="text-sm text-slate-800 mt-1 font-medium">
+            <h2 className="font-black text-white">Thanks, {name.split(' ')[0]}.</h2>
+            <p className="text-sm text-slate-300 mt-1 font-medium">
               We&apos;ll get back to you shortly at {phone}. For anything urgent, call{' '}
-              <a href="tel:+918904563397" className="font-black underline">+91 89045 63397</a> directly.
+              <a href="tel:+918904563397" className="font-black underline text-white">+91 89045 63397</a> directly.
             </p>
           </div>
         </div>
@@ -119,7 +119,7 @@ export default function GetAQuotePage() {
           type="submit"
           disabled={status === 'submitting'}
           className="focus-ring soft-press w-full sm:w-auto px-8 disabled:opacity-50 rounded-xl py-3 font-black text-sm soft-border soft-shadow"
-          style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'var(--color-dark-ink-muted)' }}
+          style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'white' }}
         >
           {status === 'submitting' ? 'Sending…' : 'Get free quote'}
         </button>

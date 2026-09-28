@@ -25,7 +25,7 @@ export const GalleryModal: React.FC<GalleryModalProps> = ({ open, onClose }) => 
         </button>
 
         <div className="space-y-4">
-          <div className="flex items-center gap-2 text-[#f36f0f] text-xs font-bold uppercase tracking-wider">
+          <div className="flex items-center gap-2 text-white text-xs font-bold uppercase tracking-wider">
             <Sparkles className="w-4 h-4" />
             <span>Al-Safr Travel Gallery</span>
           </div>
