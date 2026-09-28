@@ -127,8 +127,8 @@ export const Header: React.FC<HeaderProps> = ({
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
           <div className="flex items-center gap-5 sm:gap-6">
-            <a href="tel:+918904563397" className="flex items-center gap-1.5 hover:text-[#f36f0f] transition-colors">
-              <Phone className="w-3 h-3 text-[#f36f0f]" />
+            <a href="tel:+918904563397" className="flex items-center gap-1.5 hover:text-white transition-colors">
+              <Phone className="w-3 h-3 text-white" />
               <span>+91 89045 63397</span>
             </a>
             <a
@@ -140,13 +140,13 @@ export const Header: React.FC<HeaderProps> = ({
               <MessageCircle className="w-3 h-3 text-emerald-400" />
               <span>WhatsApp: +91 89045 63396</span>
             </a>
-            <a href="mailto:alsafartoursntravels@gmail.com" className="flex items-center gap-1.5 hover:text-[#f36f0f] transition-colors hidden md:flex">
-              <Mail className="w-3 h-3 text-[#f36f0f]" />
+            <a href="mailto:alsafartoursntravels@gmail.com" className="flex items-center gap-1.5 hover:text-white transition-colors hidden md:flex">
+              <Mail className="w-3 h-3 text-white" />
               <span>alsafartoursntravels@gmail.com</span>
             </a>
           </div>
           <div className="flex items-center gap-1.5 text-[#f4f3ec]/75 truncate">
-            <MapPin className="w-3 h-3 text-[#f36f0f] shrink-0" />
+            <MapPin className="w-3 h-3 text-white shrink-0" />
             <span className="truncate">Electronic City Phase I, Bengaluru 560100</span>
           </div>
         </div>
@@ -171,7 +171,7 @@ export const Header: React.FC<HeaderProps> = ({
             }}
             className="focus-ring rounded-xl flex items-center gap-3 shrink-0 group text-left cursor-pointer"
           >
-            <div className="w-10 h-10 rounded-xl bg-[#f36f0f] text-white flex items-center justify-center shadow-md shadow-[#f36f0f]/20 group-hover:scale-105 transition-transform">
+            <div className="w-10 h-10 rounded-xl bg-[#1c1817] text-white flex items-center justify-center shadow-md shadow-[#1c1817]/20 group-hover:scale-105 transition-transform">
               <Plane className="w-5 h-5 -rotate-45" />
             </div>
             <div>
@@ -179,7 +179,7 @@ export const Header: React.FC<HeaderProps> = ({
                 <span className="text-xl font-black tracking-tight text-[#1c1817]">
                   Al-Safr
                 </span>
-                <span className="text-[11px] font-bold text-[#f36f0f] font-arabic" dir="rtl">
+                <span className="text-[11px] font-bold text-[#1c1817] font-arabic" dir="rtl">
                   (السفر)
                 </span>
               </div>
@@ -191,7 +191,7 @@ export const Header: React.FC<HeaderProps> = ({
               <span
                 aria-hidden="true"
                 className={`w-2 h-2 rounded-full ml-1 ${
-                  apiStatus === 'success' ? 'bg-emerald-500' : apiStatus === 'loading' ? 'bg-[#f36f0f] animate-pulse' : 'bg-rose-500'
+                  apiStatus === 'success' ? 'bg-emerald-500' : apiStatus === 'loading' ? 'bg-[#1c1817] animate-pulse' : 'bg-rose-500'
                 }`}
                 title="Live Flight Telemetry Status"
               />
@@ -214,7 +214,7 @@ export const Header: React.FC<HeaderProps> = ({
                       : 'text-[#1c1817]/75 hover:text-[#1c1817] hover:bg-[#1c1817]/5'
                   }`}
                 >
-                  <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-[#f36f0f]' : 'text-[#1c1817]/60'}`} />
+                  <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-white' : 'text-[#1c1817]/60'}`} />
                   {TABS[0].label}
                 </button>
               );
@@ -233,7 +233,7 @@ export const Header: React.FC<HeaderProps> = ({
                     : 'text-[#1c1817]/75 hover:text-[#1c1817] hover:bg-[#1c1817]/5'
                 }`}
               >
-                <LayoutGrid className={`w-4 h-4 shrink-0 ${activeTab === 'services' ? 'text-[#f36f0f]' : 'text-[#1c1817]/60'}`} />
+                <LayoutGrid className={`w-4 h-4 shrink-0 ${activeTab === 'services' ? 'text-white' : 'text-[#1c1817]/60'}`} />
                 Services
                 <ChevronDown className={`w-3.5 h-3.5 transition-transform ${isServicesMenuOpen ? 'rotate-180' : ''}`} />
               </button>
@@ -253,7 +253,7 @@ export const Header: React.FC<HeaderProps> = ({
                         onClick={() => goService(item.id)}
                         className="focus-ring w-full flex items-center gap-2.5 px-4 py-2.5 text-sm font-bold text-left text-[#1c1817]/80 hover:bg-[#f4f3ec] hover:text-[#1c1817] transition-colors cursor-pointer"
                       >
-                        <ItemIcon className="w-4 h-4" style={{ color: '#f36f0f' }} />
+                        <ItemIcon className="w-4 h-4" style={{ color: '#1c1817' }} />
                         {item.label}
                       </button>
                     );
@@ -276,7 +276,7 @@ export const Header: React.FC<HeaderProps> = ({
                       : 'text-[#1c1817]/75 hover:text-[#1c1817] hover:bg-[#1c1817]/5'
                   }`}
                 >
-                  <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-[#f36f0f]' : 'text-[#1c1817]/60'}`} />
+                  <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-white' : 'text-[#1c1817]/60'}`} />
                   {TABS[1].label}
                 </button>
               );
@@ -291,7 +291,7 @@ export const Header: React.FC<HeaderProps> = ({
                   : 'text-[#1c1817]/75 hover:text-[#1c1817] hover:bg-[#1c1817]/5'
               }`}
             >
-              <Images className={`w-4 h-4 shrink-0 ${pathname === '/gallery' ? 'text-[#f36f0f]' : 'text-[#1c1817]/60'}`} />
+              <Images className={`w-4 h-4 shrink-0 ${pathname === '/gallery' ? 'text-white' : 'text-[#1c1817]/60'}`} />
               Gallery
             </Link>
 
@@ -320,7 +320,7 @@ export const Header: React.FC<HeaderProps> = ({
           <div className="flex items-center gap-3">
             {/* All pricing is shown in INR — no currency switcher */}
             <div className="hidden sm:flex items-center gap-1.5 rounded-full border border-[#1c1817]/15 bg-white/60 px-3 py-1.5 text-xs font-bold text-[#1c1817] shadow-2xs">
-              <Globe className="w-3.5 h-3.5 text-[#f36f0f]" aria-hidden="true" />
+              <Globe className="w-3.5 h-3.5 text-[#1c1817]" aria-hidden="true" />
               <span>INR (₹)</span>
             </div>
 
@@ -337,7 +337,7 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               type="button"
               onClick={handleBookNow}
-              className="px-5 sm:px-6 py-2.5 rounded-full bg-[#f36f0f] hover:bg-[#dc6009] active:scale-98 text-white font-bold text-xs sm:text-sm tracking-wide orange-pill-glow transition-all cursor-pointer"
+              className="px-5 sm:px-6 py-2.5 rounded-full bg-[#1c1817] hover:bg-[#322c2a] active:scale-98 text-white font-bold text-xs sm:text-sm tracking-wide orange-pill-glow transition-all cursor-pointer"
             >
               Book Now
             </button>
@@ -375,7 +375,7 @@ export const Header: React.FC<HeaderProps> = ({
                     isActive ? 'bg-[#1c1817] text-white' : 'text-[#1c1817]/80 hover:bg-[#1c1817]/5'
                   }`}
                 >
-                  <Icon className={`w-4 h-4 ${isActive ? 'text-[#f36f0f]' : ''}`} />
+                  <Icon className={`w-4 h-4 ${isActive ? 'text-white' : ''}`} />
                   {TABS[0].label}
                 </button>
               );
@@ -391,7 +391,7 @@ export const Header: React.FC<HeaderProps> = ({
               }`}
             >
               <span className="flex items-center gap-3">
-                <LayoutGrid className={`w-4 h-4 ${activeTab === 'services' ? 'text-[#f36f0f]' : ''}`} />
+                <LayoutGrid className={`w-4 h-4 ${activeTab === 'services' ? 'text-white' : ''}`} />
                 Services
               </span>
               <ChevronDown className={`w-4 h-4 transition-transform ${isMobileServicesOpen ? 'rotate-180' : ''}`} />
@@ -411,7 +411,7 @@ export const Header: React.FC<HeaderProps> = ({
                       }}
                       className="w-full px-4 py-2.5 rounded-xl text-sm font-bold text-[#1c1817]/70 hover:bg-[#1c1817]/5 transition-colors flex items-center gap-3"
                     >
-                      <ItemIcon className="w-4 h-4" style={{ color: '#f36f0f' }} />
+                      <ItemIcon className="w-4 h-4" style={{ color: '#1c1817' }} />
                       {item.label}
                     </button>
                   );
@@ -434,7 +434,7 @@ export const Header: React.FC<HeaderProps> = ({
                     isActive ? 'bg-[#1c1817] text-white' : 'text-[#1c1817]/80 hover:bg-[#1c1817]/5'
                   }`}
                 >
-                  <Icon className={`w-4 h-4 ${isActive ? 'text-[#f36f0f]' : ''}`} />
+                  <Icon className={`w-4 h-4 ${isActive ? 'text-white' : ''}`} />
                   {TABS[1].label}
                 </button>
               );
@@ -448,7 +448,7 @@ export const Header: React.FC<HeaderProps> = ({
                 pathname === '/gallery' ? 'bg-[#1c1817] text-white' : 'text-[#1c1817]/80 hover:bg-[#1c1817]/5'
               }`}
             >
-              <Images className={`w-4 h-4 ${pathname === '/gallery' ? 'text-[#f36f0f]' : ''}`} />
+              <Images className={`w-4 h-4 ${pathname === '/gallery' ? 'text-white' : ''}`} />
               Gallery
             </Link>
 
@@ -492,7 +492,7 @@ export const Header: React.FC<HeaderProps> = ({
                 setIsMenuOpen(false);
                 handleBookNow();
               }}
-              className="w-full py-3 rounded-xl bg-[#f36f0f] text-white text-center text-xs font-bold orange-pill-glow"
+              className="w-full py-3 rounded-xl bg-[#1c1817] text-white text-center text-xs font-bold orange-pill-glow"
             >
               Book Now
             </button>
@@ -502,7 +502,7 @@ export const Header: React.FC<HeaderProps> = ({
                 href="tel:+918904563397"
                 className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white border border-[#1c1817]/10 text-[#1c1817] font-bold"
               >
-                <Phone className="w-4 h-4 text-[#f36f0f]" />
+                <Phone className="w-4 h-4 text-[#1c1817]" />
                 <span>Call: +91 89045 63397</span>
               </a>
               <a
@@ -515,7 +515,7 @@ export const Header: React.FC<HeaderProps> = ({
                 <span>WhatsApp: +91 89045 63396</span>
               </a>
               <div className="flex items-start gap-2 px-1 text-[#1c1817]/70 text-[11px] leading-snug">
-                <MapPin className="w-3.5 h-3.5 text-[#f36f0f] shrink-0 mt-0.5" />
+                <MapPin className="w-3.5 h-3.5 text-[#1c1817] shrink-0 mt-0.5" />
                 <span>53/3, Abbaiah Reddy St, near Celebrity Arch, Doddathoguru, Electronic City Phase I, Bengaluru 560100</span>
               </div>
             </div>

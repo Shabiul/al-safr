@@ -4,10 +4,13 @@
   --font-sans: 'Cera Pro', 'Outfit', 'Plus Jakarta Sans', var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
 
-  /* User Specified Palette: #f36f0f, #f4f3ec, #1c1817, #ffffff */
-  --color-primary-orange: #f36f0f;
-  --color-primary-orange-hover: #dc6009;
-  --color-primary-orange-light: #fef5ee;
+  /* Accent swapped from orange to black — see --color-dark-ink below for
+     the actual value. Kept the token names so every component that
+     references them (by CSS var, not the old literal hex) updates for
+     free. */
+  --color-primary-orange: #1c1817;
+  --color-primary-orange-hover: #322c2a;
+  --color-primary-orange-light: #ece9e7;
 
   --color-canvas: #f4f3ec;
   --color-canvas-muted: #eae8df;
@@ -22,7 +25,7 @@
      pages) that reference these token names still resolve to the current
      palette instead of rendering unstyled. */
   --color-cream: #f4f3ec;
-  --color-ticket-orange: #f36f0f;
+  --color-ticket-orange: #1c1817;
   --color-ink: #1c1817;
   --color-navy-900: #1c1817;
 }
@@ -47,7 +50,7 @@
     outline: none;
   }
   .focus-ring:focus-visible {
-    outline: 2px solid #f36f0f;
+    outline: 2px solid #1c1817;
     outline-offset: 2px;
   }
 
@@ -59,9 +62,9 @@
     border-bottom-right-radius: 0;
   }
 
-  /* Signature glowing orange pill */
+  /* Signature glowing pill — was orange, now black */
   .orange-pill-glow {
-    box-shadow: 0 16px 32px -6px rgba(243, 111, 15, 0.42);
+    box-shadow: 0 16px 32px -6px rgba(28, 24, 23, 0.42);
   }
 
   /* Slow spin for video demo circular badge */

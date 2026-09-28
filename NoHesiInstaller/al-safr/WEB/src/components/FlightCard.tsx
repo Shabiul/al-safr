@@ -75,7 +75,7 @@ export const FlightCard: React.FC<FlightCardProps> = ({
         {flight.priceTrend.isLowest7Days ? (
           <span
             className="px-2.5 py-1 rounded-full text-xs font-black flex items-center gap-1 soft-border"
-            style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'var(--color-dark-ink-muted)' }}
+            style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'white' }}
           >
             <TrendingDown className="w-3.5 h-3.5" aria-hidden="true" />
             {flight.priceTrend.changePercent}% · 7-DAY LOW
@@ -141,12 +141,12 @@ export const FlightCard: React.FC<FlightCardProps> = ({
                 style={isSelected ? { backgroundColor: 'var(--color-ticket-orange)' } : undefined}
               >
                 <div>
-                  <span className="text-[11px] font-bold text-slate-500 block">{CABIN_LABEL[cabin]}</span>
-                  <span className="text-sm font-black text-slate-900 block mt-0.5 font-mono">
+                  <span className={`text-[11px] font-bold block ${isSelected ? 'text-white/80' : 'text-slate-500'}`}>{CABIN_LABEL[cabin]}</span>
+                  <span className={`text-sm font-black block mt-0.5 font-mono ${isSelected ? 'text-white' : 'text-slate-900'}`}>
                     {formatPrice(flight.prices[cabin], currency)}
                   </span>
                 </div>
-                <span className="text-[11px] text-slate-400 mt-2 block">
+                <span className={`text-[11px] mt-2 block ${isSelected ? 'text-white/70' : 'text-slate-400'}`}>
                   {cabin === 'first'
                     ? soldOut
                       ? 'Sold out'

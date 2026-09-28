@@ -222,7 +222,7 @@ export const BoardingPassModal: React.FC<BoardingPassModalProps> = ({
                 type="button"
                 onClick={onClose}
                 className="focus-ring soft-press py-2.5 px-4 rounded-xl text-sm font-black soft-border"
-                style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'var(--color-dark-ink-muted)' }}
+                style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'white' }}
               >
                 Done
               </button>

@@ -39,7 +39,7 @@ export default function ContactPage() {
       <StaticPageShell title="Message sent">
         <div className="p-8 rounded-2xl bg-cream soft-border soft-shadow flex items-start gap-3">
           <div className="w-11 h-11 rounded-xl soft-border flex items-center justify-center shrink-0" style={{ backgroundColor: 'var(--color-ticket-orange)' }}>
-            <CheckCircle2 className="w-6 h-6" style={{ color: 'var(--color-dark-ink-muted)' }} />
+            <CheckCircle2 className="w-6 h-6" style={{ color: 'white' }} />
           </div>
           <div>
             <h2 className="font-black text-slate-900">Thanks, {name.split(' ')[0]}.</h2>
@@ -61,7 +61,7 @@ export default function ContactPage() {
           const content = (
             <>
               <div className="w-10 h-10 rounded-xl soft-border flex items-center justify-center shrink-0" style={{ backgroundColor: c.color }}>
-                <Icon className="w-5 h-5" style={{ color: 'var(--color-dark-ink-muted)' }} />
+                <Icon className="w-5 h-5" style={{ color: 'white' }} />
               </div>
               <div className="min-w-0">
                 <div className="text-xs font-black uppercase tracking-wide text-slate-400">{c.label}</div>
@@ -85,7 +85,7 @@ export default function ContactPage() {
         <form onSubmit={handleSubmit} className="lg:col-span-3 space-y-4 rounded-2xl bg-cream soft-border soft-shadow p-6">
           <div className="flex items-center gap-2 mb-1">
             <div className="w-9 h-9 rounded-lg soft-border flex items-center justify-center" style={{ backgroundColor: 'var(--color-ticket-orange)' }}>
-              <MessageCircle className="w-4.5 h-4.5" style={{ color: 'var(--color-dark-ink-muted)' }} />
+              <MessageCircle className="w-4.5 h-4.5" style={{ color: 'white' }} />
             </div>
             <h2 className="font-black text-slate-900">Send us a message</h2>
           </div>
@@ -138,7 +138,7 @@ export default function ContactPage() {
             type="submit"
             disabled={status === 'submitting'}
             className="focus-ring soft-press w-full sm:w-auto px-8 disabled:opacity-50 rounded-xl py-2.5 font-black text-sm soft-border soft-shadow-sm"
-            style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'var(--color-dark-ink-muted)' }}
+            style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'white' }}
           >
             {status === 'submitting' ? 'Sending…' : 'Send message'}
           </button>

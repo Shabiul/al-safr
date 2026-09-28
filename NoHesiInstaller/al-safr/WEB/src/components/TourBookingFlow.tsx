@@ -139,7 +139,7 @@ export function TourBookingFlow({ tourPackageId, packageName, destination, price
             <div className="p-6 space-y-5">
               {step === 1 && (
                 <div className="space-y-4">
-                  <p className="text-xs font-black uppercase tracking-wide px-2 py-1 rounded-full soft-border inline-block" style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'var(--color-dark-ink-muted)' }}>Step 1 of 3 · Trip details</p>
+                  <p className="text-xs font-black uppercase tracking-wide px-2 py-1 rounded-full soft-border inline-block" style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'white' }}>Step 1 of 3 · Trip details</p>
                   <label className="space-y-1.5 block">
                     <span className="text-sm font-bold text-slate-700 flex items-center gap-1.5"><Calendar className="w-4 h-4" style={{ color: 'var(--color-ticket-orange)' }} />Travel date</span>
                     <input
@@ -173,15 +173,15 @@ export function TourBookingFlow({ tourPackageId, packageName, destination, price
                     </div>
                   </label>
                   <div className="rounded-xl p-4 flex items-center justify-between soft-border" style={{ backgroundColor: 'var(--color-ticket-orange)' }}>
-                    <span className="text-sm font-bold" style={{ color: 'var(--color-dark-ink-muted)' }}>Estimated total</span>
-                    <span className="text-lg font-black" style={{ color: 'var(--color-dark-ink-muted)' }}>{formatPrice(total, currency)}</span>
+                    <span className="text-sm font-bold" style={{ color: 'white' }}>Estimated total</span>
+                    <span className="text-lg font-black" style={{ color: 'white' }}>{formatPrice(total, currency)}</span>
                   </div>
                 </div>
               )}
 
               {step === 2 && (
                 <div className="space-y-4">
-                  <p className="text-xs font-black uppercase tracking-wide px-2 py-1 rounded-full soft-border inline-block" style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'var(--color-dark-ink-muted)' }}>Step 2 of 3 · Your details</p>
+                  <p className="text-xs font-black uppercase tracking-wide px-2 py-1 rounded-full soft-border inline-block" style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'white' }}>Step 2 of 3 · Your details</p>
                   <label className="space-y-1.5 block">
                     <span className="text-sm font-bold text-slate-700">Full name</span>
                     <input
@@ -228,7 +228,7 @@ export function TourBookingFlow({ tourPackageId, packageName, destination, price
 
               {step === 3 && (
                 <div className="space-y-4">
-                  <p className="text-xs font-black uppercase tracking-wide px-2 py-1 rounded-full soft-border inline-block" style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'var(--color-dark-ink-muted)' }}>Step 3 of 3 · Review &amp; confirm</p>
+                  <p className="text-xs font-black uppercase tracking-wide px-2 py-1 rounded-full soft-border inline-block" style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'white' }}>Step 3 of 3 · Review &amp; confirm</p>
                   <div className="rounded-xl divide-y-2 soft-border" style={{ borderColor: 'var(--color-dark-ink-muted)' }}>
                     <div className="px-4 py-3 flex items-center justify-between text-sm" style={{ borderColor: 'var(--color-dark-ink-muted)' }}>
                       <span className="text-slate-500 font-semibold">Package</span>
@@ -247,8 +247,8 @@ export function TourBookingFlow({ tourPackageId, packageName, destination, price
                       <span className="font-black text-slate-900 text-right">{name}<br /><span className="text-xs text-slate-400 font-semibold">{email} · {phone}</span></span>
                     </div>
                     <div className="px-4 py-3 flex items-center justify-between" style={{ backgroundColor: 'var(--color-ticket-orange)' }}>
-                      <span className="text-sm font-bold" style={{ color: 'var(--color-dark-ink-muted)' }}>Total</span>
-                      <span className="text-lg font-black" style={{ color: 'var(--color-dark-ink-muted)' }}>{formatPrice(total, currency)}</span>
+                      <span className="text-sm font-bold" style={{ color: 'white' }}>Total</span>
+                      <span className="text-lg font-black" style={{ color: 'white' }}>{formatPrice(total, currency)}</span>
                     </div>
                   </div>
                   <p className="text-xs text-slate-400 font-medium">
@@ -260,7 +260,7 @@ export function TourBookingFlow({ tourPackageId, packageName, destination, price
               {step === 4 && (
                 <div className="text-center py-4 space-y-3">
                   <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto soft-border soft-shadow-sm" style={{ backgroundColor: 'var(--color-ticket-orange)' }}>
-                    <CheckCircle2 className="w-8 h-8" style={{ color: 'var(--color-dark-ink-muted)' }} />
+                    <CheckCircle2 className="w-8 h-8" style={{ color: 'white' }} />
                   </div>
                   <h3 className="font-black text-slate-900 text-lg">Thanks, {name.split(' ')[0]}!</h3>
                   <p className="text-sm text-slate-500 max-w-xs mx-auto font-medium">
@@ -306,7 +306,7 @@ export function TourBookingFlow({ tourPackageId, packageName, destination, price
                       onClick={handleConfirm}
                       disabled={isSubmitting}
                       className="focus-ring soft-press flex-1 flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl disabled:opacity-50 text-sm font-black soft-border soft-shadow-sm"
-                      style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'var(--color-dark-ink-muted)' }}
+                      style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'white' }}
                     >
                       {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Confirm booking'}
                     </button>
