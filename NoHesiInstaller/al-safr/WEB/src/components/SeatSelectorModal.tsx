@@ -12,6 +12,8 @@ import {
   Check,
   User,
   CreditCard,
+  Luggage,
+  Info,
 } from 'lucide-react';
 
 export interface BookingConfirmation {
@@ -40,6 +42,17 @@ const COUNTRY_CODES = [
   { code: '+44', label: 'UK (+44)' },
   { code: '+1', label: 'USA (+1)' },
 ];
+
+// General industry-typical allowances by cabin — NOT airline-verified data
+// for a specific fare (Google Flights doesn't return per-fare baggage
+// terms). Shown as guidance with an explicit disclaimer rather than
+// presented as a confirmed limit, so it stays honest instead of inventing
+// a specific airline's real policy.
+const BAGGAGE_GUIDANCE: Record<'economy' | 'business' | 'first', { cabin: string; checkin: string }> = {
+  economy: { cabin: '7 kg (1 piece)', checkin: '15–23 kg (1 piece)' },
+  business: { cabin: '10 kg (2 pieces)', checkin: '30–35 kg (2 pieces)' },
+  first: { cabin: '10 kg (2 pieces)', checkin: '40 kg (2 pieces)' },
+};
 
 const INDIAN_STATES = [
   'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh', 'Goa', 'Gujarat',
@@ -421,6 +434,29 @@ export const SeatSelectorModal: React.FC<SeatSelectorModalProps> = ({
                     </span>
                   </div>
                 </label>
+              </div>
+
+              {/* Baggage allowance */}
+              <div className="bg-slate-50 p-4 rounded-xl space-y-3 soft-border">
+                <h4 className="text-sm font-black text-slate-900 flex items-center gap-1.5">
+                  <Luggage className="w-3.5 h-3.5" style={{ color: 'var(--color-ticket-orange)' }} aria-hidden="true" />
+                  Baggage allowance
+                </h4>
+                <div className="grid grid-cols-2 gap-3 text-sm">
+                  <div>
+                    <span className="text-[11px] text-slate-500 font-bold block">Cabin baggage</span>
+                    <span className="font-black text-slate-900">{BAGGAGE_GUIDANCE[selectedCabin].cabin}</span>
+                  </div>
+                  <div>
+                    <span className="text-[11px] text-slate-500 font-bold block">Check-in baggage</span>
+                    <span className="font-black text-slate-900">{BAGGAGE_GUIDANCE[selectedCabin].checkin}</span>
+                  </div>
+                </div>
+                <p className="text-[11px] text-slate-500 font-medium flex items-start gap-1.5">
+                  <Info className="w-3 h-3 shrink-0 mt-0.5" aria-hidden="true" />
+                  General {CABIN_LABEL[selectedCabin].toLowerCase()} guidance, not the airline&apos;s confirmed
+                  allowance for this fare — the exact limit is shown on your e-ticket and confirmed at check-in.
+                </p>
               </div>
 
               {/* Contact details — where the itinerary/e-ticket gets sent */}
