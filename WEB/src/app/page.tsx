@@ -90,8 +90,29 @@ export default function Home() {
   // Flight search results
   const [flights, setFlights] = useState<FlightOption[]>([]);
   const [flightFilters, setFlightFilters] = useState<FlightFilterState>(EMPTY_FLIGHT_FILTERS);
+  const [flightSort, setFlightSort] = useState<'recommended' | 'price_low' | 'price_high'>('recommended');
   const filteredFlights = useMemo(() => applyFlightFilters(flights, flightFilters), [flights, flightFilters]);
   const [selectedCabin, setSelectedCabin] = useState<'economy' | 'business' | 'first'>('business');
+  const sortedFlights = useMemo(() => {
+    if (flightSort === 'recommended') return filteredFlights;
+    // Flights with no fare in the currently selected cabin (see the
+    // per-cabin real-price merge in the API) sort to the back either way —
+    // there's no real price to rank them by.
+    const priceOf = (f: FlightOption) => {
+      const p = f.prices[selectedCabin];
+      return p > 0 ? p : null;
+    };
+    const sorted = [...filteredFlights];
+    sorted.sort((a, b) => {
+      const pa = priceOf(a);
+      const pb = priceOf(b);
+      if (pa == null && pb == null) return 0;
+      if (pa == null) return 1;
+      if (pb == null) return -1;
+      return flightSort === 'price_low' ? pa - pb : pb - pa;
+    });
+    return sorted;
+  }, [filteredFlights, flightSort, selectedCabin]);
 
   // Live Telemetry Stream State
   const [isFetchingLive, setIsFetchingLive] = useState(false);
@@ -126,6 +147,7 @@ export default function Home() {
 
         setFlights(liveOptions);
         setFlightFilters(EMPTY_FLIGHT_FILTERS);
+        setFlightSort('recommended');
         setLastLiveSync(new Date(data.timestamp).toLocaleTimeString());
         setDataSourceNotice(data.dataSourceNotice || '');
         setApiStatus('success');
@@ -306,6 +328,29 @@ export default function Home() {
                           <p className="text-xs text-slate-400 mt-0.5">{dataSourceNotice}</p>
                         )}
                       </div>
+
+                      {filteredFlights.length > 0 && (
+                        <div className="flex items-center bg-slate-100 p-1 rounded-xl text-sm soft-border shrink-0">
+                          {([
+                            ['recommended', 'Recommended'],
+                            ['price_low', 'Price: Low to High'],
+                            ['price_high', 'Price: High to Low'],
+                          ] as const).map(([key, label]) => (
+                            <button
+                              key={key}
+                              type="button"
+                              onClick={() => setFlightSort(key)}
+                              aria-pressed={flightSort === key}
+                              className={`focus-ring px-3 py-1.5 rounded-lg font-black transition-colors whitespace-nowrap ${
+                                flightSort === key ? 'text-white' : 'text-slate-500 hover:text-slate-900'
+                              }`}
+                              style={flightSort === key ? { backgroundColor: 'var(--color-ticket-orange)' } : undefined}
+                            >
+                              {label}
+                            </button>
+                          ))}
+                        </div>
+                      )}
                     </div>
 
                     {isFetchingLive ? (
@@ -339,7 +384,7 @@ export default function Home() {
                       </div>
                     ) : (
                       <div className="space-y-3">
-                        {filteredFlights.map((flight) => (
+                        {sortedFlights.map((flight) => (
                           <FlightCard
                             key={flight.id}
                             flight={flight}
