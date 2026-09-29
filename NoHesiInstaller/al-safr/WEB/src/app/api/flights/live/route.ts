@@ -11,13 +11,8 @@ const CABIN_TO_CLASS_ID: Record<string, number> = {
   business: 3,
   first: 4,
 };
-// Price ratios relative to economy, used only to derive the two cabins we
-// didn't query (the API returns one live price per requested cabin).
-const CABIN_PRICE_RATIO: Record<string, number> = {
-  economy: 1,
-  business: 2.15,
-  first: 3.9,
-};
+type CabinClass = 'economy' | 'business' | 'first';
+const CABINS: CabinClass[] = ['economy', 'business', 'first'];
 
 interface GfSegment {
   departureAirportCode: string;
@@ -84,7 +79,6 @@ function parseGoogleFlightsResponse(
   const itineraries = [...top, ...other.slice(0, 2)];
   if (itineraries.length === 0) return null;
 
-  const ratio = CABIN_PRICE_RATIO[cabinClass] || 1;
   const seenKeys = new Set<string>();
 
   const options: FlightOption[] = [];
@@ -104,7 +98,10 @@ function parseGoogleFlightsResponse(
     const stops = it.stops ?? it.segments.length - 1;
     const durHours = Math.floor(it.duration / 60);
     const durMins = it.duration % 60;
-    const economyEquivalent = (it.price / ratio) * markupMultiplier;
+    // Only the queried cabin's price is real here — the other two cabins get
+    // filled in (or left unavailable) by merging with the other two cabin
+    // searches, not guessed via a fixed ratio.
+    const realPrice = Math.round(it.price * markupMultiplier);
 
     const firstSeg = it.segments[0];
     const lastSeg = it.segments[it.segments.length - 1];
@@ -154,9 +151,9 @@ function parseGoogleFlightsResponse(
       duration: `${durHours}h ${durMins}m`,
       stops,
       prices: {
-        economy: Math.round(economyEquivalent),
-        business: Math.round(economyEquivalent * CABIN_PRICE_RATIO.business),
-        first: Math.round(economyEquivalent * CABIN_PRICE_RATIO.first),
+        economy: cabinClass === 'economy' ? realPrice : 0,
+        business: cabinClass === 'business' ? realPrice : 0,
+        first: cabinClass === 'first' ? realPrice : 0,
       },
       priceTrend: {
         changePercent: 0,
@@ -164,7 +161,11 @@ function parseGoogleFlightsResponse(
         trend: 'stable',
         forecastNext48h: 'Live fare snapshot from Google Flights',
       },
-      seatsRemaining: { economy: 9, business: 4, first: 1 },
+      seatsRemaining: {
+        economy: cabinClass === 'economy' ? 9 : 0,
+        business: cabinClass === 'business' ? 4 : 0,
+        first: cabinClass === 'first' ? 1 : 0,
+      },
       amenities: firstSeg.seatPitch ? [`Seat pitch ${firstSeg.seatPitch}`] : [],
     } as FlightOption);
   }
@@ -258,6 +259,56 @@ async function fetchGoogleFlights(
   } catch (err: any) {
     return { flights: null, notice: err?.message || 'Network error' };
   }
+}
+
+// Runs the same route/date search once per cabin (3 real API calls) and
+// merges them by flight identity (same id = same physical flight/schedule
+// across all 3 responses, since flight number + departure time don't
+// change with cabin). A cabin with no match for a given flight means that
+// flight genuinely wasn't returned in that cabin's search — marked
+// unavailable (0 seats) rather than estimated from another cabin's price.
+async function searchAllCabins(
+  origin: Airport,
+  dest: Airport,
+  travelDate: string
+): Promise<{ flights: FlightOption[] | null; notice: string }> {
+  const [econ, biz, first] = await Promise.all(
+    CABINS.map((c) => fetchGoogleFlights(origin, dest, travelDate, c))
+  );
+  const byCabin: Record<CabinClass, { flights: FlightOption[] | null; notice: string }> = {
+    economy: econ,
+    business: biz,
+    first,
+  };
+
+  // Economy usually has the fullest flight list; fall back to whichever
+  // cabin actually returned something so a route that's business/first-only
+  // still shows results instead of nothing.
+  const base = CABINS.map((c) => byCabin[c]).find((r) => r.flights && r.flights.length > 0);
+  if (!base?.flights) {
+    return { flights: null, notice: econ.notice || biz.notice || first.notice || 'No flights returned for this route' };
+  }
+
+  const byIdPerCabin: Record<CabinClass, Map<string, FlightOption>> = {
+    economy: new Map((econ.flights ?? []).map((f) => [f.id, f])),
+    business: new Map((biz.flights ?? []).map((f) => [f.id, f])),
+    first: new Map((first.flights ?? []).map((f) => [f.id, f])),
+  };
+
+  const merged: FlightOption[] = base.flights.map((flight) => {
+    const prices = { economy: 0, business: 0, first: 0 };
+    const seatsRemaining = { economy: 0, business: 0, first: 0 };
+    for (const cabin of CABINS) {
+      const match = byIdPerCabin[cabin].get(flight.id);
+      if (match) {
+        prices[cabin] = match.prices[cabin];
+        seatsRemaining[cabin] = match.seatsRemaining[cabin];
+      }
+    }
+    return { ...flight, prices, seatsRemaining };
+  });
+
+  return { flights: merged, notice: 'ok' };
 }
 
 export async function GET(request: Request) {
@@ -376,28 +427,13 @@ export async function GET(request: Request) {
   const distanceKm = Math.round(Math.sqrt(latDelta * latDelta + lngDelta * lngDelta) * 111);
 
   // 3. Real third-party airline fares via Google Flights (RapidAPI). No
-  // fabricated fallback flights — if the live API has nothing for this
-  // route/cabin, we say so and return an empty list rather than inventing one.
-  let { flights: googleFlights, notice: googleFlightsNotice } = await fetchGoogleFlights(
-    origin,
-    dest,
-    travelDate,
-    cabinClass,
-    lite
-  );
-
-  // Short-haul/domestic routes commonly sell Economy only — retry there
-  // instead of showing nothing (or worse, fake data) when a higher cabin
-  // has no live inventory.
-  let cabinDowngraded = false;
-  if (!googleFlights && cabinClass !== 'economy') {
-    const retry = await fetchGoogleFlights(origin, dest, travelDate, 'economy', lite);
-    if (retry.flights) {
-      googleFlights = retry.flights;
-      googleFlightsNotice = retry.notice;
-      cabinDowngraded = true;
-    }
-  }
+  // fabricated fallback flights or guessed cross-cabin prices — the fare
+  // calendar (lite=1) only needs one cabin's cheapest price, so it stays a
+  // single cheap request; a real search fetches all 3 cabins so every price
+  // shown is a real fare rather than a ratio-based estimate.
+  const { flights: googleFlights, notice: googleFlightsNotice } = lite
+    ? await fetchGoogleFlights(origin, dest, travelDate, cabinClass, true)
+    : await searchAllCabins(origin, dest, travelDate);
 
   const usingLiveFares = googleFlights !== null;
   const flightOptions: FlightOption[] = googleFlights ?? [];
@@ -405,9 +441,8 @@ export async function GET(request: Request) {
   // Anchor the forecast on the cheapest real fare we actually found, not a
   // distance-only guess — falls back to the distance estimate only when no
   // live fare exists at all for this route.
-  const cheapestRealEconomy = flightOptions.length > 0
-    ? Math.min(...flightOptions.map((f) => f.prices.economy))
-    : null;
+  const realEconomyPrices = flightOptions.map((f) => f.prices.economy).filter((p) => p > 0);
+  const cheapestRealEconomy = realEconomyPrices.length > 0 ? Math.min(...realEconomyPrices) : null;
   const baseEconomy = cheapestRealEconomy ?? Math.round(280 + distanceKm * 0.08);
 
   // 4. Generate 7-day fare trend estimate anchored on the real fare above
@@ -441,9 +476,7 @@ export async function GET(request: Request) {
     },
     dataSource: usingLiveFares ? 'google-flights-live' : 'no-live-data',
     dataSourceNotice: usingLiveFares
-      ? cabinDowngraded
-        ? `No live ${cabinClass} fares for this route — showing live Economy fares instead`
-        : 'Fares from Google Flights (live)'
+      ? 'Fares from Google Flights (live)'
       : `No live fares found for this route (${googleFlightsNotice})`,
     flights: flightOptions,
     priceForecast: priceForecastPoints,
