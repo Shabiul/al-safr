@@ -8,6 +8,7 @@ import {
   CurrencyCode,
 } from '@/services/flightData';
 import { FareCalendar } from './FareCalendar';
+import { DiscountPopup } from './DiscountPopup';
 import {
   PlaneTakeoff,
   PlaneLanding,
@@ -101,6 +102,7 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
   const [isRetCalOpen, setIsRetCalOpen] = useState(false);
   const [curFareType, setCurFareType] = useState<FareType>('regular');
   const [gstNumber, setGstNumber] = useState('');
+  const [isDiscountPopupOpen, setIsDiscountPopupOpen] = useState(false);
 
   // Swap animation trigger
   const [isSwapping, setIsSwapping] = useState(false);
@@ -274,10 +276,12 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
       passengers: curPassengers,
       supersonicOnly: curSupersonic,
     });
+    setIsDiscountPopupOpen(true);
   };
 
   return (
     <div className="bg-cream rounded-3xl p-5 sm:p-7 soft-border soft-shadow">
+      <DiscountPopup isOpen={isDiscountPopupOpen} onClose={() => setIsDiscountPopupOpen(false)} />
       <form onSubmit={handleExecuteSearch} className="space-y-5">
         {/* Top Segmented Controls: Trip Type & Supersonic Filter */}
         <div className="flex flex-wrap items-center justify-between gap-3 border-b-[3px] pb-4" style={{ borderColor: 'var(--color-dark-ink-muted)' }}>

@@ -4,6 +4,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { CurrencyCode, formatPrice } from '@/services/flightData';
 import { TourPackage } from '@/services/tourPackageData';
+import { DiscountPopup } from '@/components/DiscountPopup';
 import { MapPin, ArrowRight, RefreshCw, Compass, Search, CheckCircle2, UtensilsCrossed, Heart, Flame, SlidersHorizontal, Star } from 'lucide-react';
 
 interface TourPackagesProps {
@@ -48,6 +49,7 @@ export const TourPackages: React.FC<TourPackagesProps> = ({ currency }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [notice, setNotice] = useState('');
   const [query, setQuery] = useState('');
+  const [isDiscountPopupOpen, setIsDiscountPopupOpen] = useState(false);
   const [sortKey, setSortKey] = useState<SortKey>('relevance');
   const [wishlist, setWishlist] = useState<Set<string>>(new Set());
 
@@ -250,6 +252,7 @@ export const TourPackages: React.FC<TourPackagesProps> = ({ currency }) => {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-5">
+      <DiscountPopup isOpen={isDiscountPopupOpen} onClose={() => setIsDiscountPopupOpen(false)} />
       {/* FILTERS SIDEBAR */}
       <aside className="bg-cream rounded-2xl p-5 space-y-6 h-fit lg:sticky lg:top-20 soft-border soft-shadow-sm">
         <div className="flex items-center justify-between">
@@ -441,6 +444,9 @@ export const TourPackages: React.FC<TourPackagesProps> = ({ currency }) => {
                 placeholder="Search packages…"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') setIsDiscountPopupOpen(true);
+                }}
                 className="focus-ring pl-9 pr-3 py-2 bg-cream rounded-xl text-sm text-slate-900 font-bold soft-border w-full sm:w-56"
               />
             </div>
