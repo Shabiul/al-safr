@@ -21,12 +21,35 @@ export interface BookingConfirmation {
   seatNumber: string;
   passengerName: string;
   passportNumber: string;
+  contactCountryCode: string;
+  contactMobile: string;
+  contactEmail: string;
+  gstNumber: string;
+  gstState: string;
   totalPriceUsd: number;
   gate: string;
   terminal: string;
   boardingTime: string;
   boardingGroup: string;
 }
+
+const COUNTRY_CODES = [
+  { code: '+91', label: 'India (+91)' },
+  { code: '+971', label: 'UAE (+971)' },
+  { code: '+966', label: 'Saudi Arabia (+966)' },
+  { code: '+44', label: 'UK (+44)' },
+  { code: '+1', label: 'USA (+1)' },
+];
+
+const INDIAN_STATES = [
+  'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh', 'Goa', 'Gujarat',
+  'Haryana', 'Himachal Pradesh', 'Jharkhand', 'Karnataka', 'Kerala', 'Madhya Pradesh',
+  'Maharashtra', 'Manipur', 'Meghalaya', 'Mizoram', 'Nagaland', 'Odisha', 'Punjab',
+  'Rajasthan', 'Sikkim', 'Tamil Nadu', 'Telangana', 'Tripura', 'Uttar Pradesh',
+  'Uttarakhand', 'West Bengal', 'Andaman and Nicobar Islands', 'Chandigarh',
+  'Dadra and Nagar Haveli and Daman and Diu', 'Delhi', 'Jammu and Kashmir', 'Ladakh',
+  'Lakshadweep', 'Puducherry',
+];
 
 interface SeatSelectorModalProps {
   isOpen: boolean;
@@ -56,6 +79,12 @@ export const SeatSelectorModal: React.FC<SeatSelectorModalProps> = ({
   const [passengerName, setPassengerName] = useState('Tariq Al-Mansoor');
   const [passportNumber, setPassportNumber] = useState('A8942104');
   const [priorityAddon, setPriorityAddon] = useState(true);
+  const [contactCountryCode, setContactCountryCode] = useState('+91');
+  const [contactMobile, setContactMobile] = useState('');
+  const [contactEmail, setContactEmail] = useState('');
+  const [hasGst, setHasGst] = useState(false);
+  const [gstNumber, setGstNumber] = useState('');
+  const [gstState, setGstState] = useState('');
 
   if (!isOpen || !flight) return null;
 
@@ -89,6 +118,11 @@ export const SeatSelectorModal: React.FC<SeatSelectorModalProps> = ({
       seatNumber: selectedSeat,
       passengerName: passengerName || 'Valued Passenger',
       passportNumber: passportNumber || 'A0000000',
+      contactCountryCode,
+      contactMobile,
+      contactEmail,
+      gstNumber: hasGst ? gstNumber : '',
+      gstState: hasGst ? gstState : '',
       totalPriceUsd: totalCost,
       gate: 'B18',
       terminal: 'Terminal 3',
@@ -389,10 +423,110 @@ export const SeatSelectorModal: React.FC<SeatSelectorModalProps> = ({
                 </label>
               </div>
 
-              {/* Price Breakdown */}
+              {/* Contact details — where the itinerary/e-ticket gets sent */}
+              <div className="space-y-2">
+                <h4 className="text-sm font-black text-slate-900">Booking details will be sent to</h4>
+                <div className="grid grid-cols-3 gap-2">
+                  <div className="space-y-1">
+                    <label htmlFor="contact-country-code" className="sr-only">
+                      Country code
+                    </label>
+                    <select
+                      id="contact-country-code"
+                      value={contactCountryCode}
+                      onChange={(e) => setContactCountryCode(e.target.value)}
+                      className="focus-ring w-full px-2 py-2 text-xs bg-slate-50 rounded-lg font-bold soft-border"
+                    >
+                      {COUNTRY_CODES.map((c) => (
+                        <option key={c.code} value={c.code}>
+                          {c.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="col-span-2 space-y-1">
+                    <label htmlFor="contact-mobile" className="sr-only">
+                      Mobile number
+                    </label>
+                    <input
+                      id="contact-mobile"
+                      type="tel"
+                      placeholder="Mobile no."
+                      value={contactMobile}
+                      onChange={(e) => setContactMobile(e.target.value)}
+                      required
+                      className="focus-ring w-full px-3 py-2 text-sm bg-slate-50 rounded-lg font-medium soft-border"
+                    />
+                  </div>
+                </div>
+                <div className="space-y-1">
+                  <label htmlFor="contact-email" className="sr-only">
+                    Email
+                  </label>
+                  <input
+                    id="contact-email"
+                    type="email"
+                    placeholder="Email"
+                    value={contactEmail}
+                    onChange={(e) => setContactEmail(e.target.value)}
+                    required
+                    className="focus-ring w-full px-3 py-2 text-sm bg-slate-50 rounded-lg font-medium soft-border"
+                  />
+                </div>
+
+                <label className="flex items-center gap-2 pt-1 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={hasGst}
+                    onChange={(e) => setHasGst(e.target.checked)}
+                    className="focus-ring w-4 h-4 rounded soft-border"
+                  />
+                  <span className="text-xs font-bold text-slate-700">I have a GST number (Optional)</span>
+                </label>
+
+                {hasGst && (
+                  <div className="space-y-2 pt-1">
+                    <div className="space-y-1">
+                      <label htmlFor="gst-number-checkout" className="text-xs font-bold text-slate-700">
+                        GSTIN
+                      </label>
+                      <input
+                        id="gst-number-checkout"
+                        type="text"
+                        placeholder="15-digit GSTIN"
+                        value={gstNumber}
+                        onChange={(e) => setGstNumber(e.target.value.toUpperCase())}
+                        maxLength={15}
+                        className="focus-ring w-full px-3 py-2 text-sm bg-slate-50 rounded-lg font-medium font-mono soft-border"
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <label htmlFor="gst-state" className="text-xs font-bold text-slate-700">
+                        Your state (for GST invoice)
+                      </label>
+                      <select
+                        id="gst-state"
+                        value={gstState}
+                        onChange={(e) => setGstState(e.target.value)}
+                        className="focus-ring w-full px-3 py-2 text-sm bg-slate-50 rounded-lg font-medium soft-border"
+                      >
+                        <option value="">Select the state</option>
+                        {INDIAN_STATES.map((s) => (
+                          <option key={s} value={s}>
+                            {s}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Fare Summary */}
               <div className="bg-slate-50 p-4 rounded-xl space-y-2 text-sm soft-border">
+                <h4 className="text-xs font-black text-slate-500 uppercase tracking-wide">Fare Summary</h4>
                 <div className="flex items-center justify-between text-slate-600 font-medium">
-                  <span>{CABIN_LABEL[selectedCabin]} fare</span>
+                  <span>Base fare ({CABIN_LABEL[selectedCabin]})</span>
                   <span className="font-mono">{formatPrice(baseFare, currency)}</span>
                 </div>
                 {seatFee > 0 && (
@@ -408,11 +542,11 @@ export const SeatSelectorModal: React.FC<SeatSelectorModalProps> = ({
                   </div>
                 )}
                 <div className="flex items-center justify-between text-slate-600 font-medium">
-                  <span>Taxes & fees</span>
+                  <span>Taxes and surcharges</span>
                   <span className="font-mono">+{formatPrice(taxesFees, currency)}</span>
                 </div>
                 <div className="pt-2 border-t-2 flex items-center justify-between font-black text-sm text-slate-900" style={{ borderColor: 'var(--color-dark-ink-muted)' }}>
-                  <span>Total</span>
+                  <span>Total Amount</span>
                   <span className="text-lg font-mono" style={{ color: 'var(--color-ticket-orange)' }}>{formatPrice(totalCost, currency)}</span>
                 </div>
               </div>
