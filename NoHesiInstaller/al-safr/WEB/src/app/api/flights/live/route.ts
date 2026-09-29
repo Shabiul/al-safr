@@ -191,7 +191,8 @@ async function fetchGoogleFlights(
   origin: Airport,
   dest: Airport,
   travelDate: string,
-  cabinClass: string
+  cabinClass: string,
+  skipLayoverDetails = false
 ): Promise<{ flights: FlightOption[] | null; notice: string }> {
   if (!hasRapidApiKey()) return { flights: null, notice: 'RAPIDAPI_KEY not configured' };
 
@@ -228,8 +229,11 @@ async function fetchGoogleFlights(
 
     // Fill in real layover details: full airport name (already in the API
     // response) + city (resolved once per unique layover airport) + real
-    // gap between arrival and the next departure.
-    if (layoverMap.size > 0) {
+    // gap between arrival and the next departure. Skipped for the fare
+    // calendar's bulk per-date price lookups — it only needs the price, and
+    // this extra round-trip per layover airport isn't worth the latency
+    // multiplied across ~60 dates.
+    if (!skipLayoverDetails && layoverMap.size > 0) {
       const uniqueCodes = [...new Set([...layoverMap.values()].flat().map((l) => l.code))];
       const cityEntries = await Promise.all(
         uniqueCodes.map(async (code) => [code, await fetchAirportCity(code)] as const)
@@ -262,6 +266,11 @@ export async function GET(request: Request) {
   const destCode = searchParams.get('destination') || 'DXB';
   const travelDate = searchParams.get('date') || new Date().toISOString().split('T')[0];
   const cabinClass = searchParams.get('cabinClass') || 'economy';
+  // Used by the fare calendar's bulk per-date price lookups: skips the
+  // OpenSky telemetry call and layover-city enrichment, neither of which
+  // that UI reads, so each of the ~60 calendar requests isn't stuck behind
+  // several seconds of unused work.
+  const lite = searchParams.get('lite') === '1';
 
   const startTime = Date.now();
 
@@ -322,41 +331,43 @@ export async function GET(request: Request) {
 
   // 1. Fetch REAL LIVE AIRBORNE FLIGHTS from OpenSky Network ADS-B
   let liveAirborne: any[] = [];
-  try {
-    const openSkyRes = await fetch('https://opensky-network.org/api/states/all', {
-      cache: 'no-store',
-      signal: AbortSignal.timeout(5000),
-    });
-    if (openSkyRes.ok) {
-      const openSkyData = await openSkyRes.json();
-      liveAirborne = (openSkyData.states || [])
-        .filter(
-          (s: any) =>
-            s[1] &&
-            s[1].trim() &&
-            !s[8] &&
-            s[5] !== null &&
-            s[6] !== null &&
-            s[7] !== null
-        )
-        .slice(0, 24)
-        .map((s: any) => ({
-          icao24: s[0],
-          callsign: s[1].trim(),
-          country: s[2],
-          lng: parseFloat(s[5].toFixed(4)),
-          lat: parseFloat(s[6].toFixed(4)),
-          altitudeFt: Math.round((s[7] || 0) * 3.28084),
-          flightLevel: `FL${Math.round(((s[7] || 0) * 3.28084) / 100)}`,
-          speedKnots: Math.round((s[9] || 0) * 1.94384),
-          mach: parseFloat(((s[9] || 0) * 1.94384 / 573.8).toFixed(2)),
-          headingDeg: Math.round(s[10] || 0),
-          verticalSpeedFpm: Math.round((s[11] || 0) * 196.85),
-          squawk: s[14] || '1000',
-        }));
+  if (!lite) {
+    try {
+      const openSkyRes = await fetch('https://opensky-network.org/api/states/all', {
+        cache: 'no-store',
+        signal: AbortSignal.timeout(5000),
+      });
+      if (openSkyRes.ok) {
+        const openSkyData = await openSkyRes.json();
+        liveAirborne = (openSkyData.states || [])
+          .filter(
+            (s: any) =>
+              s[1] &&
+              s[1].trim() &&
+              !s[8] &&
+              s[5] !== null &&
+              s[6] !== null &&
+              s[7] !== null
+          )
+          .slice(0, 24)
+          .map((s: any) => ({
+            icao24: s[0],
+            callsign: s[1].trim(),
+            country: s[2],
+            lng: parseFloat(s[5].toFixed(4)),
+            lat: parseFloat(s[6].toFixed(4)),
+            altitudeFt: Math.round((s[7] || 0) * 3.28084),
+            flightLevel: `FL${Math.round(((s[7] || 0) * 3.28084) / 100)}`,
+            speedKnots: Math.round((s[9] || 0) * 1.94384),
+            mach: parseFloat(((s[9] || 0) * 1.94384 / 573.8).toFixed(2)),
+            headingDeg: Math.round(s[10] || 0),
+            verticalSpeedFpm: Math.round((s[11] || 0) * 196.85),
+            squawk: s[14] || '1000',
+          }));
+      }
+    } catch {
+      // If rate-limited, fallback handled cleanly
     }
-  } catch {
-    // If rate-limited, fallback handled cleanly
   }
 
   // 2. Geodesic distance calculation (used only as a last-resort forecast anchor)
@@ -371,7 +382,8 @@ export async function GET(request: Request) {
     origin,
     dest,
     travelDate,
-    cabinClass
+    cabinClass,
+    lite
   );
 
   // Short-haul/domestic routes commonly sell Economy only — retry there
@@ -379,7 +391,7 @@ export async function GET(request: Request) {
   // has no live inventory.
   let cabinDowngraded = false;
   if (!googleFlights && cabinClass !== 'economy') {
-    const retry = await fetchGoogleFlights(origin, dest, travelDate, 'economy');
+    const retry = await fetchGoogleFlights(origin, dest, travelDate, 'economy', lite);
     if (retry.flights) {
       googleFlights = retry.flights;
       googleFlightsNotice = retry.notice;
