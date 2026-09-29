@@ -30,6 +30,20 @@ interface AirportLite {
   aliases?: string[];
 }
 
+type FareType = 'regular' | 'student' | 'armed-forces' | 'gst' | 'senior-citizen' | 'doctors-nurses';
+
+// No invented discount amounts here — we don't have a real backend
+// discount to honor per fare type, so each subtext describes what the
+// fare actually gets you rather than a rupee figure we can't back up.
+const FARE_TYPES: { key: FareType; label: string; sublabel: string; badge?: string }[] = [
+  { key: 'regular', label: 'Regular', sublabel: 'Regular fares' },
+  { key: 'student', label: 'Student', sublabel: 'Extra baggage allowance' },
+  { key: 'armed-forces', label: 'Armed Forces', sublabel: 'For defence personnel' },
+  { key: 'gst', label: 'Have a GST number?', sublabel: 'Assured GST invoice', badge: 'NEW' },
+  { key: 'senior-citizen', label: 'Senior Citizen', sublabel: 'Priority assistance' },
+  { key: 'doctors-nurses', label: 'Doctors & Nurses', sublabel: 'Thank-you fares' },
+];
+
 interface FlightSearchProps {
   currency: CurrencyCode;
   origin: string;
@@ -85,6 +99,8 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
   const [isPassengerOpen, setIsPassengerOpen] = useState(false);
   const [isDepCalOpen, setIsDepCalOpen] = useState(false);
   const [isRetCalOpen, setIsRetCalOpen] = useState(false);
+  const [curFareType, setCurFareType] = useState<FareType>('regular');
+  const [gstNumber, setGstNumber] = useState('');
 
   // Swap animation trigger
   const [isSwapping, setIsSwapping] = useState(false);
@@ -782,6 +798,54 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
               </div>
             )}
           </div>
+        </div>
+
+        {/* Special Fare Selector */}
+        <div className="pt-1">
+          <span className="text-xs font-black text-slate-500 uppercase block mb-2">Select a special fare</span>
+          <div className="flex flex-wrap gap-2">
+            {FARE_TYPES.map((ft) => {
+              const isSelected = curFareType === ft.key;
+              return (
+                <button
+                  key={ft.key}
+                  type="button"
+                  onClick={() => setCurFareType(ft.key)}
+                  aria-pressed={isSelected}
+                  className={`focus-ring text-left px-3.5 py-2 rounded-xl soft-border transition-colors ${
+                    isSelected ? 'bg-slate-50' : 'bg-cream hover:bg-slate-50'
+                  }`}
+                  style={isSelected ? { boxShadow: '0 0 0 2px var(--color-ticket-orange)' } : undefined}
+                >
+                  <span className="flex items-center gap-1.5 text-xs font-black text-slate-900">
+                    {ft.label}
+                    {ft.badge && (
+                      <span className="text-[9px] font-black px-1.5 py-0.5 rounded-full text-white" style={{ backgroundColor: 'var(--color-ticket-orange)' }}>
+                        {ft.badge}
+                      </span>
+                    )}
+                  </span>
+                  <span className="text-[11px] text-slate-500 font-medium block mt-0.5">{ft.sublabel}</span>
+                </button>
+              );
+            })}
+          </div>
+          {curFareType === 'gst' && (
+            <div className="mt-2.5">
+              <label htmlFor="gst-number" className="sr-only">
+                GST number
+              </label>
+              <input
+                id="gst-number"
+                type="text"
+                placeholder="Enter your 15-digit GSTIN"
+                value={gstNumber}
+                onChange={(e) => setGstNumber(e.target.value.toUpperCase())}
+                maxLength={15}
+                className="focus-ring w-full sm:w-72 px-3 py-2 bg-slate-50 rounded-xl text-xs font-bold text-slate-900 soft-border"
+              />
+            </div>
+          )}
         </div>
 
         {/* Action Button Strip */}

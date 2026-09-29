@@ -106,7 +106,12 @@ export const LandingHome: React.FC<LandingHomeProps> = ({
   const [passengers, setPassengers] = useState<number>(1);
   const [originCode, setOriginCode] = useState<string>('JFK');
   const [destCode, setDestCode] = useState<string>('KIN');
-  const [departureDate, setDepartureDate] = useState<string>('2026-10-15');
+  // Live date — a fixed default goes stale and quietly falls behind "today".
+  const [departureDate, setDepartureDate] = useState<string>(() => {
+    const d = new Date();
+    d.setDate(d.getDate() + 7);
+    return d.toISOString().split('T')[0];
+  });
 
   // Interactive states
   const [openFaq, setOpenFaq] = useState<number | null>(0);
