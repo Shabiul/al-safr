@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { CurrencyCode, formatPrice } from '@/services/flightData';
 import { CabOption, CabLocation } from '@/services/cabData';
+import { DiscountPopup } from '@/components/DiscountPopup';
 import {
   Car,
   MapPin,
@@ -44,6 +45,7 @@ export const CabSearch: React.FC<CabSearchProps> = ({ currency }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [notice, setNotice] = useState('');
   const [hasSearched, setHasSearched] = useState(false);
+  const [isDiscountPopupOpen, setIsDiscountPopupOpen] = useState(false);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -103,6 +105,7 @@ export const CabSearch: React.FC<CabSearchProps> = ({ currency }) => {
     }
     setIsLoading(true);
     setNotice('');
+    setIsDiscountPopupOpen(true);
     try {
       const params = new URLSearchParams({
         latitude: String(selectedLocation.latitude),
@@ -126,6 +129,7 @@ export const CabSearch: React.FC<CabSearchProps> = ({ currency }) => {
 
   return (
     <div className="space-y-6">
+      <DiscountPopup isOpen={isDiscountPopupOpen} onClose={() => setIsDiscountPopupOpen(false)} />
       <div className="bg-cream rounded-3xl p-5 sm:p-7 space-y-3 soft-border soft-shadow">
         <p className="text-xs font-bold text-slate-400">
           Self-drive car rental — currently available across Europe and parts of Asia (not yet India, UAE, or the US).

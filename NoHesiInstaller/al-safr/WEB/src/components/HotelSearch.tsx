@@ -4,6 +4,7 @@ import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { CurrencyCode, formatPrice } from '@/services/flightData';
 import { HotelOption } from '@/services/hotelData';
 import { HotelBookingFlow } from '@/components/HotelBookingFlow';
+import { DiscountPopup } from '@/components/DiscountPopup';
 import {
   Building2,
   Calendar,
@@ -62,6 +63,7 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [notice, setNotice] = useState<string>('');
   const [hasSearched, setHasSearched] = useState(false);
+  const [isDiscountPopupOpen, setIsDiscountPopupOpen] = useState(false);
 
   // Filters & sort (client-side, applied over the fetched result set)
   const [sortKey, setSortKey] = useState<SortKey>('popularity');
@@ -134,6 +136,7 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
     setIsLoading(true);
     setNotice('');
     setIsDestOpen(false);
+    setIsDiscountPopupOpen(true);
     try {
       const params = new URLSearchParams({
         destination,
@@ -182,6 +185,7 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
 
   return (
     <div className="space-y-6">
+      <DiscountPopup isOpen={isDiscountPopupOpen} onClose={() => setIsDiscountPopupOpen(false)} />
       {/* MakeMyTrip-style search bar */}
       <div className="bg-cream rounded-3xl p-5 sm:p-7 soft-border soft-shadow">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
@@ -307,7 +311,7 @@ export const HotelSearch: React.FC<HotelSearchProps> = ({ currency }) => {
                       setIsDestOpen(false);
                     }}
                     className="focus-ring w-full px-3 py-2.5 rounded-xl text-left transition-colors flex items-center gap-2 text-sm font-black soft-border"
-                    style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'var(--color-dark-ink-muted)' }}
+                    style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'white' }}
                   >
                     <MapPin className="w-4 h-4 shrink-0" />
                     Use &quot;{destSearch.trim()}&quot; as destination
