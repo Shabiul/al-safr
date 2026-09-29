@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import Link from 'next/link';
 import { Header } from '@/components/Header';
 import { LandingHome } from '@/components/LandingHome';
@@ -9,6 +9,7 @@ import { HotelSearch } from '@/components/HotelSearch';
 import { TourPackages } from '@/components/TourPackages';
 import { CabSearch } from '@/components/CabSearch';
 import { FlightCard } from '@/components/FlightCard';
+import { FlightFilters, FlightFilterState, EMPTY_FLIGHT_FILTERS, applyFlightFilters } from '@/components/FlightFilters';
 import { SeatSelectorModal, BookingConfirmation } from '@/components/SeatSelectorModal';
 import { BoardingPassModal } from '@/components/BoardingPassModal';
 import { GalleryModal } from '@/components/GalleryModal';
@@ -88,6 +89,8 @@ export default function Home() {
 
   // Flight search results
   const [flights, setFlights] = useState<FlightOption[]>([]);
+  const [flightFilters, setFlightFilters] = useState<FlightFilterState>(EMPTY_FLIGHT_FILTERS);
+  const filteredFlights = useMemo(() => applyFlightFilters(flights, flightFilters), [flights, flightFilters]);
   const [selectedCabin, setSelectedCabin] = useState<'economy' | 'business' | 'first'>('business');
 
   // Live Telemetry Stream State
@@ -122,6 +125,7 @@ export default function Home() {
         }
 
         setFlights(liveOptions);
+        setFlightFilters(EMPTY_FLIGHT_FILTERS);
         setLastLiveSync(new Date(data.timestamp).toLocaleTimeString());
         setDataSourceNotice(data.dataSourceNotice || '');
         setApiStatus('success');
@@ -282,51 +286,71 @@ export default function Home() {
                   onSearch={handleSearch}
                 />
 
-                <div className="space-y-4">
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                    <div>
-                      <h2 className="text-lg font-semibold text-slate-900">
-                        {flights.length} {flights.length === 1 ? 'flight' : 'flights'} found
-                        <span className="ml-2 text-sm font-normal text-slate-500">
-                          {searchParams.origin} → {searchParams.destination}
-                        </span>
-                      </h2>
-                      {dataSourceNotice && (
-                        <p className="text-xs text-slate-400 mt-0.5">{dataSourceNotice}</p>
-                      )}
-                    </div>
-                  </div>
-
-                  {isFetchingLive ? (
-                    <div className="p-12 text-center bg-slate-50 rounded-2xl border border-slate-200 space-y-3">
-                      <RefreshCw className="w-7 h-7 text-brand-600 animate-spin mx-auto" />
-                      <div className="font-medium text-sm text-slate-700">Searching live fares…</div>
-                      <p className="text-sm text-slate-500">
-                        {searchParams.origin} → {searchParams.destination}
-                      </p>
-                    </div>
-                  ) : flights.length === 0 ? (
-                    <div className="p-12 text-center bg-slate-50 rounded-2xl border border-dashed border-slate-300 space-y-2">
-                      <div className="font-medium text-sm text-slate-700">
-                        No live flights found for {searchParams.origin} → {searchParams.destination}
-                      </div>
-                      <p className="text-sm text-slate-500 max-w-md mx-auto">
-                        {dataSourceNotice || 'Try a different date, cabin class, or route.'}
-                      </p>
-                    </div>
-                  ) : (
-                    <div className="space-y-3">
-                      {flights.map((flight) => (
-                        <FlightCard
-                          key={flight.id}
-                          flight={flight}
-                          currency={currency}
-                          selectedCabin={selectedCabin}
-                          onSelectFlight={handleOpenSeatSelector}
-                        />
-                      ))}
+                <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 items-start">
+                  {flights.length > 0 && (
+                    <div className="lg:col-span-1 lg:sticky lg:top-28">
+                      <FlightFilters flights={flights} filters={flightFilters} onChange={setFlightFilters} />
                     </div>
                   )}
+
+                  <div className={`space-y-4 ${flights.length > 0 ? 'lg:col-span-3' : 'lg:col-span-4'}`}>
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                      <div>
+                        <h2 className="text-lg font-semibold text-slate-900">
+                          {filteredFlights.length} {filteredFlights.length === 1 ? 'flight' : 'flights'} found
+                          <span className="ml-2 text-sm font-normal text-slate-500">
+                            {searchParams.origin} → {searchParams.destination}
+                          </span>
+                        </h2>
+                        {dataSourceNotice && (
+                          <p className="text-xs text-slate-400 mt-0.5">{dataSourceNotice}</p>
+                        )}
+                      </div>
+                    </div>
+
+                    {isFetchingLive ? (
+                      <div className="p-12 text-center bg-slate-50 rounded-2xl border border-slate-200 space-y-3">
+                        <RefreshCw className="w-7 h-7 text-brand-600 animate-spin mx-auto" />
+                        <div className="font-medium text-sm text-slate-700">Searching live fares…</div>
+                        <p className="text-sm text-slate-500">
+                          {searchParams.origin} → {searchParams.destination}
+                        </p>
+                      </div>
+                    ) : flights.length === 0 ? (
+                      <div className="p-12 text-center bg-slate-50 rounded-2xl border border-dashed border-slate-300 space-y-2">
+                        <div className="font-medium text-sm text-slate-700">
+                          No live flights found for {searchParams.origin} → {searchParams.destination}
+                        </div>
+                        <p className="text-sm text-slate-500 max-w-md mx-auto">
+                          {dataSourceNotice || 'Try a different date, cabin class, or route.'}
+                        </p>
+                      </div>
+                    ) : filteredFlights.length === 0 ? (
+                      <div className="p-12 text-center bg-slate-50 rounded-2xl border border-dashed border-slate-300 space-y-2">
+                        <div className="font-medium text-sm text-slate-700">No flights match these filters</div>
+                        <button
+                          type="button"
+                          onClick={() => setFlightFilters(EMPTY_FLIGHT_FILTERS)}
+                          className="focus-ring text-sm font-bold"
+                          style={{ color: 'var(--color-ticket-orange)' }}
+                        >
+                          Clear all filters
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="space-y-3">
+                        {filteredFlights.map((flight) => (
+                          <FlightCard
+                            key={flight.id}
+                            flight={flight}
+                            currency={currency}
+                            selectedCabin={selectedCabin}
+                            onSelectFlight={handleOpenSeatSelector}
+                          />
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             )}
