@@ -123,7 +123,7 @@ export const Header: React.FC<HeaderProps> = ({
         className={`w-full text-xs text-[#f4f3ec]/90 transition-all duration-300 hidden sm:block ${
           scrolled ? 'h-0 opacity-0 overflow-hidden py-0' : 'h-8 py-1.5 opacity-100'
         }`}
-        style={{ backgroundColor: '#1c1817' }}
+        style={{ backgroundColor: '#44403c' }}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
           <div className="flex items-center gap-5 sm:gap-6">
@@ -171,7 +171,7 @@ export const Header: React.FC<HeaderProps> = ({
             }}
             className="focus-ring rounded-xl flex items-center gap-3 shrink-0 group text-left cursor-pointer"
           >
-            <div className="w-10 h-10 rounded-xl bg-[#1c1817] text-white flex items-center justify-center shadow-md shadow-[#1c1817]/20 group-hover:scale-105 transition-transform">
+            <div className="w-10 h-10 rounded-xl bg-[#44403c] text-white flex items-center justify-center shadow-md shadow-[#44403c]/20 group-hover:scale-105 transition-transform">
               <Plane className="w-5 h-5 -rotate-45" />
             </div>
             <div>
@@ -191,7 +191,7 @@ export const Header: React.FC<HeaderProps> = ({
               <span
                 aria-hidden="true"
                 className={`w-2 h-2 rounded-full ml-1 ${
-                  apiStatus === 'success' ? 'bg-emerald-500' : apiStatus === 'loading' ? 'bg-[#1c1817] animate-pulse' : 'bg-rose-500'
+                  apiStatus === 'success' ? 'bg-emerald-500' : apiStatus === 'loading' ? 'bg-[#44403c] animate-pulse' : 'bg-rose-500'
                 }`}
                 title="Live Flight Telemetry Status"
               />
@@ -210,7 +210,7 @@ export const Header: React.FC<HeaderProps> = ({
                   aria-current={isActive ? 'page' : undefined}
                   className={`focus-ring px-4 py-2 rounded-full text-sm font-bold transition-all flex items-center gap-2 whitespace-nowrap cursor-pointer ${
                     isActive
-                      ? 'bg-[#1c1817] text-white shadow-sm'
+                      ? 'bg-[#44403c] text-white shadow-sm'
                       : 'text-[#1c1817]/75 hover:text-[#1c1817] hover:bg-[#1c1817]/5'
                   }`}
                 >
@@ -229,7 +229,7 @@ export const Header: React.FC<HeaderProps> = ({
                 aria-expanded={isServicesMenuOpen}
                 className={`focus-ring px-4 py-2 rounded-full text-sm font-bold transition-all flex items-center gap-2 whitespace-nowrap cursor-pointer ${
                   activeTab === 'services'
-                    ? 'bg-[#1c1817] text-white shadow-sm'
+                    ? 'bg-[#44403c] text-white shadow-sm'
                     : 'text-[#1c1817]/75 hover:text-[#1c1817] hover:bg-[#1c1817]/5'
                 }`}
               >
@@ -272,7 +272,7 @@ export const Header: React.FC<HeaderProps> = ({
                   aria-current={isActive ? 'page' : undefined}
                   className={`focus-ring px-4 py-2 rounded-full text-sm font-bold transition-all flex items-center gap-2 whitespace-nowrap cursor-pointer ${
                     isActive
-                      ? 'bg-[#1c1817] text-white shadow-sm'
+                      ? 'bg-[#44403c] text-white shadow-sm'
                       : 'text-[#1c1817]/75 hover:text-[#1c1817] hover:bg-[#1c1817]/5'
                   }`}
                 >
@@ -287,7 +287,7 @@ export const Header: React.FC<HeaderProps> = ({
               aria-current={pathname === '/gallery' ? 'page' : undefined}
               className={`focus-ring px-4 py-2 rounded-full text-sm font-bold transition-all flex items-center gap-2 whitespace-nowrap ${
                 pathname === '/gallery'
-                  ? 'bg-[#1c1817] text-white shadow-sm'
+                  ? 'bg-[#44403c] text-white shadow-sm'
                   : 'text-[#1c1817]/75 hover:text-[#1c1817] hover:bg-[#1c1817]/5'
               }`}
             >
@@ -305,7 +305,7 @@ export const Header: React.FC<HeaderProps> = ({
                   aria-current={isActive ? 'page' : undefined}
                   className={`focus-ring px-4 py-2 rounded-full text-sm font-bold transition-all flex items-center gap-2 whitespace-nowrap ${
                     isActive
-                      ? 'bg-[#1c1817] text-white shadow-sm'
+                      ? 'bg-[#44403c] text-white shadow-sm'
                       : 'text-[#1c1817]/75 hover:text-[#1c1817] hover:bg-[#1c1817]/5'
                   }`}
                 >
@@ -327,7 +327,7 @@ export const Header: React.FC<HeaderProps> = ({
             {/* Get a Quote Button */}
             <Link
               href="/get-a-quote"
-              className="focus-ring hidden md:inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-[#1c1817]/20 hover:border-[#1c1817] text-xs font-bold text-[#1c1817] transition-colors"
+              className="focus-ring hidden md:inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-[#1c1817]/20 hover:border-[#44403c] text-xs font-bold text-[#1c1817] transition-colors"
             >
               <span>Get a Quote</span>
               <ArrowRight className="w-3.5 h-3.5" />
@@ -337,7 +337,7 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               type="button"
               onClick={handleBookNow}
-              className="px-5 sm:px-6 py-2.5 rounded-full bg-[#1c1817] hover:bg-[#322c2a] active:scale-98 text-white font-bold text-xs sm:text-sm tracking-wide orange-pill-glow transition-all cursor-pointer"
+              className="px-5 sm:px-6 py-2.5 rounded-full bg-[#44403c] hover:bg-[#57534e] active:scale-98 text-white font-bold text-xs sm:text-sm tracking-wide orange-pill-glow transition-all cursor-pointer"
             >
               Book Now
             </button>
@@ -348,7 +348,7 @@ export const Header: React.FC<HeaderProps> = ({
               onClick={() => setIsMenuOpen((v) => !v)}
               aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
               aria-expanded={isMenuOpen}
-              className="w-10 h-10 rounded-full bg-[#1c1817] text-white flex lg:hidden items-center justify-center cursor-pointer shadow-xs"
+              className="w-10 h-10 rounded-full bg-[#44403c] text-white flex lg:hidden items-center justify-center cursor-pointer shadow-xs"
             >
               {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
@@ -372,7 +372,7 @@ export const Header: React.FC<HeaderProps> = ({
                   }}
                   aria-current={isActive ? 'page' : undefined}
                   className={`w-full px-4 py-3 rounded-xl text-sm font-bold transition-colors flex items-center gap-3 ${
-                    isActive ? 'bg-[#1c1817] text-white' : 'text-[#1c1817]/80 hover:bg-[#1c1817]/5'
+                    isActive ? 'bg-[#44403c] text-white' : 'text-[#1c1817]/80 hover:bg-[#1c1817]/5'
                   }`}
                 >
                   <Icon className={`w-4 h-4 ${isActive ? 'text-white' : ''}`} />
@@ -387,7 +387,7 @@ export const Header: React.FC<HeaderProps> = ({
               onClick={() => setIsMobileServicesOpen((v) => !v)}
               aria-expanded={isMobileServicesOpen}
               className={`w-full px-4 py-3 rounded-xl text-sm font-bold transition-colors flex items-center justify-between gap-3 ${
-                activeTab === 'services' ? 'bg-[#1c1817] text-white' : 'text-[#1c1817]/80 hover:bg-[#1c1817]/5'
+                activeTab === 'services' ? 'bg-[#44403c] text-white' : 'text-[#1c1817]/80 hover:bg-[#1c1817]/5'
               }`}
             >
               <span className="flex items-center gap-3">
@@ -431,7 +431,7 @@ export const Header: React.FC<HeaderProps> = ({
                   }}
                   aria-current={isActive ? 'page' : undefined}
                   className={`w-full px-4 py-3 rounded-xl text-sm font-bold transition-colors flex items-center gap-3 ${
-                    isActive ? 'bg-[#1c1817] text-white' : 'text-[#1c1817]/80 hover:bg-[#1c1817]/5'
+                    isActive ? 'bg-[#44403c] text-white' : 'text-[#1c1817]/80 hover:bg-[#1c1817]/5'
                   }`}
                 >
                   <Icon className={`w-4 h-4 ${isActive ? 'text-white' : ''}`} />
@@ -445,7 +445,7 @@ export const Header: React.FC<HeaderProps> = ({
               onClick={() => setIsMenuOpen(false)}
               aria-current={pathname === '/gallery' ? 'page' : undefined}
               className={`w-full px-4 py-3 rounded-xl text-sm font-bold transition-colors flex items-center gap-3 ${
-                pathname === '/gallery' ? 'bg-[#1c1817] text-white' : 'text-[#1c1817]/80 hover:bg-[#1c1817]/5'
+                pathname === '/gallery' ? 'bg-[#44403c] text-white' : 'text-[#1c1817]/80 hover:bg-[#1c1817]/5'
               }`}
             >
               <Images className={`w-4 h-4 ${pathname === '/gallery' ? 'text-white' : ''}`} />
@@ -462,7 +462,7 @@ export const Header: React.FC<HeaderProps> = ({
                   onClick={() => setIsMenuOpen(false)}
                   aria-current={isActive ? 'page' : undefined}
                   className={`w-full px-4 py-3 rounded-xl text-sm font-bold transition-colors flex items-center gap-3 ${
-                    isActive ? 'bg-[#1c1817] text-white' : 'text-[#1c1817]/80 hover:bg-[#1c1817]/5'
+                    isActive ? 'bg-[#44403c] text-white' : 'text-[#1c1817]/80 hover:bg-[#1c1817]/5'
                   }`}
                 >
                   <Icon className="w-4 h-4" />
@@ -492,7 +492,7 @@ export const Header: React.FC<HeaderProps> = ({
                 setIsMenuOpen(false);
                 handleBookNow();
               }}
-              className="w-full py-3 rounded-xl bg-[#1c1817] text-white text-center text-xs font-bold orange-pill-glow"
+              className="w-full py-3 rounded-xl bg-[#44403c] text-white text-center text-xs font-bold orange-pill-glow"
             >
               Book Now
             </button>

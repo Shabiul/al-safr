@@ -8,8 +8,8 @@
      the actual value. Kept the token names so every component that
      references them (by CSS var, not the old literal hex) updates for
      free. */
-  --color-primary-orange: #1c1817;
-  --color-primary-orange-hover: #322c2a;
+  --color-primary-orange: #44403c;
+  --color-primary-orange-hover: #57534e;
   --color-primary-orange-light: #ece9e7;
 
   --color-canvas: #f4f3ec;
@@ -25,7 +25,7 @@
      pages) that reference these token names still resolve to the current
      palette instead of rendering unstyled. */
   --color-cream: #f4f3ec;
-  --color-ticket-orange: #1c1817;
+  --color-ticket-orange: #44403c;
   --color-ink: #1c1817;
   --color-navy-900: #1c1817;
 }
@@ -50,7 +50,7 @@
     outline: none;
   }
   .focus-ring:focus-visible {
-    outline: 2px solid #1c1817;
+    outline: 2px solid #44403c;
     outline-offset: 2px;
   }
 
@@ -64,7 +64,7 @@
 
   /* Signature glowing pill — was orange, now black */
   .orange-pill-glow {
-    box-shadow: 0 16px 32px -6px rgba(28, 24, 23, 0.42);
+    box-shadow: 0 16px 32px -6px rgba(68, 64, 60, 0.42);
   }
 
   /* Slow spin for video demo circular badge */
