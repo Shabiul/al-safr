@@ -31,7 +31,9 @@ async function fetchDayPrice(origin: string, destination: string, date: string):
   const key = `${origin}|${destination}|${date}`;
   if (priceCache.has(key)) return priceCache.get(key)!;
   try {
-    const res = await fetch(`/api/flights/live?origin=${origin}&destination=${destination}&date=${date}&cabinClass=economy`);
+    const res = await fetch(`/api/flights/live?origin=${origin}&destination=${destination}&date=${date}&cabinClass=economy&lite=1`, {
+      signal: AbortSignal.timeout(15000),
+    });
     const data = await res.json();
     const prices: number[] = Array.isArray(data.flights)
       ? data.flights.map((f: { prices?: { economy?: number } }) => f.prices?.economy).filter((n: unknown): n is number => typeof n === 'number')
@@ -56,7 +58,7 @@ async function fetchDatesWithLimit(
   isStale: () => boolean
 ) {
   let idx = 0;
-  const CONCURRENCY = 6;
+  const CONCURRENCY = 8;
   async function worker() {
     while (idx < dates.length) {
       const date = dates[idx++];
