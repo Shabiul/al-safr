@@ -7,6 +7,7 @@ import {
   findAirport,
   CurrencyCode,
 } from '@/services/flightData';
+import { FareCalendar } from './FareCalendar';
 import {
   PlaneTakeoff,
   PlaneLanding,
@@ -50,6 +51,7 @@ interface FlightSearchProps {
 }
 
 export const FlightSearch: React.FC<FlightSearchProps> = ({
+  currency,
   origin,
   destination,
   departureDate,
@@ -81,6 +83,8 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
   const [originSearch, setOriginSearch] = useState('');
   const [destSearch, setDestSearch] = useState('');
   const [isPassengerOpen, setIsPassengerOpen] = useState(false);
+  const [isDepCalOpen, setIsDepCalOpen] = useState(false);
+  const [isRetCalOpen, setIsRetCalOpen] = useState(false);
 
   // Swap animation trigger
   const [isSwapping, setIsSwapping] = useState(false);
@@ -94,6 +98,8 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
   const originRef = useRef<HTMLDivElement>(null);
   const destRef = useRef<HTMLDivElement>(null);
   const passengerRef = useRef<HTMLDivElement>(null);
+  const depDateRef = useRef<HTMLDivElement>(null);
+  const retDateRef = useRef<HTMLDivElement>(null);
 
   // Close dropdowns on outside click
   useEffect(() => {
@@ -106,6 +112,12 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
       }
       if (passengerRef.current && !passengerRef.current.contains(event.target as Node)) {
         setIsPassengerOpen(false);
+      }
+      if (depDateRef.current && !depDateRef.current.contains(event.target as Node)) {
+        setIsDepCalOpen(false);
+      }
+      if (retDateRef.current && !retDateRef.current.contains(event.target as Node)) {
+        setIsRetCalOpen(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -214,6 +226,13 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
     }, 300);
     return () => clearTimeout(handle);
   }, [destSearch]);
+
+  const formatDateLabel = (iso: string): string => {
+    if (!iso) return 'Select date';
+    const d = new Date(`${iso}T00:00:00`);
+    if (Number.isNaN(d.getTime())) return 'Select date';
+    return d.toLocaleDateString('en-US', { weekday: 'short', day: 'numeric', month: 'short' });
+  };
 
   const swapLocations = () => {
     setIsSwapping(true);
@@ -623,30 +642,70 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
               </div>
 
               <div className="grid grid-cols-2 gap-2 mt-1.5">
-                <div>
-                  <label htmlFor="departure-date" className="sr-only">
-                    Departure date
-                  </label>
-                  <input
-                    id="departure-date"
-                    type="date"
-                    value={curDepDate}
-                    onChange={(e) => setCurDepDate(e.target.value)}
-                    className="focus-ring w-full px-2 py-1.5 bg-cream rounded-lg text-xs font-bold text-slate-900 cursor-pointer soft-border"
-                  />
+                <div ref={depDateRef} className="relative">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsDepCalOpen((v) => !v);
+                      setIsRetCalOpen(false);
+                    }}
+                    aria-haspopup="dialog"
+                    aria-expanded={isDepCalOpen}
+                    className="focus-ring w-full px-2 py-1.5 bg-cream rounded-lg text-xs font-bold text-slate-900 cursor-pointer soft-border text-left"
+                  >
+                    {formatDateLabel(curDepDate)}
+                  </button>
+                  {isDepCalOpen && (
+                    <div
+                      role="dialog"
+                      aria-label="Departure date"
+                      className="absolute top-full left-0 mt-2 bg-cream rounded-2xl z-50 p-4 soft-border soft-shadow w-[min(90vw,32rem)]"
+                    >
+                      <FareCalendar
+                        origin={curOrigin}
+                        destination={curDest}
+                        currency={currency}
+                        value={curDepDate}
+                        onSelect={(date) => {
+                          setCurDepDate(date);
+                          setIsDepCalOpen(false);
+                        }}
+                      />
+                    </div>
+                  )}
                 </div>
                 {tripType === 'round' ? (
-                  <div>
-                    <label htmlFor="return-date" className="sr-only">
-                      Return date
-                    </label>
-                    <input
-                      id="return-date"
-                      type="date"
-                      value={curRetDate}
-                      onChange={(e) => setCurRetDate(e.target.value)}
-                      className="focus-ring w-full px-2 py-1.5 bg-cream rounded-lg text-xs font-bold text-slate-900 cursor-pointer soft-border"
-                    />
+                  <div ref={retDateRef} className="relative">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsRetCalOpen((v) => !v);
+                        setIsDepCalOpen(false);
+                      }}
+                      aria-haspopup="dialog"
+                      aria-expanded={isRetCalOpen}
+                      className="focus-ring w-full px-2 py-1.5 bg-cream rounded-lg text-xs font-bold text-slate-900 cursor-pointer soft-border text-left"
+                    >
+                      {formatDateLabel(curRetDate)}
+                    </button>
+                    {isRetCalOpen && (
+                      <div
+                        role="dialog"
+                        aria-label="Return date"
+                        className="absolute top-full right-0 mt-2 bg-cream rounded-2xl z-50 p-4 soft-border soft-shadow w-[min(90vw,32rem)]"
+                      >
+                        <FareCalendar
+                          origin={curDest}
+                          destination={curOrigin}
+                          currency={currency}
+                          value={curRetDate}
+                          onSelect={(date) => {
+                            setCurRetDate(date);
+                            setIsRetCalOpen(false);
+                          }}
+                        />
+                      </div>
+                    )}
                   </div>
                 ) : (
                   <div className="px-2 py-1.5 bg-slate-100 rounded-lg text-[11px] text-slate-400 flex items-center justify-center font-bold soft-border">
