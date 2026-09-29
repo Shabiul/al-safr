@@ -19,6 +19,20 @@ const WEEKDAYS = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
 // the user already priced once.
 const priceCache = new Map<string, number | null>();
 
+// We only have a single RapidAPI key. Once it tells us we're rate-limited
+// or over quota, hammering it with the rest of a ~60-date batch just wastes
+// more of that same limited allowance and delays it recovering — so this
+// circuit breaker stops firing new requests for a cooldown window and lets
+// everything still pending resolve to "no data" immediately instead.
+let coolingDownUntil = 0;
+const COOLDOWN_MS = 3 * 60 * 1000;
+
+function isQuotaOrRateLimitNotice(notice: unknown): boolean {
+  if (typeof notice !== 'string') return false;
+  const s = notice.toLowerCase();
+  return s.includes('too many requests') || s.includes('quota') || s.includes('rate limit');
+}
+
 function pad(n: number): string {
   return String(n).padStart(2, '0');
 }
@@ -30,11 +44,15 @@ function toISODate(d: Date): string {
 async function fetchDayPrice(origin: string, destination: string, date: string): Promise<number | null> {
   const key = `${origin}|${destination}|${date}`;
   if (priceCache.has(key)) return priceCache.get(key)!;
+  if (Date.now() < coolingDownUntil) return null;
   try {
     const res = await fetch(`/api/flights/live?origin=${origin}&destination=${destination}&date=${date}&cabinClass=economy&lite=1`, {
       signal: AbortSignal.timeout(15000),
     });
     const data = await res.json();
+    if (isQuotaOrRateLimitNotice(data.dataSourceNotice)) {
+      coolingDownUntil = Date.now() + COOLDOWN_MS;
+    }
     const prices: number[] = Array.isArray(data.flights)
       ? data.flights.map((f: { prices?: { economy?: number } }) => f.prices?.economy).filter((n: unknown): n is number => typeof n === 'number')
       : [];
@@ -50,6 +68,8 @@ async function fetchDayPrice(origin: string, destination: string, date: string):
 // ponytail: unbounded concurrency would hammer the RapidAPI quota when a
 // 2-month grid opens (~60 dates) — a fixed worker pool keeps it to a handful
 // of in-flight requests without pulling in a queue library for one loop.
+// Kept deliberately low (not maxed out for speed) since a single shared key
+// is what's rate-limiting us, not raw latency.
 async function fetchDatesWithLimit(
   dates: string[],
   origin: string,
@@ -58,7 +78,7 @@ async function fetchDatesWithLimit(
   isStale: () => boolean
 ) {
   let idx = 0;
-  const CONCURRENCY = 8;
+  const CONCURRENCY = 3;
   async function worker() {
     while (idx < dates.length) {
       const date = dates[idx++];
@@ -101,28 +121,40 @@ export const FareCalendar: React.FC<FareCalendarProps> = ({ origin, destination,
 
   useEffect(() => {
     let stale = false;
-    const months = [viewMonthStart, secondMonthStart];
-    const dates = months
-      .flatMap((m) => buildMonthDays(m))
-      .filter((d): d is Date => d !== null && d >= today)
-      .map(toISODate);
+    const monthDates = (m: Date) =>
+      buildMonthDays(m)
+        .filter((d): d is Date => d !== null && d >= today)
+        .map(toISODate);
 
+    const allDates = [...monthDates(viewMonthStart), ...monthDates(secondMonthStart)];
     setPrices((prev) => {
       const next = { ...prev };
-      for (const date of dates) {
+      for (const date of allDates) {
         const key = `${origin}|${destination}|${date}`;
         if (priceCache.has(key)) next[date] = priceCache.get(key)!;
       }
       return next;
     });
 
-    const missing = dates.filter((date) => !priceCache.has(`${origin}|${destination}|${date}`));
-    if (missing.length > 0) {
-      fetchDatesWithLimit(missing, origin, destination, (date, price) => {
-        if (stale) return;
-        setPrices((prev) => ({ ...prev, [date]: price }));
-      }, () => stale);
-    }
+    const update = (date: string, price: number | null) => {
+      if (stale) return;
+      setPrices((prev) => ({ ...prev, [date]: price }));
+    };
+
+    // Fetch the first visible month, then the second — not both at once —
+    // so opening the calendar doesn't immediately burst ~60 requests against
+    // a single rate-limited key. Most opens only need the first month anyway.
+    (async () => {
+      const firstMissing = monthDates(viewMonthStart).filter((date) => !priceCache.has(`${origin}|${destination}|${date}`));
+      if (firstMissing.length > 0) {
+        await fetchDatesWithLimit(firstMissing, origin, destination, update, () => stale);
+      }
+      if (stale) return;
+      const secondMissing = monthDates(secondMonthStart).filter((date) => !priceCache.has(`${origin}|${destination}|${date}`));
+      if (secondMissing.length > 0) {
+        await fetchDatesWithLimit(secondMissing, origin, destination, update, () => stale);
+      }
+    })();
 
     return () => {
       stale = true;
