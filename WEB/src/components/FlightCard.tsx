@@ -127,31 +127,39 @@ export const FlightCard: React.FC<FlightCardProps> = ({
         <div className="md:col-span-5 grid grid-cols-3 gap-2">
           {(['economy', 'business', 'first'] as const).map((cabin) => {
             const isSelected = selectedCabin === cabin;
-            const soldOut = cabin === 'first' && flight.seatsRemaining.first <= 0;
+            // A price of 0 means this specific flight wasn't returned when we
+            // searched that cabin — i.e. it genuinely isn't sold in that
+            // cabin, not that we're missing data to guess a price for it.
+            const unavailable = flight.prices[cabin] <= 0;
             return (
               <button
                 key={cabin}
                 type="button"
+                disabled={unavailable}
                 onClick={() => onSelectFlight(flight, cabin)}
                 aria-pressed={isSelected}
-                aria-label={`${CABIN_LABEL[cabin]}, ${formatPrice(flight.prices[cabin], currency)}`}
+                aria-label={
+                  unavailable
+                    ? `${CABIN_LABEL[cabin]}, not available`
+                    : `${CABIN_LABEL[cabin]}, ${formatPrice(flight.prices[cabin], currency)}`
+                }
                 className={`focus-ring p-2.5 rounded-xl text-left transition-all flex flex-col justify-between soft-border ${
-                  isSelected ? 'soft-shadow-sm -translate-y-0.5' : 'bg-slate-50 hover:bg-cream'
+                  unavailable
+                    ? 'bg-slate-50 opacity-50 cursor-not-allowed'
+                    : isSelected
+                    ? 'soft-shadow-sm -translate-y-0.5'
+                    : 'bg-slate-50 hover:bg-cream'
                 }`}
-                style={isSelected ? { backgroundColor: 'var(--color-ticket-orange)' } : undefined}
+                style={isSelected && !unavailable ? { backgroundColor: 'var(--color-ticket-orange)' } : undefined}
               >
                 <div>
-                  <span className={`text-[11px] font-bold block ${isSelected ? 'text-white/80' : 'text-slate-500'}`}>{CABIN_LABEL[cabin]}</span>
-                  <span className={`text-sm font-black block mt-0.5 font-mono ${isSelected ? 'text-white' : 'text-slate-900'}`}>
-                    {formatPrice(flight.prices[cabin], currency)}
+                  <span className={`text-[11px] font-bold block ${isSelected && !unavailable ? 'text-white/80' : 'text-slate-500'}`}>{CABIN_LABEL[cabin]}</span>
+                  <span className={`text-sm font-black block mt-0.5 font-mono ${isSelected && !unavailable ? 'text-white' : 'text-slate-900'}`}>
+                    {unavailable ? '—' : formatPrice(flight.prices[cabin], currency)}
                   </span>
                 </div>
-                <span className={`text-[11px] mt-2 block ${isSelected ? 'text-white/70' : 'text-slate-400'}`}>
-                  {cabin === 'first'
-                    ? soldOut
-                      ? 'Sold out'
-                      : `${flight.seatsRemaining.first} left`
-                    : `${flight.seatsRemaining[cabin]} seats left`}
+                <span className={`text-[11px] mt-2 block ${isSelected && !unavailable ? 'text-white/70' : 'text-slate-400'}`}>
+                  {unavailable ? 'Not available' : `${flight.seatsRemaining[cabin]} seats left`}
                 </span>
               </button>
             );
@@ -178,12 +186,13 @@ export const FlightCard: React.FC<FlightCardProps> = ({
 
         <button
           type="button"
+          disabled={flight.prices[selectedCabin] <= 0}
           onClick={() => onSelectFlight(flight, selectedCabin)}
-          className="focus-ring soft-press py-2.5 px-5 rounded-xl text-white font-black text-sm flex items-center gap-2 ml-auto soft-border soft-shadow-sm"
+          className="focus-ring soft-press py-2.5 px-5 rounded-xl text-white font-black text-sm flex items-center gap-2 ml-auto soft-border soft-shadow-sm disabled:opacity-40 disabled:cursor-not-allowed"
           style={{ backgroundColor: 'var(--color-ticket-orange)' }}
         >
           <Armchair className="w-4 h-4" aria-hidden="true" />
-          Select seats
+          {flight.prices[selectedCabin] <= 0 ? `Not available in ${CABIN_LABEL[selectedCabin]}` : 'Select seats'}
         </button>
       </div>
     </div>
