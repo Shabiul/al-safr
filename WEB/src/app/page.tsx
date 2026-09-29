@@ -210,7 +210,7 @@ export default function Home() {
             <div className="bg-white rounded-2xl p-4 flex flex-wrap items-center justify-between gap-3 text-sm border border-slate-200/90 shadow-xs">
               <div className="flex flex-wrap items-center gap-3 text-slate-600">
                 <div
-                  className="flex items-center gap-1.5 font-bold text-xs uppercase tracking-wider px-3 py-1 rounded-full bg-[#1c1817] text-white shadow-xs"
+                  className="flex items-center gap-1.5 font-bold text-xs uppercase tracking-wider px-3 py-1 rounded-full bg-[#44403c] text-white shadow-xs"
                 >
                   <span className="w-2 h-2 rounded-full bg-white animate-pulse" aria-hidden="true" />
                   Live data stream
@@ -248,7 +248,7 @@ export default function Home() {
                     aria-current={isActive ? 'page' : undefined}
                     className={`focus-ring flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all ${
                       isActive
-                        ? 'bg-[#1c1817] text-white shadow-sm shadow-[#1c1817]/20'
+                        ? 'bg-[#44403c] text-white shadow-sm shadow-[#44403c]/20'
                         : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
                     }`}
                   >

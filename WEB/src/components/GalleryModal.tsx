@@ -14,7 +14,7 @@ export const GalleryModal: React.FC<GalleryModalProps> = ({ open, onClose }) => 
 
   return (
     <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 animate-in fade-in duration-200">
-      <div className="bg-[#1c1817] rounded-3xl p-6 max-w-3xl w-full text-white shadow-2xl relative">
+      <div className="bg-[#44403c] rounded-3xl p-6 max-w-3xl w-full text-white shadow-2xl relative">
         <button
           type="button"
           onClick={onClose}
