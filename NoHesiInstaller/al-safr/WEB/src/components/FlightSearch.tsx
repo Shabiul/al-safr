@@ -675,7 +675,7 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
                     <div
                       role="dialog"
                       aria-label="Departure date"
-                      className="absolute top-full left-0 mt-2 bg-cream rounded-2xl z-50 p-4 soft-border soft-shadow w-[min(90vw,32rem)]"
+                      className="absolute top-full left-0 mt-2 bg-cream rounded-2xl z-50 p-4 soft-border soft-shadow w-[min(95vw,44rem)]"
                     >
                       <FareCalendar
                         origin={curOrigin}
@@ -708,7 +708,7 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
                       <div
                         role="dialog"
                         aria-label="Return date"
-                        className="absolute top-full right-0 mt-2 bg-cream rounded-2xl z-50 p-4 soft-border soft-shadow w-[min(90vw,32rem)]"
+                        className="absolute top-full right-0 mt-2 bg-cream rounded-2xl z-50 p-4 soft-border soft-shadow w-[min(95vw,44rem)]"
                       >
                         <FareCalendar
                           origin={curDest}
