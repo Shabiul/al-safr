@@ -66,12 +66,21 @@ export default function Home() {
     }
   }, []);
 
+  // Default to real upcoming dates (today + 7 / + 14 days) instead of a
+  // fixed date that goes stale — a hardcoded default silently drifts into
+  // the past and breaks the fare calendar (every day shows as unselectable).
+  const defaultTripDate = (daysFromNow: number): string => {
+    const d = new Date();
+    d.setDate(d.getDate() + daysFromNow);
+    return d.toISOString().split('T')[0];
+  };
+
   // Search parameters
   const [searchParams, setSearchParams] = useState({
     origin: 'DEL',
     destination: 'DXB',
-    departureDate: '2026-09-18',
-    returnDate: '2026-09-25',
+    departureDate: defaultTripDate(7),
+    returnDate: defaultTripDate(14),
     cabinClass: 'business' as 'economy' | 'business' | 'first',
     passengers: 1,
     supersonicOnly: false,
