@@ -51,6 +51,8 @@ export const DiscountPopup: React.FC<DiscountPopupProps> = ({ isOpen, onClose })
         <div className="flex flex-col sm:flex-row gap-2 pt-1">
           <Link
             href="/contact"
+            target="_blank"
+            rel="noopener noreferrer"
             onClick={onClose}
             className="focus-ring soft-press flex-1 py-2.5 px-4 rounded-xl text-white font-black text-sm flex items-center justify-center gap-2 soft-border soft-shadow-sm"
             style={{ backgroundColor: 'var(--color-ticket-orange)' }}
