@@ -174,20 +174,6 @@ export default function Home() {
     setActiveTab('services');
   };
 
-  // Quick search from Hero Ticket Card or Destination cards
-  const handleQuickSearch = (origin: string, destination: string, date: string, cabin: 'economy' | 'business' | 'first') => {
-    setSearchParams((prev) => ({
-      ...prev,
-      origin,
-      destination,
-      departureDate: date,
-      cabinClass: cabin,
-    }));
-    setSelectedCabin(cabin);
-    setActiveService('book');
-    setActiveTab('services');
-  };
-
   // LandingHome's cards link to a specific service (book/hotels/tours/cabs)
   // or a top-level tab (bookings) — the services all live under one
   // consolidated "Services" tab with its own sub-navigation.
@@ -234,8 +220,9 @@ export default function Home() {
           <LandingHome
             currency={currency}
             onNavigate={handleNavigate}
-            onQuickSearch={handleQuickSearch}
             onOpenGallery={() => setIsGalleryOpen(true)}
+            searchParams={{ ...searchParams, cabinClass: selectedCabin }}
+            onSearch={handleSearch}
           />
         )}
 

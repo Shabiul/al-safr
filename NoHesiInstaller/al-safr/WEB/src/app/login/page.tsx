@@ -35,7 +35,7 @@ export default function LoginPage() {
       <div className="rounded-3xl bg-cream p-7 sm:p-8 soft-border soft-shadow">
         <span
           className="inline-block text-xs font-black tracking-widest uppercase px-3 py-1 rounded-full soft-border mb-4"
-          style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'var(--color-dark-ink-muted)' }}
+          style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'white' }}
         >
           Welcome back
         </span>
@@ -69,7 +69,7 @@ export default function LoginPage() {
             type="submit"
             disabled={isSubmitting}
             className="focus-ring soft-press w-full disabled:opacity-50 rounded-xl py-3 font-black text-sm soft-border soft-shadow"
-            style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'var(--color-dark-ink-muted)' }}
+            style={{ backgroundColor: 'var(--color-ticket-orange)', color: 'white' }}
           >
             {isSubmitting ? 'Logging in…' : 'Log in'}
           </button>

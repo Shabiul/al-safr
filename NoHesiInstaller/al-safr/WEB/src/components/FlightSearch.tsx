@@ -16,7 +16,6 @@ import {
   Calendar,
   Users,
   Search,
-  Zap,
   Check,
   X,
   MapPin,
@@ -90,7 +89,6 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
   const [curRetDate, setCurRetDate] = useState(returnDate);
   const [curCabin, setCurCabin] = useState<'economy' | 'business' | 'first'>(cabinClass);
   const [curPassengers, setCurPassengers] = useState(passengers);
-  const [curSupersonic, setCurSupersonic] = useState(supersonicOnly);
 
   // Dropdown states for MakeMyTrip style autocomplete
   const [isOriginOpen, setIsOriginOpen] = useState(false);
@@ -274,13 +272,13 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
       returnDate: tripType === 'round' ? curRetDate : '',
       cabinClass: curCabin,
       passengers: curPassengers,
-      supersonicOnly: curSupersonic,
+      supersonicOnly,
     });
     setIsDiscountPopupOpen(true);
   };
 
   return (
-    <div className="bg-cream rounded-3xl p-5 sm:p-7 soft-border soft-shadow">
+    <div className="@container bg-cream rounded-3xl p-5 sm:p-7 soft-border soft-shadow">
       <DiscountPopup isOpen={isDiscountPopupOpen} onClose={() => setIsDiscountPopupOpen(false)} />
       <form onSubmit={handleExecuteSearch} className="space-y-5">
         {/* Top Segmented Controls: Trip Type & Supersonic Filter */}
@@ -311,20 +309,6 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
           </div>
 
           <div className="flex flex-wrap items-center gap-2.5">
-            {/* Supersonic Toggle Filter */}
-            <button
-              type="button"
-              onClick={() => setCurSupersonic(!curSupersonic)}
-              aria-pressed={curSupersonic}
-              className={`focus-ring px-3 py-1.5 rounded-xl text-sm font-black flex items-center gap-1.5 transition-colors soft-border ${
-                curSupersonic ? 'text-white' : 'bg-cream text-slate-600 hover:bg-slate-50'
-              }`}
-              style={curSupersonic ? { backgroundColor: 'var(--color-ticket-orange)', color: 'white' } : undefined}
-            >
-              <Zap className="w-3.5 h-3.5 fill-current" style={{ color: curSupersonic ? 'white' : 'var(--color-ticket-orange)' }} />
-              Supersonic only
-            </button>
-
             {/* Cabin Class Selection */}
             <div className="flex items-center bg-slate-100 p-1 rounded-xl text-sm soft-border">
               {(['economy', 'business', 'first'] as const).map((c) => (
@@ -346,9 +330,9 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
         </div>
 
         {/* Main Flight Booking Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-3 relative">
+        <div className="grid grid-cols-1 @3xl:grid-cols-12 gap-3 relative">
           {/* FROM CARD */}
-          <div ref={originRef} className="md:col-span-3 relative">
+          <div ref={originRef} className="@3xl:col-span-3 relative">
             <button
               type="button"
               onClick={() => {
@@ -493,7 +477,7 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
           </div>
 
           {/* SWAP BUTTON */}
-          <div className="md:col-span-1 flex items-center justify-center -my-1 md:my-0 relative z-10">
+          <div className="@3xl:col-span-1 flex items-center justify-center -my-1 @3xl:my-0 relative z-10">
             <button
               type="button"
               onClick={swapLocations}
@@ -507,7 +491,7 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
           </div>
 
           {/* TO CARD */}
-          <div ref={destRef} className="md:col-span-3 relative">
+          <div ref={destRef} className="@3xl:col-span-3 relative">
             <button
               type="button"
               onClick={() => {
@@ -652,7 +636,7 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
           </div>
 
           {/* DATES CARD */}
-          <div className="md:col-span-3 space-y-1">
+          <div className="@3xl:col-span-3 space-y-1">
             <div className="p-4 rounded-2xl bg-slate-50 soft-border">
               <div className="flex items-center justify-between text-slate-500 text-xs font-black uppercase">
                 <span className="flex items-center gap-1.5">
@@ -737,7 +721,7 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
           </div>
 
           {/* TRAVELLERS CARD */}
-          <div ref={passengerRef} className="md:col-span-2 relative">
+          <div ref={passengerRef} className="@3xl:col-span-2 relative">
             <button
               type="button"
               onClick={() => setIsPassengerOpen((v) => !v)}
@@ -786,6 +770,28 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({
                     >
                       +
                     </button>
+                  </div>
+                </div>
+
+                <div className="pt-2 border-t-2 space-y-2" style={{ borderColor: 'var(--color-dark-ink-muted)' }}>
+                  <span className="text-sm font-black text-slate-700">Class</span>
+                  <div className="grid grid-cols-3 gap-1.5">
+                    {(['economy', 'business', 'first'] as const).map((cls) => (
+                      <button
+                        key={cls}
+                        type="button"
+                        onClick={() => setCurCabin(cls)}
+                        aria-pressed={curCabin === cls}
+                        className={`focus-ring py-1.5 rounded-lg text-xs font-bold capitalize transition-colors soft-border ${
+                          curCabin === cls
+                            ? 'text-white'
+                            : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
+                        }`}
+                        style={curCabin === cls ? { backgroundColor: 'var(--color-ticket-orange)' } : undefined}
+                      >
+                        {cls}
+                      </button>
+                    ))}
                   </div>
                 </div>
 

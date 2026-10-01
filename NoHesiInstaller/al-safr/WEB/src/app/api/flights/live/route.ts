@@ -380,60 +380,61 @@ export async function GET(request: Request) {
 
   const [origin, dest] = await Promise.all([resolveAirport(originCode), resolveAirport(destCode)]);
 
-  // 1. Fetch REAL LIVE AIRBORNE FLIGHTS from OpenSky Network ADS-B
-  let liveAirborne: any[] = [];
-  if (!lite) {
+  // 1. Fetch REAL LIVE AIRBORNE FLIGHTS from OpenSky Network ADS-B, and
+  // 2. Real third-party airline fares via Google Flights (RapidAPI) — run
+  // together since neither depends on the other's result; sequencing them
+  // added OpenSky's latency on top of the fare search for no reason.
+  const fetchLiveAirborne = async (): Promise<any[]> => {
+    if (lite) return [];
     try {
       const openSkyRes = await fetch('https://opensky-network.org/api/states/all', {
         cache: 'no-store',
         signal: AbortSignal.timeout(5000),
       });
-      if (openSkyRes.ok) {
-        const openSkyData = await openSkyRes.json();
-        liveAirborne = (openSkyData.states || [])
-          .filter(
-            (s: any) =>
-              s[1] &&
-              s[1].trim() &&
-              !s[8] &&
-              s[5] !== null &&
-              s[6] !== null &&
-              s[7] !== null
-          )
-          .slice(0, 24)
-          .map((s: any) => ({
-            icao24: s[0],
-            callsign: s[1].trim(),
-            country: s[2],
-            lng: parseFloat(s[5].toFixed(4)),
-            lat: parseFloat(s[6].toFixed(4)),
-            altitudeFt: Math.round((s[7] || 0) * 3.28084),
-            flightLevel: `FL${Math.round(((s[7] || 0) * 3.28084) / 100)}`,
-            speedKnots: Math.round((s[9] || 0) * 1.94384),
-            mach: parseFloat(((s[9] || 0) * 1.94384 / 573.8).toFixed(2)),
-            headingDeg: Math.round(s[10] || 0),
-            verticalSpeedFpm: Math.round((s[11] || 0) * 196.85),
-            squawk: s[14] || '1000',
-          }));
-      }
+      if (!openSkyRes.ok) return [];
+      const openSkyData = await openSkyRes.json();
+      return (openSkyData.states || [])
+        .filter(
+          (s: any) =>
+            s[1] &&
+            s[1].trim() &&
+            !s[8] &&
+            s[5] !== null &&
+            s[6] !== null &&
+            s[7] !== null
+        )
+        .slice(0, 24)
+        .map((s: any) => ({
+          icao24: s[0],
+          callsign: s[1].trim(),
+          country: s[2],
+          lng: parseFloat(s[5].toFixed(4)),
+          lat: parseFloat(s[6].toFixed(4)),
+          altitudeFt: Math.round((s[7] || 0) * 3.28084),
+          flightLevel: `FL${Math.round(((s[7] || 0) * 3.28084) / 100)}`,
+          speedKnots: Math.round((s[9] || 0) * 1.94384),
+          mach: parseFloat(((s[9] || 0) * 1.94384 / 573.8).toFixed(2)),
+          headingDeg: Math.round(s[10] || 0),
+          verticalSpeedFpm: Math.round((s[11] || 0) * 196.85),
+          squawk: s[14] || '1000',
+        }));
     } catch {
       // If rate-limited, fallback handled cleanly
+      return [];
     }
-  }
+  };
 
-  // 2. Geodesic distance calculation (used only as a last-resort forecast anchor)
+  const [liveAirborne, { flights: googleFlights, notice: googleFlightsNotice }] = await Promise.all([
+    fetchLiveAirborne(),
+    lite
+      ? fetchGoogleFlights(origin, dest, travelDate, cabinClass, true)
+      : searchAllCabins(origin, dest, travelDate),
+  ]);
+
+  // Geodesic distance calculation (used only as a last-resort forecast anchor)
   const latDelta = Math.abs(origin.lat - dest.lat);
   const lngDelta = Math.abs(origin.lng - dest.lng);
   const distanceKm = Math.round(Math.sqrt(latDelta * latDelta + lngDelta * lngDelta) * 111);
-
-  // 3. Real third-party airline fares via Google Flights (RapidAPI). No
-  // fabricated fallback flights or guessed cross-cabin prices — the fare
-  // calendar (lite=1) only needs one cabin's cheapest price, so it stays a
-  // single cheap request; a real search fetches all 3 cabins so every price
-  // shown is a real fare rather than a ratio-based estimate.
-  const { flights: googleFlights, notice: googleFlightsNotice } = lite
-    ? await fetchGoogleFlights(origin, dest, travelDate, cabinClass, true)
-    : await searchAllCabins(origin, dest, travelDate);
 
   const usingLiveFares = googleFlights !== null;
   const flightOptions: FlightOption[] = googleFlights ?? [];

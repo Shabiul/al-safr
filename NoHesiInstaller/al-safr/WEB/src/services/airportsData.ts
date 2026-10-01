@@ -1389,6 +1389,17 @@ export const POPULAR_AIRPORTS: Airport[] = [
   AIRPORTS.find((a) => a.code === 'MAA')!,
 ].filter(Boolean);
 
+// Lowercased search fields computed once at module load instead of on every
+// keystroke — searchAirports runs on each character typed in the autocomplete.
+const SEARCH_INDEX = AIRPORTS.map((airport) => ({
+  airport,
+  code: airport.code.toLowerCase(),
+  city: airport.city.toLowerCase(),
+  name: airport.name.toLowerCase(),
+  country: airport.country.toLowerCase(),
+  aliases: (airport.aliases || []).map((al) => al.toLowerCase()),
+}));
+
 /**
  * Intelligent ranked search over the comprehensive airports database.
  * Supports IATA code, city names, country, airport names, and common colloquial aliases.
@@ -1401,13 +1412,7 @@ export function searchAirports(rawQuery: string, limit = 15): Airport[] {
 
   const scored: { airport: Airport; score: number }[] = [];
 
-  for (const airport of AIRPORTS) {
-    const code = airport.code.toLowerCase();
-    const city = airport.city.toLowerCase();
-    const name = airport.name.toLowerCase();
-    const country = airport.country.toLowerCase();
-    const aliases = (airport.aliases || []).map((al) => al.toLowerCase());
-
+  for (const { airport, code, city, name, country, aliases } of SEARCH_INDEX) {
     let score = 0;
 
     // 1. Exact IATA match (highest priority)
