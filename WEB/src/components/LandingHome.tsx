@@ -6,40 +6,48 @@ import {
   Plane,
   Compass,
   ArrowRight,
-  ArrowLeftRight,
-  MapPin,
-  Calendar,
   Check,
-  ChevronDown,
   ChevronRight,
   Plus,
   Minus,
   Expand,
   Sparkles,
+  Search,
+  Building2,
+  Car,
 } from 'lucide-react';
 import { CurrencyCode, formatPrice } from '@/services/flightData';
 import { TourPackage } from '@/services/tourPackageData';
+import { FlightSearch } from '@/components/FlightSearch';
 
 type TabId = 'book' | 'hotels' | 'tours' | 'cabs' | 'bookings';
+type ServiceId = 'book' | 'hotels' | 'tours' | 'cabs';
 
 interface LandingHomeProps {
   currency: CurrencyCode;
   onNavigate: (tab: TabId) => void;
-  onQuickSearch?: (origin: string, destination: string, date: string, cabin: 'economy' | 'business' | 'first') => void;
   onOpenGallery: () => void;
+  // Seeds the embedded flight search widget and, on submit, hands off to
+  // the same handler the Services tab's FlightSearch uses — so submitting
+  // from the landing page redirects to Services > Flights with results
+  // already loading, instead of duplicating that fetch/state logic here.
+  searchParams: {
+    origin: string;
+    destination: string;
+    departureDate: string;
+    returnDate: string;
+    cabinClass: 'economy' | 'business' | 'first';
+    passengers: number;
+    supersonicOnly: boolean;
+  };
+  onSearch: (params: LandingHomeProps['searchParams']) => void;
 }
 
-const AIRPORT_OPTIONS = [
-  { code: 'DEL', city: 'Delhi', name: 'Indira Gandhi Intnl' },
-  { code: 'DXB', city: 'Dubai', name: 'Dubai International' },
-  { code: 'JFK', city: 'New York', name: 'John F. Kennedy' },
-  { code: 'KIN', city: 'Jamaica', name: 'Norman Manley Intnl' },
-  { code: 'BKK', city: 'Bangkok', name: 'Suvarnabhumi' },
-  { code: 'MLE', city: 'Maldives', name: 'Velana International' },
-  { code: 'ZRH', city: 'Zurich', name: 'Zurich Airport' },
-  { code: 'LHR', city: 'London', name: 'Heathrow' },
-  { code: 'SIN', city: 'Singapore', name: 'Changi' },
-  { code: 'HND', city: 'Tokyo', name: 'Haneda' },
+const LANDING_SERVICE_TABS: { id: ServiceId; label: string; icon: React.ElementType }[] = [
+  { id: 'book', label: 'Flights', icon: Search },
+  { id: 'hotels', label: 'Hotels', icon: Building2 },
+  { id: 'tours', label: 'Tour Packages', icon: Compass },
+  { id: 'cabs', label: 'Cabs', icon: Car },
 ];
 
 const TESTIMONIALS = [
@@ -97,22 +105,10 @@ const FAQS = [
 export const LandingHome: React.FC<LandingHomeProps> = ({
   currency,
   onNavigate,
-  onQuickSearch,
   onOpenGallery,
+  searchParams,
+  onSearch,
 }) => {
-  // Flight Ticket Search Widget state
-  const [tripType, setTripType] = useState<'oneway' | 'roundtrip'>('oneway');
-  const [cabinClass, setCabinClass] = useState<'economy' | 'business' | 'first'>('economy');
-  const [passengers, setPassengers] = useState<number>(1);
-  const [originCode, setOriginCode] = useState<string>('JFK');
-  const [destCode, setDestCode] = useState<string>('KIN');
-  // Live date — a fixed default goes stale and quietly falls behind "today".
-  const [departureDate, setDepartureDate] = useState<string>(() => {
-    const d = new Date();
-    d.setDate(d.getDate() + 7);
-    return d.toISOString().split('T')[0];
-  });
-
   // Interactive states
   const [openFaq, setOpenFaq] = useState<number | null>(0);
 
@@ -136,21 +132,6 @@ export const LandingHome: React.FC<LandingHomeProps> = ({
       cancelled = true;
     };
   }, []);
-
-  const handleSwapAirports = () => {
-    const temp = originCode;
-    setOriginCode(destCode);
-    setDestCode(temp);
-  };
-
-  const handleExecuteSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (onQuickSearch) {
-      onQuickSearch(originCode, destCode, departureDate, cabinClass);
-    } else {
-      onNavigate('book');
-    }
-  };
 
   return (
     <div className="w-full bg-[#f4f3ec] text-[#1c1817] selection:bg-[#1c1817]/20 selection:text-[#1c1817] overflow-x-hidden">
@@ -272,157 +253,50 @@ export const LandingHome: React.FC<LandingHomeProps> = ({
             </div>
 
             {/* =========================================================================
-                FLIGHT TICKET SEARCH CARD (Image 3 Ticket Widget)
+                FLIGHT TICKET SEARCH CARD — FlightSearch uses container queries
+                (@container) internally so its field grid reflows to this
+                column's actual width instead of the viewport's, so it doesn't
+                overflow when squeezed beside the hero image.
                ========================================================================= */}
-            <div id="ticket-search" className="bg-white rounded-3xl p-5 sm:p-6 shadow-md border border-[#1c1817]/10 text-left space-y-4">
-              {/* Trip type selector & travelers */}
-              <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-dashed border-[#1c1817]/15">
-                <div className="inline-flex p-1 rounded-full bg-[#f4f3ec] border border-[#1c1817]/10">
-                  <button
-                    type="button"
-                    onClick={() => setTripType('oneway')}
-                    className={`px-3.5 py-1 rounded-full text-xs font-bold transition-all cursor-pointer ${
-                      tripType === 'oneway' ? 'bg-[#44403c] text-white shadow-2xs' : 'text-[#1c1817]/70 hover:text-[#1c1817]'
-                    }`}
-                  >
-                    One Way
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setTripType('roundtrip')}
-                    className={`px-3.5 py-1 rounded-full text-xs font-bold transition-all cursor-pointer ${
-                      tripType === 'roundtrip' ? 'bg-[#44403c] text-white shadow-2xs' : 'text-[#1c1817]/70 hover:text-[#1c1817]'
-                    }`}
-                  >
-                    Round Trip
-                  </button>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <div className="relative">
-                    <select
-                      value={cabinClass}
-                      onChange={(e) => setCabinClass(e.target.value as 'economy' | 'business' | 'first')}
-                      className="appearance-none bg-[#f4f3ec] border border-[#1c1817]/10 text-xs font-bold text-[#1c1817] pl-3 pr-6 py-1.5 rounded-xl cursor-pointer focus:outline-none"
-                    >
-                      <option value="economy">Economy</option>
-                      <option value="business">Business</option>
-                      <option value="first">First Class</option>
-                    </select>
-                    <ChevronDown className="w-3 h-3 text-[#1c1817]/40 absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none" />
-                  </div>
-
-                  <div className="relative">
-                    <select
-                      value={passengers}
-                      onChange={(e) => setPassengers(Number(e.target.value))}
-                      className="appearance-none bg-[#f4f3ec] border border-[#1c1817]/10 text-xs font-bold text-[#1c1817] pl-3 pr-6 py-1.5 rounded-xl cursor-pointer focus:outline-none"
-                    >
-                      <option value={1}>1 Traveler</option>
-                      <option value={2}>2 Travelers</option>
-                      <option value={3}>3 Travelers</option>
-                      <option value={4}>4+ Travelers</option>
-                    </select>
-                    <ChevronDown className="w-3 h-3 text-[#1c1817]/40 absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none" />
-                  </div>
-                </div>
-              </div>
-
-              {/* Main inputs row */}
-              <form onSubmit={handleExecuteSearch} className="space-y-3">
-                <div className="grid grid-cols-1 sm:grid-cols-12 gap-2.5 items-center">
-                  {/* From Field */}
-                  <div className="sm:col-span-4 bg-[#f4f3ec] hover:bg-[#edeade] border border-[#1c1817]/10 rounded-2xl p-2.5 transition-colors">
-                    <div className="flex items-center gap-1.5 text-[10px] text-[#1c1817]/50 font-bold uppercase tracking-wider mb-0.5">
-                      <MapPin className="w-3 h-3 text-[#1c1817]" />
-                      <span>From</span>
-                    </div>
-                    <select
-                      value={originCode}
-                      onChange={(e) => setOriginCode(e.target.value)}
-                      className="w-full bg-transparent text-sm font-bold text-[#1c1817] focus:outline-none cursor-pointer"
-                    >
-                      {AIRPORT_OPTIONS.map((a) => (
-                        <option key={a.code} value={a.code}>
-                          {a.city} ({a.code})
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  {/* Swap Button */}
-                  <div className="sm:col-span-1 flex justify-center -my-1 sm:my-0">
+            <div id="ticket-search" className="space-y-3">
+              {/* Service selector — Flights shows the full search form below;
+                  Hotels/Tours/Cabs each already own a complete search+results
+                  page under the Services tab, so selecting one jumps straight
+                  there instead of duplicating that form here. */}
+              <div className="flex flex-wrap items-center gap-2 w-fit bg-white p-1.5 rounded-2xl shadow-md border border-[#1c1817]/10">
+                {LANDING_SERVICE_TABS.map((service) => {
+                  const Icon = service.icon;
+                  const isActive = service.id === 'book';
+                  return (
                     <button
+                      key={service.id}
                       type="button"
-                      onClick={handleSwapAirports}
-                      title="Swap Origin and Destination"
-                      className="w-8 h-8 rounded-full bg-white border border-[#1c1817]/15 shadow-2xs hover:border-[#44403c] hover:text-[#1c1817] text-[#1c1817] flex items-center justify-center transition-transform active:rotate-180 cursor-pointer"
+                      onClick={() => {
+                        if (!isActive) onNavigate(service.id);
+                      }}
+                      aria-current={isActive ? 'page' : undefined}
+                      className={`focus-ring flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all cursor-pointer ${
+                        isActive ? 'bg-[#44403c] text-white shadow-sm' : 'text-[#1c1817]/60 hover:text-[#1c1817] hover:bg-[#f4f3ec]'
+                      }`}
                     >
-                      <ArrowLeftRight className="w-3.5 h-3.5" />
+                      <Icon className="w-4 h-4" />
+                      {service.label}
                     </button>
-                  </div>
-
-                  {/* To Field */}
-                  <div className="sm:col-span-4 bg-[#f4f3ec] hover:bg-[#edeade] border border-[#1c1817]/10 rounded-2xl p-2.5 transition-colors">
-                    <div className="flex items-center gap-1.5 text-[10px] text-[#1c1817]/50 font-bold uppercase tracking-wider mb-0.5">
-                      <MapPin className="w-3 h-3 text-sky-500" />
-                      <span>To</span>
-                    </div>
-                    <select
-                      value={destCode}
-                      onChange={(e) => setDestCode(e.target.value)}
-                      className="w-full bg-transparent text-sm font-bold text-[#1c1817] focus:outline-none cursor-pointer"
-                    >
-                      {AIRPORT_OPTIONS.map((a) => (
-                        <option key={a.code} value={a.code}>
-                          {a.city} ({a.code})
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  {/* Date Field */}
-                  <div className="sm:col-span-3 bg-[#f4f3ec] hover:bg-[#edeade] border border-[#1c1817]/10 rounded-2xl p-2.5 transition-colors">
-                    <div className="flex items-center gap-1.5 text-[10px] text-[#1c1817]/50 font-bold uppercase tracking-wider mb-0.5">
-                      <Calendar className="w-3 h-3 text-[#1c1817]" />
-                      <span>Date</span>
-                    </div>
-                    <input
-                      type="date"
-                      value={departureDate}
-                      onChange={(e) => setDepartureDate(e.target.value)}
-                      className="w-full bg-transparent text-xs font-bold text-[#1c1817] focus:outline-none cursor-pointer"
-                    />
-                  </div>
-                </div>
-
-                {/* Find ticket action button */}
-                <button
-                  type="submit"
-                  className="w-full py-3.5 rounded-2xl bg-[#44403c] hover:bg-[#57534e] active:scale-98 text-white font-black text-sm tracking-wide orange-pill-glow transition-all flex items-center justify-center gap-2 cursor-pointer"
-                >
-                  <span>Find ticket</span>
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-              </form>
-
-              {/* Featured Route Shortcut */}
-              <div className="flex flex-wrap items-center gap-2 pt-1 text-xs">
-                <span className="text-[#1c1817]/50 font-bold uppercase text-[10px]">Popular:</span>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setOriginCode('JFK');
-                    setDestCode('KIN');
-                    if (onQuickSearch) onQuickSearch('JFK', 'KIN', departureDate, cabinClass);
-                  }}
-                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#f4f3ec] border border-[#1c1817]/10 hover:border-[#44403c] text-[#1c1817] font-bold text-xs transition-colors cursor-pointer"
-                >
-                  <Plane className="w-3 h-3 text-[#1c1817] -rotate-45" />
-                  <span>NEW YORK (JFK) ➔ JAMAICA (KIN)</span>
-                  <span className="text-[#1c1817] font-extrabold">• Direct</span>
-                </button>
+                  );
+                })}
               </div>
+
+              <FlightSearch
+                currency={currency}
+                origin={searchParams.origin}
+                destination={searchParams.destination}
+                departureDate={searchParams.departureDate}
+                returnDate={searchParams.returnDate}
+                cabinClass={searchParams.cabinClass}
+                passengers={searchParams.passengers}
+                supersonicOnly={searchParams.supersonicOnly}
+                onSearch={onSearch}
+              />
             </div>
 
             {/* Bottom 2-Part Widget Row */}
