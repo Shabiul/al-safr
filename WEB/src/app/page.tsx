@@ -17,6 +17,7 @@ import {
   CurrencyCode,
   FlightOption,
   formatPrice,
+  fetchLiveExchangeRates,
 } from '@/services/flightData';
 import {
   Plane,
@@ -43,10 +44,18 @@ const SERVICE_TABS: { id: ServiceId; label: string; icon: React.ElementType; col
 export default function Home() {
   // All pricing is shown in INR — no currency switcher.
   const currency: CurrencyCode = 'INR';
+  const [, setRateVersion] = useState(0);
   const [activeTab, setActiveTab] = useState<MainTab>('home');
   const [activeService, setActiveService] = useState<ServiceId>('book');
   const [apiStatus, setApiStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
+
+  // Fetch live exchange rates on initial load
+  useEffect(() => {
+    fetchLiveExchangeRates().then((rates) => {
+      if (rates) setRateVersion((v) => v + 1);
+    });
+  }, []);
 
   // Other pages' navbar (About, Contact, login, ...) can't call into this
   // component's state directly, so Header falls back to a real navigation

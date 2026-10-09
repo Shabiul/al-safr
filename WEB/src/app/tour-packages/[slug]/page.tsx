@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import { db } from '@/lib/db';
 import { CurrencyCode, CURRENCIES, formatPrice } from '@/services/flightData';
+import { getLiveExchangeRates } from '@/lib/exchangeRates';
 import { TourPackage } from '@/services/tourPackageData';
 import { MapPin, Calendar, Check, X, Compass } from 'lucide-react';
 import { TourBookingFlow } from '@/components/TourBookingFlow';
@@ -14,6 +15,7 @@ interface PageProps {
 }
 
 export default async function TourPackageDetailPage({ params, searchParams }: PageProps) {
+  await getLiveExchangeRates();
   const { slug } = await params;
   const { currency: currencyParam } = await searchParams;
   const currency: CurrencyCode = currencyParam && currencyParam in CURRENCIES ? (currencyParam as CurrencyCode) : 'INR';
