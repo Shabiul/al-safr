@@ -174,15 +174,38 @@ export const LIVE_FLIGHTS: LiveFlightTelemetry[] = [
 ];
 
 export const CURRENCIES = {
-  INR: { symbol: '₹', rate: 83.5, label: 'INR (₹)' },
+  INR: { symbol: '₹', rate: 96.83, label: 'INR (₹)' },
   USD: { symbol: '$', rate: 1.0, label: 'USD ($)' },
   AED: { symbol: 'AED ', rate: 3.67, label: 'AED (د.إ)' },
   SAR: { symbol: 'SAR ', rate: 3.75, label: 'SAR (ر.س)' },
-  EUR: { symbol: '€', rate: 0.92, label: 'EUR (€)' },
-  GBP: { symbol: '£', rate: 0.79, label: 'GBP (£)' },
+  EUR: { symbol: '€', rate: 0.89, label: 'EUR (€)' },
+  GBP: { symbol: '£', rate: 0.76, label: 'GBP (£)' },
 };
 
 export type CurrencyCode = keyof typeof CURRENCIES;
+
+export function updateCurrenciesRates(rates: Partial<Record<CurrencyCode, number>>) {
+  for (const [code, rate] of Object.entries(rates)) {
+    if (code in CURRENCIES && typeof rate === 'number' && rate > 0) {
+      CURRENCIES[code as CurrencyCode].rate = rate;
+    }
+  }
+}
+
+export async function fetchLiveExchangeRates(): Promise<Record<CurrencyCode, number> | null> {
+  try {
+    const res = await fetch('/api/exchange-rates', { cache: 'no-store' });
+    if (!res.ok) return null;
+    const data = await res.json();
+    if (data.success && data.rates) {
+      updateCurrenciesRates(data.rates);
+      return data.rates;
+    }
+  } catch {
+    // Gracefully preserve default live rates on error
+  }
+  return null;
+}
 
 export function formatPrice(amountUsd: number, currency: CurrencyCode): string {
   const curr = CURRENCIES[currency] || CURRENCIES.INR;

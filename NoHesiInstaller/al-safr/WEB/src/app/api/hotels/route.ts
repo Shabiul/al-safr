@@ -3,6 +3,7 @@ import { hasRapidApiKey, rapidApiFetch } from '@/lib/rapidapi';
 import { HotelOption } from '@/services/hotelData';
 import { CURRENCIES, CurrencyCode } from '@/services/flightData';
 import { getMarkupMultiplier } from '@/lib/markup';
+import { getLiveExchangeRates } from '@/lib/exchangeRates';
 
 export const dynamic = 'force-dynamic';
 
@@ -32,6 +33,7 @@ async function resolveDestination(name: string): Promise<{ dest_id: string; dest
 }
 
 export async function GET(request: Request) {
+  await getLiveExchangeRates();
   const { searchParams } = new URL(request.url);
   const destination = searchParams.get('destination')?.trim();
   const destIdParam = searchParams.get('destId');

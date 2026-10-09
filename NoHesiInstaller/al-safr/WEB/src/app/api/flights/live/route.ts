@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
-import { Airport, FlightOption, findAirport } from '@/services/flightData';
+import { Airport, CURRENCIES, FlightOption, findAirport } from '@/services/flightData';
 import { hasRapidApiKey, rapidApiFetch } from '@/lib/rapidapi';
 import { getMarkupMultiplier } from '@/lib/markup';
+import { getLiveExchangeRates } from '@/lib/exchangeRates';
 
 export const dynamic = 'force-dynamic';
 
@@ -101,10 +102,19 @@ function parseGoogleFlightsResponse(
     // Only the queried cabin's price is real here — the other two cabins get
     // filled in (or left unavailable) by merging with the other two cabin
     // searches, not guessed via a fixed ratio.
-    const realPrice = Math.round(it.price * markupMultiplier);
+    // Fetched in INR (matches Google Flights exactly) but stored as USD like the
+    // rest of the app; formatPrice multiplies by the same rate, so it round-trips
+    // to the exact INR fare. Deliberately not rounded: whole-dollar rounding
+    // would shift the displayed fare by up to ~₹48.
+    const realPrice = (it.price * markupMultiplier) / CURRENCIES.INR.rate;
 
     const firstSeg = it.segments[0];
     const lastSeg = it.segments[it.segments.length - 1];
+    // The API occasionally omits the itinerary-level departureTime, falling
+    // back to the first leg's own time rather than showing "null:xx".
+    const departureTime = it.departureTime && !it.departureTime.startsWith('null')
+      ? it.departureTime
+      : firstSeg.departureTime || it.departureTime;
 
     // Overnight/long-haul itineraries can land a day (or more) after they
     // depart — mark it explicitly so an arrival clock-time earlier than the
@@ -146,7 +156,7 @@ function parseGoogleFlightsResponse(
       aircraft,
       origin,
       destination: dest,
-      departureTime: it.departureTime,
+      departureTime,
       arrivalTime: dayOffset > 0 ? `${it.arrivalTime} (+${dayOffset}d)` : it.arrivalTime,
       duration: `${durHours}h ${durMins}m`,
       stops,
@@ -203,9 +213,9 @@ async function fetchGoogleFlights(
       arrivalId: dest.code,
       departureDate: travelDate,
       adults: '1',
-      currency: 'USD',
-      languageCode: 'en-US',
-      countryCode: 'US',
+      currency: 'INR',
+      languageCode: 'en-IN',
+      countryCode: 'IN',
       cabinClass: String(CABIN_TO_CLASS_ID[cabinClass] || 1),
     });
 
@@ -312,6 +322,7 @@ async function searchAllCabins(
 }
 
 export async function GET(request: Request) {
+  await getLiveExchangeRates();
   const { searchParams } = new URL(request.url);
   const originCode = searchParams.get('origin') || 'DEL';
   const destCode = searchParams.get('destination') || 'DXB';
