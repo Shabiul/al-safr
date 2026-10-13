@@ -110,10 +110,13 @@ export const SeatSelectorModal: React.FC<SeatSelectorModalProps> = ({
     return 0;
   };
 
-  const baseFare = flight.prices[selectedCabin];
+  // The search-result fare is the all-in Google Flights price. At checkout it is
+  // split: 80% base fare, 20% taxes & surcharges (the fare total is unchanged).
+  const searchFare = flight.prices[selectedCabin];
+  const baseFare = searchFare * 0.8;
   const seatFee = getSeatExtraPrice(selectedSeat);
   const addonFee = priorityAddon ? 35 : 0;
-  const taxesFees = Math.round(baseFare * 0.12);
+  const taxesFees = searchFare - baseFare;
   const totalCost = baseFare + seatFee + addonFee + taxesFees;
 
   const handleCompleteBooking = (e: React.FormEvent) => {
