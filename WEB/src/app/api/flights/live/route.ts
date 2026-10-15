@@ -115,6 +115,10 @@ function parseGoogleFlightsResponse(
     const departureTime = it.departureTime && !it.departureTime.startsWith('null')
       ? it.departureTime
       : firstSeg.departureTime || it.departureTime;
+    // Same for the itinerary-level arrivalTime — fall back to the last leg's.
+    const arrivalClock = it.arrivalTime && !it.arrivalTime.startsWith('null')
+      ? it.arrivalTime
+      : lastSeg.arrivalTime || it.arrivalTime;
 
     // Overnight/long-haul itineraries can land a day (or more) after they
     // depart — mark it explicitly so an arrival clock-time earlier than the
@@ -157,7 +161,7 @@ function parseGoogleFlightsResponse(
       origin,
       destination: dest,
       departureTime,
-      arrivalTime: dayOffset > 0 ? `${it.arrivalTime} (+${dayOffset}d)` : it.arrivalTime,
+      arrivalTime: dayOffset > 0 ? `${arrivalClock} (+${dayOffset}d)` : arrivalClock,
       duration: `${durHours}h ${durMins}m`,
       stops,
       prices: {
