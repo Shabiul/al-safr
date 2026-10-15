@@ -102,8 +102,8 @@ export default function Home() {
   const [flightSort, setFlightSort] = useState<'recommended' | 'price_low' | 'price_high'>('recommended');
   const filteredFlights = useMemo(() => applyFlightFilters(flights, flightFilters), [flights, flightFilters]);
   const [selectedCabin, setSelectedCabin] = useState<'economy' | 'business' | 'first'>('business');
-  const sortedFlights = useMemo(() => {
-    if (flightSort === 'recommended') return filteredFlights;
+  const sortFlights = useCallback((list: FlightOption[]) => {
+    if (flightSort === 'recommended') return list;
     // Flights with no fare in the currently selected cabin (see the
     // per-cabin real-price merge in the API) sort to the back either way —
     // there's no real price to rank them by.
@@ -111,7 +111,7 @@ export default function Home() {
       const p = f.prices[selectedCabin];
       return p > 0 ? p : null;
     };
-    const sorted = [...filteredFlights];
+    const sorted = [...list];
     sorted.sort((a, b) => {
       const pa = priceOf(a);
       const pb = priceOf(b);
@@ -121,7 +121,17 @@ export default function Home() {
       return flightSort === 'price_low' ? pa - pb : pb - pa;
     });
     return sorted;
-  }, [filteredFlights, flightSort, selectedCabin]);
+  }, [flightSort, selectedCabin]);
+  const sortedFlights = useMemo(() => sortFlights(filteredFlights), [sortFlights, filteredFlights]);
+
+  // Round trip: the return leg (destination → origin on the return date) is
+  // fetched separately and listed under the outbound flights.
+  const [returnFlights, setReturnFlights] = useState<FlightOption[]>([]);
+  const [isFetchingReturn, setIsFetchingReturn] = useState(false);
+  const [returnNotice, setReturnNotice] = useState('');
+  const [selectedOutbound, setSelectedOutbound] = useState<FlightOption | null>(null);
+  const [selectedReturnFlight, setSelectedReturnFlight] = useState<FlightOption | null>(null);
+  const sortedReturnFlights = useMemo(() => sortFlights(returnFlights), [sortFlights, returnFlights]);
 
   // Live Telemetry Stream State
   const [isFetchingLive, setIsFetchingLive] = useState(false);
@@ -173,11 +183,49 @@ export default function Home() {
     fetchLiveFlightData(searchParams.origin, searchParams.destination, searchParams.departureDate, searchParams.supersonicOnly, searchParams.cabinClass);
   }, [fetchLiveFlightData, searchParams.origin, searchParams.destination, searchParams.departureDate, searchParams.supersonicOnly, searchParams.cabinClass]);
 
+  // Return leg for round trips (searchParams.returnDate is '' for one-way).
+  useEffect(() => {
+    const { origin, destination, returnDate, cabinClass, supersonicOnly } = searchParams;
+    if (!returnDate) {
+      setReturnFlights([]);
+      setReturnNotice('');
+      return;
+    }
+    let cancelled = false;
+    setIsFetchingReturn(true);
+    (async () => {
+      try {
+        const res = await fetch(`/api/flights/live?origin=${encodeURIComponent(destination)}&destination=${encodeURIComponent(origin)}&date=${encodeURIComponent(returnDate)}&cabinClass=${encodeURIComponent(cabinClass)}`, {
+          cache: 'no-store',
+        });
+        const data = res.ok ? await res.json() : null;
+        if (cancelled) return;
+        let options: FlightOption[] = data?.success ? data.flights || [] : [];
+        if (supersonicOnly) {
+          options = options.filter((f) => f.aircraft.includes('Supersonic') || f.aircraft.includes('Overture'));
+        }
+        setReturnFlights(options);
+        setReturnNotice(data?.dataSourceNotice || '');
+      } catch {
+        if (!cancelled) {
+          setReturnFlights([]);
+          setReturnNotice('Could not load return flights');
+        }
+      } finally {
+        if (!cancelled) setIsFetchingReturn(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [searchParams]);
+
   // Execute Search handler — only updates searchParams; the effect above
   // (keyed on searchParams' fields) is the single place that actually
   // calls fetchLiveFlightData, so this never double-fetches.
   const handleSearch = (params: typeof searchParams) => {
     setSearchParams(params);
+    setSelectedOutbound(null);
     setSelectedCabin(params.cabinClass);
     setActiveService('book');
     setActiveTab('services');
@@ -198,6 +246,23 @@ export default function Home() {
   // Open Seat Selector
   const handleOpenSeatSelector = (flight: FlightOption, cabin: 'economy' | 'business' | 'first') => {
     setSelectedFlightForSeat(flight);
+    setSelectedReturnFlight(null);
+    setSelectedCabin(cabin);
+    setIsSeatModalOpen(true);
+  };
+
+  // Round trip is a two-step pick like Google Flights: departing flight first,
+  // then the returning flight, then one booking for the whole trip.
+  const isRoundTrip = !!searchParams.returnDate;
+  const handleSelectOutbound = (flight: FlightOption, cabin: 'economy' | 'business' | 'first') => {
+    if (!isRoundTrip) return handleOpenSeatSelector(flight, cabin);
+    setSelectedOutbound(flight);
+    setSelectedCabin(cabin);
+  };
+  const handleSelectReturn = (flight: FlightOption, cabin: 'economy' | 'business' | 'first') => {
+    if (!selectedOutbound) return;
+    setSelectedFlightForSeat(selectedOutbound);
+    setSelectedReturnFlight(flight);
     setSelectedCabin(cabin);
     setIsSeatModalOpen(true);
   };
@@ -312,10 +377,10 @@ export default function Home() {
                   )}
 
                   <div className={`space-y-4 ${flights.length > 0 ? 'lg:col-span-3' : 'lg:col-span-4'}`}>
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div className={`flex flex-col sm:flex-row sm:items-center justify-between gap-2 ${isRoundTrip && selectedOutbound ? 'hidden' : ''}`}>
                       <div>
                         <h2 className="text-lg font-semibold text-slate-900">
-                          {filteredFlights.length} {filteredFlights.length === 1 ? 'flight' : 'flights'} found
+                          {isRoundTrip ? 'Departing flights · ' : ''}{filteredFlights.length} {filteredFlights.length === 1 ? 'flight' : 'flights'} found
                           <span className="ml-2 text-sm font-normal text-slate-500">
                             {searchParams.origin} → {searchParams.destination}
                           </span>
@@ -349,7 +414,7 @@ export default function Home() {
                       )}
                     </div>
 
-                    {isFetchingLive ? (
+                    {isRoundTrip && selectedOutbound ? null : isFetchingLive ? (
                       <div className="p-12 text-center bg-slate-50 rounded-2xl border border-slate-200 space-y-3">
                         <RefreshCw className="w-7 h-7 text-brand-600 animate-spin mx-auto" />
                         <div className="font-medium text-sm text-slate-700">Searching live fares…</div>
@@ -386,9 +451,61 @@ export default function Home() {
                             flight={flight}
                             currency={currency}
                             selectedCabin={selectedCabin}
-                            onSelectFlight={handleOpenSeatSelector}
+                            onSelectFlight={handleSelectOutbound}
+                            actionLabel={isRoundTrip ? 'Select departure' : undefined}
                           />
                         ))}
+                      </div>
+                    )}
+
+                    {isRoundTrip && selectedOutbound && (
+                      <div className="space-y-3 pt-1">
+                        <div className="flex flex-wrap items-center justify-between gap-3 bg-cream rounded-2xl soft-border p-4">
+                          <div className="text-sm">
+                            <span className="font-black text-slate-900">Departure · {searchParams.departureDate}</span>
+                            <span className="ml-2 text-slate-600">
+                              {selectedOutbound.airline} {selectedOutbound.flightNumber} · {selectedOutbound.departureTime} {selectedOutbound.origin.code} → {selectedOutbound.arrivalTime} {selectedOutbound.destination.code}
+                            </span>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => setSelectedOutbound(null)}
+                            className="focus-ring text-sm font-black"
+                            style={{ color: 'var(--color-ticket-orange)' }}
+                          >
+                            Change departure
+                          </button>
+                        </div>
+                        <div>
+                          <h2 className="text-lg font-semibold text-slate-900">
+                            Returning flights
+                            <span className="ml-2 text-sm font-normal text-slate-500">
+                              {searchParams.destination} → {searchParams.origin} · {searchParams.returnDate}
+                            </span>
+                          </h2>
+                          {returnNotice && <p className="text-xs text-slate-400 mt-0.5">{returnNotice}</p>}
+                        </div>
+                        {isFetchingReturn ? (
+                          <div className="p-8 text-center bg-slate-50 rounded-2xl border border-slate-200 space-y-3">
+                            <RefreshCw className="w-6 h-6 text-brand-600 animate-spin mx-auto" />
+                            <div className="font-medium text-sm text-slate-700">Searching return fares…</div>
+                          </div>
+                        ) : sortedReturnFlights.length === 0 ? (
+                          <div className="p-8 text-center bg-slate-50 rounded-2xl border border-dashed border-slate-300 text-sm text-slate-600">
+                            No return flights found for {searchParams.destination} → {searchParams.origin} on {searchParams.returnDate}
+                          </div>
+                        ) : (
+                          sortedReturnFlights.map((flight) => (
+                            <FlightCard
+                              key={`return-${flight.id}`}
+                              flight={flight}
+                              currency={currency}
+                              selectedCabin={selectedCabin}
+                              onSelectFlight={handleSelectReturn}
+                              actionLabel="Select return & book"
+                            />
+                          ))
+                        )}
                       </div>
                     )}
                   </div>
@@ -587,7 +704,9 @@ export default function Home() {
         isOpen={isSeatModalOpen}
         onClose={() => setIsSeatModalOpen(false)}
         flight={selectedFlightForSeat}
+        returnFlight={selectedReturnFlight}
         initialCabin={selectedCabin}
+        passengers={searchParams.passengers}
         currency={currency}
         onConfirmBooking={handleConfirmBooking}
       />

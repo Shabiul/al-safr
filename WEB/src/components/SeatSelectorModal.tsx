@@ -19,6 +19,7 @@ import {
 export interface BookingConfirmation {
   bookingRef: string;
   flight: FlightOption;
+  returnFlight?: FlightOption | null;
   cabin: 'economy' | 'business' | 'first';
   seatNumber: string;
   passengerName: string;
@@ -68,7 +69,9 @@ interface SeatSelectorModalProps {
   isOpen: boolean;
   onClose: () => void;
   flight: FlightOption | null;
+  returnFlight?: FlightOption | null;
   initialCabin: 'economy' | 'business' | 'first';
+  passengers?: number;
   currency: CurrencyCode;
   onConfirmBooking: (confirmation: BookingConfirmation) => void;
 }
@@ -83,7 +86,9 @@ export const SeatSelectorModal: React.FC<SeatSelectorModalProps> = ({
   isOpen,
   onClose,
   flight,
+  returnFlight = null,
   initialCabin,
+  passengers = 1,
   currency,
   onConfirmBooking,
 }) => {
@@ -112,10 +117,12 @@ export const SeatSelectorModal: React.FC<SeatSelectorModalProps> = ({
 
   // The search-result fare is the all-in Google Flights price. At checkout it is
   // split: 80% base fare, 20% taxes & surcharges (the fare total is unchanged).
-  const searchFare = flight.prices[selectedCabin];
+  // The search price is per traveller, so the whole fare scales with the party size.
+  // A round trip adds the return flight's fare in the same cabin.
+  const searchFare = (flight.prices[selectedCabin] + (returnFlight ? returnFlight.prices[selectedCabin] : 0)) * passengers;
   const baseFare = searchFare * 0.8;
   const seatFee = getSeatExtraPrice(selectedSeat);
-  const addonFee = priorityAddon ? 35 : 0;
+  const addonFee = priorityAddon ? 35 * passengers : 0;
   const taxesFees = searchFare - baseFare;
   const totalCost = baseFare + seatFee + addonFee + taxesFees;
 
@@ -130,6 +137,7 @@ export const SeatSelectorModal: React.FC<SeatSelectorModalProps> = ({
     const confirmation: BookingConfirmation = {
       bookingRef,
       flight,
+      returnFlight,
       cabin: selectedCabin,
       seatNumber: selectedSeat,
       passengerName: passengerName || 'Valued Passenger',
@@ -565,7 +573,7 @@ export const SeatSelectorModal: React.FC<SeatSelectorModalProps> = ({
               <div className="bg-slate-50 p-4 rounded-xl space-y-2 text-sm soft-border">
                 <h4 className="text-xs font-black text-slate-500 uppercase tracking-wide">Fare Summary</h4>
                 <div className="flex items-center justify-between text-slate-600 font-medium">
-                  <span>Base fare ({CABIN_LABEL[selectedCabin]})</span>
+                  <span>Base fare ({CABIN_LABEL[selectedCabin]}{returnFlight ? ', round trip' : ''}{passengers > 1 ? ` × ${passengers} travelers` : ''})</span>
                   <span className="font-mono">{formatPrice(baseFare, currency)}</span>
                 </div>
                 {seatFee > 0 && (

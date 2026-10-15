@@ -20,6 +20,7 @@ interface FlightCardProps {
   currency: CurrencyCode;
   selectedCabin: 'economy' | 'business' | 'first';
   onSelectFlight: (flight: FlightOption, cabin: 'economy' | 'business' | 'first') => void;
+  actionLabel?: string;
 }
 
 const CABIN_LABEL: Record<'economy' | 'business' | 'first', string> = {
@@ -33,6 +34,7 @@ export const FlightCard: React.FC<FlightCardProps> = ({
   currency,
   selectedCabin,
   onSelectFlight,
+  actionLabel = 'Select seats',
 }) => {
   const isSupersonic = flight.aircraft.includes('Supersonic') || flight.aircraft.includes('Overture');
   const [logoFailed, setLogoFailed] = React.useState(false);
@@ -192,7 +194,7 @@ export const FlightCard: React.FC<FlightCardProps> = ({
           style={{ backgroundColor: 'var(--color-ticket-orange)' }}
         >
           <Armchair className="w-4 h-4" aria-hidden="true" />
-          {flight.prices[selectedCabin] <= 0 ? `Not available in ${CABIN_LABEL[selectedCabin]}` : 'Select seats'}
+          {flight.prices[selectedCabin] <= 0 ? `Not available in ${CABIN_LABEL[selectedCabin]}` : actionLabel}
         </button>
       </div>
     </div>
